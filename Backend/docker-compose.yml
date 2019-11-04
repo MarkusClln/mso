@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "27017-27019:27017-27019"
+    networks:
+      - back_network
+    restart: always
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
+    networks:
+          - back_network
+    depends_on:
+      - mongodb
+  rest-node:
+    build: .
+    ports:
+      - "3001:3000"
+    networks:
+      - back_network
+    depends_on:
+      - "mongodb"
+    environment:
+      PORT: 3000
+      JWT_Secret: "the_secret_jwt_key"
+networks:
+  back_network:
+    driver: bridge
+
