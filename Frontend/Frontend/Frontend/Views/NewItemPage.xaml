@@ -4,20 +4,27 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:vm="clr-namespace:Frontend.ViewModels"
              x:Class="Frontend.Views.NewItemPage"
              Title="New Item">
     
+    <ContentPage.BindingContext>
+        <vm:NewItemViewModel />
+    </ContentPage.BindingContext>
+    
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" />
-        <ToolbarItem Text="Save" Clicked="Save_Clicked" />
+        <!--<ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" />
+        <ToolbarItem Text="Save" Clicked="Save_Clicked" />-->
     </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
         <StackLayout Spacing="20" Padding="15">
             <Label Text="Text" FontSize="Medium" />
-            <Entry Text="{Binding Item.Text}" d:Text="Item name" FontSize="Small" />
+            <Entry Text="{Binding Name}" d:Text="Item name" FontSize="Small" />
             <Label Text="Description" FontSize="Medium" />
-            <Editor Text="{Binding Item.Description}" d:Text="Item description" FontSize="Small" Margin="0" />
+            <Editor Text="{Binding Description}" d:Text="Item description" FontSize="Small" Margin="0" />
+            <Button Text="Klick mich" Command="{Binding TestCommand}"/>
+            <Label Text="NOT HIDDEN" IsVisible="{Binding IsVisible}"/>
         </StackLayout>
     </ContentPage.Content>
     

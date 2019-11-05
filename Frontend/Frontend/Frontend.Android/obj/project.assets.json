@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "MonoAndroid,Version=v9.0": {
+      "Autofac/4.9.4": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Autofac.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Autofac.dll": {}
+        }
+      },
       "System.Numerics.Vectors/4.5.0": {
         "type": "package",
         "compile": {
@@ -804,6 +813,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "Autofac": "4.9.4",
           "Xamarin.Essentials": "1.2.0",
           "Xamarin.Forms": "4.2.0.709249"
         },
@@ -817,6 +827,26 @@
     }
   },
   "libraries": {
+    "Autofac/4.9.4": {
+      "sha512": "dYiDG4yoV7GDCoOc66d1sqMmg2gwDyomHKgATuMfhFzYxVpWEltToHVHXI3I9vOEvIXE55S4OZPY0ldiZmZtpA==",
+      "type": "package",
+      "path": "autofac/4.9.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "autofac.4.9.4.nupkg.sha512",
+        "autofac.nuspec",
+        "lib/net45/Autofac.dll",
+        "lib/net45/Autofac.pdb",
+        "lib/net45/Autofac.xml",
+        "lib/netstandard1.1/Autofac.dll",
+        "lib/netstandard1.1/Autofac.pdb",
+        "lib/netstandard1.1/Autofac.xml",
+        "lib/netstandard2.0/Autofac.dll",
+        "lib/netstandard2.0/Autofac.pdb",
+        "lib/netstandard2.0/Autofac.xml"
+      ]
+    },
     "System.Numerics.Vectors/4.5.0": {
       "sha512": "QQTlPTl06J/iiDbJCiepZ4H//BVraReU4O4EoRw1U02H5TLUIT7xn3GnDp9AXPSlJUDyFs4uWjWafNX6WrAojQ==",
       "type": "package",
@@ -1904,6 +1934,7 @@
   },
   "projectFileDependencyGroups": {
     "MonoAndroid,Version=v9.0": [
+      "Autofac >= 4.9.4",
       "Frontend >= 1.0.0",
       "Xamarin.Android.Support.Core.Utils >= 28.0.0.1",
       "Xamarin.Essentials >= 1.2.0",
@@ -1911,24 +1942,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Markus\\.nuget\\packages\\": {},
+    "C:\\Users\\jensw\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend.Android\\Frontend.Android.csproj",
+      "projectUniqueName": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend.Android\\Frontend.Android.csproj",
       "projectName": "Frontend.Android",
-      "projectPath": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend.Android\\Frontend.Android.csproj",
-      "packagesPath": "C:\\Users\\Markus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend.Android\\obj\\",
+      "projectPath": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend.Android\\Frontend.Android.csproj",
+      "packagesPath": "C:\\Users\\jensw\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend.Android\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\Markus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jensw\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -1942,8 +1973,8 @@
       "frameworks": {
         "monoandroid90": {
           "projectReferences": {
-            "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend\\Frontend.csproj": {
-              "projectPath": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend\\Frontend.csproj"
+            "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend\\Frontend.csproj": {
+              "projectPath": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend\\Frontend.csproj"
             }
           }
         }
@@ -1952,6 +1983,10 @@
     "frameworks": {
       "monoandroid90": {
         "dependencies": {
+          "Autofac": {
+            "target": "Package",
+            "version": "[4.9.4, )"
+          },
           "Xamarin.Android.Support.Core.Utils": {
             "target": "Package",
             "version": "[28.0.0.1, )"

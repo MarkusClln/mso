@@ -3,17 +3,20 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Frontend.Services;
 using Frontend.Views;
+using Autofac;
+using Xamarin.Forms.Internals;
+using Frontend.Common;
 
 namespace Frontend
 {
     public partial class App : Application
     {
-
         public App()
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
+            DIContainer.Initialize();
+            //DependencyService.Register<MockDataStore>();
             MainPage = new MainPage();
         }
 

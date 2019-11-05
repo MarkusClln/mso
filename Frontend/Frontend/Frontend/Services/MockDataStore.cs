@@ -6,6 +6,7 @@ using Frontend.Models;
 
 namespace Frontend.Services
 {
+    //TODO We are using nodejs backend with mongo. Maybe keep this for debugging purposes
     public class MockDataStore : IDataStore<Item>
     {
         readonly List<Item> items;

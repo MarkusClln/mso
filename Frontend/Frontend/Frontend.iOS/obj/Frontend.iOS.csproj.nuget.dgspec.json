@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend.iOS\\Frontend.iOS.csproj": {}
+    "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend.iOS\\Frontend.iOS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend.iOS\\Frontend.iOS.csproj": {
+    "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend.iOS\\Frontend.iOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend.iOS\\Frontend.iOS.csproj",
+        "projectUniqueName": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend.iOS\\Frontend.iOS.csproj",
         "projectName": "Frontend.iOS",
-        "projectPath": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend.iOS\\Frontend.iOS.csproj",
-        "packagesPath": "C:\\Users\\Markus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend.iOS\\obj\\",
+        "projectPath": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend.iOS\\Frontend.iOS.csproj",
+        "packagesPath": "C:\\Users\\jensw\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend.iOS\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\Markus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jensw\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -32,8 +32,8 @@
         "frameworks": {
           "xamarinios10": {
             "projectReferences": {
-              "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend\\Frontend.csproj": {
-                "projectPath": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend\\Frontend.csproj"
+              "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend\\Frontend.csproj": {
+                "projectPath": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend\\Frontend.csproj"
               }
             }
           }
@@ -65,20 +65,21 @@
         }
       }
     },
-    "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend\\Frontend.csproj": {
+    "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend\\Frontend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend\\Frontend.csproj",
+        "projectUniqueName": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend\\Frontend.csproj",
         "projectName": "Frontend",
-        "projectPath": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend\\Frontend.csproj",
-        "packagesPath": "C:\\Users\\Markus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Markus\\Desktop\\mso\\Frontend\\Frontend\\Frontend\\Frontend\\obj\\",
+        "projectPath": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend\\Frontend.csproj",
+        "packagesPath": "C:\\Users\\jensw\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jensw\\Source\\Repos\\MarkusClln\\mso\\Frontend\\Frontend\\Frontend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Markus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jensw\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -103,6 +104,10 @@
       "frameworks": {
         "netstandard2.0": {
           "dependencies": {
+            "Autofac": {
+              "target": "Package",
+              "version": "[4.9.4, )"
+            },
             "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",
