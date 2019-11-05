@@ -33,10 +33,10 @@ namespace Frontend.ViewModels
 
         public NewItemViewModel()
         {
-            var test = DIContainer.RestService;
+            var test = DIContainer.ApiService;
 
             this.Name = "Hallooo";
-            this.Description = test.Get();
+            this.Description = test.GetDebug();
             this.IsVisible = false;
             this.TestCommand = new Command(Test);
         }

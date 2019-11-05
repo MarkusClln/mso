@@ -6,18 +6,26 @@ using System.Text;
 
 namespace Frontend.Common
 {
+    /// <summary>
+    /// Dependency Injection Container
+    /// Used for registering services, so they can be used anywhere you need a specific service
+    /// </summary>
     public static class DIContainer
     {
         private static IContainer _container;
 
-        public static IRestService RestService { get { return _container.Resolve<IRestService>(); } }
+        //create a public property which just returns a specific service
+        public static IApiService ApiService { get { return _container.Resolve<IApiService>(); } }
+       
+        //gets called at application start
         public static void Initialize()
         {
             if (_container == null)
             {
                 var builder = new ContainerBuilder();
 
-                builder.RegisterType<RestService>().As<IRestService>().SingleInstance();
+                //register your service 
+                builder.RegisterType<ApiService>().As<IApiService>().SingleInstance();
 
                 _container = builder.Build();
             }

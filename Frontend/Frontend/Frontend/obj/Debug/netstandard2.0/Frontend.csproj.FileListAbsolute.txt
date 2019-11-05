@@ -15,4 +15,3 @@ C:\Users\jensw\Source\Repos\MarkusClln\mso\Frontend\Frontend\Frontend\obj\Debug\
 C:\Users\jensw\Source\Repos\MarkusClln\mso\Frontend\Frontend\Frontend\obj\Debug\netstandard2.0\Frontend.dll
 C:\Users\jensw\Source\Repos\MarkusClln\mso\Frontend\Frontend\Frontend\obj\Debug\netstandard2.0\ref\Frontend.dll
 C:\Users\jensw\Source\Repos\MarkusClln\mso\Frontend\Frontend\Frontend\obj\Debug\netstandard2.0\Frontend.pdb
-C:\Users\jensw\Source\Repos\MarkusClln\mso\Frontend\Frontend\Frontend\obj\Debug\netstandard2.0\XamlC.stamp
