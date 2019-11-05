@@ -1,5 +1,7 @@
-version: '3.7'
+version: '2'
+
 services:
+
   mongodb:
     image: mongo
     ports:
@@ -20,10 +22,9 @@ services:
           - back_network
     depends_on:
       - mongodb
-  rest-node:
-    build: .
-    ports:
-      - "3001:3000"
+
+  node1:
+    build: Node/.
     networks:
       - back_network
     depends_on:
@@ -31,6 +32,46 @@ services:
     environment:
       PORT: 3000
       JWT_Secret: "the_secret_jwt_key"
+      DB_IP: "172.23.0.2"
+      DB_PORT: "27017"
+      DB_NAME: "mso"
+      NODE_NAME: "node1"
+  node2:
+    build: Node/.
+    networks:
+      - back_network
+    depends_on:
+      - "mongodb"
+    environment:
+      PORT: 3000
+      JWT_Secret: "the_secret_jwt_key"
+      DB_IP: "172.23.0.2"
+      DB_PORT: "27017"
+      DB_NAME: "mso"
+      NODE_NAME: "node2"
+  node3:
+    build: Node/.
+    networks:
+      - back_network
+    depends_on:
+      - "mongodb"
+    environment:
+      PORT: 3000
+      JWT_Secret: "the_secret_jwt_key"
+      DB_IP: "172.23.0.2"
+      DB_PORT: "27017"
+      DB_NAME: "mso"
+      NODE_NAME: "node3"
+
+  loadbalancer:
+    build: NginX/.
+    networks:
+      - back_network
+    ports:
+      - '9001:9001'
+    depends_on:
+      - node1
+
 networks:
   back_network:
     driver: bridge

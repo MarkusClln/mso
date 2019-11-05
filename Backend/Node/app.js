@@ -33,7 +33,23 @@ app.use('/pin', testRoute);
 
 function connect_db(){
 
-  mongoose.connect("mongodb://172.21.0.1:27017/mso",
+  if(process.env.DB_IP == undefined){
+    db_ip = "172.21.0.1"
+  }else{
+    db_ip = process.env.DB_IP
+  }
+  if(process.env.DB_PORT == undefined){
+    db_port = "27017"
+  }else{
+    db_port = process.env.DB_PORT
+  }
+  if(process.env.DB_NAME == undefined){
+    db_name = "mso"
+  }else{
+    db_name = process.env.DB_NAME
+  }
+
+  mongoose.connect("mongodb://"+db_ip+":"+db_port+"/"+db_name,
       {useNewUrlParser: true, useUnifiedTopology: true});
   var db = mongoose.connection;
   db.on('error', console.error.bind(console, 'connection error:'));
