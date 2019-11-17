@@ -2,6 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../App/app/src/main/res/raw/style.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../App/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../App/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/mso_projectxxx/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/mso_projectxxx/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/mso_projectxxx/ui/map/MapFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/mso_projectxxx/ui/map/MapFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../App/app/src/main/res/layout/fragment_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../App/app/src/main/res/layout/fragment_map.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -67,6 +72,7 @@
       <workItem from="1573891873186" duration="78000" />
       <workItem from="1573892686965" duration="1008000" />
       <workItem from="1573897851822" duration="3000" />
+      <workItem from="1573986834104" duration="769000" />
     </task>
     <servers />
   </component>
