@@ -1,23 +1,26 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require("mongoose");
+const express = require('express');
+const router = express.Router();
+const mongoose = require("mongoose");
 
 const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 
-const pinsSchema = require("../models/pin");
+const pinSchema = require("../models/pinSchema");
+const ckeck_auth = require("../middleware/check-auth");
+
 
 /* GET home page. */
 
-router.post('/set', function(req, res, next) {
+router.post('/set', ckeck_auth, function(req, res, next) {
 
     const body = req.body;
 
-    const pin = new pinsSchema({
-
+    const pin = new pinSchema({
+        _id: new mongoose.Types.ObjectId(),
         location: body.pin.location,
         name: body.pin.name,
-        description: body.pin.description
+        description: body.pin.description,
+        user_id: req.authData.userId
 
     });
 
@@ -25,7 +28,6 @@ router.post('/set', function(req, res, next) {
         if (err) res.send(err);
         res.json(result);
     });
-
 });
 
 router.get('/getAll',  function(req, res, next) {
@@ -34,7 +36,7 @@ router.get('/getAll',  function(req, res, next) {
     var distance = req.query.Distance
     if(lat != undefined && lng != undefined && distance != undefined){
 
-        pinsSchema.find({
+        pinSchema.find({
             location: {
                 $nearSphere: {
                     $maxDistance: distance,
@@ -53,11 +55,20 @@ router.get('/getAll',  function(req, res, next) {
     }
 });
 
-router.get('/get/:id', function(req, res, next) {
+router.get('/getById/:id', function(req, res, next) {
     var id = req.params.id;
-    pinsSchema.findById(id,function (err, result) {
+    pinSchema.findById(id,function (err, result) {
         if (err) return console.error(err);
         res.json(result)
+    });
+});
+
+router.get('/getByUserId/:id', function(req, res, next) {
+    var id = req.params.id;
+    var query = pinSchema.find({ 'user_id': id });
+    query.exec(function (err, result) {
+        if (err) return console.error(err);
+        res.json(result);
     });
 });
 

@@ -4,20 +4,8 @@ var router = express.Router();
 var mongoose = require("mongoose");
 var bcrypt = require("bcryptjs");
 
+const User = require("../models/userSchema");
 
-
-router.post('/auth', verifyToken, (req, res) => {
-   jwt.verify(req.token, process.env.JWT_Secret, (err, authData)=>{
-       if(err){
-           res.sendStatus(403);
-       }else{
-           res.json({
-               message: "Auth...",
-               authData
-           })
-       }
-   });
-});
 
 router.post('/signin', (req, res) => {
     User.find({email: req.body.email})
@@ -58,9 +46,6 @@ router.post('/signin', (req, res) => {
     });
 });
 
-
-const User = require("../models/user");
-
 router.post('/signup', (req, res, next) => {
 
     User.find({email: req.body.email}).exec().then(user => {
@@ -100,19 +85,5 @@ router.post('/signup', (req, res, next) => {
 
 
 });
-
-
-function verifyToken(req, res, next){
-    const bearerHeader = req.headers['authorization'];
-    if(typeof bearerHeader !== 'undefined'){
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-    }else{
-        //Forbidden
-        res.sendStatus(403);
-    }
-}
 
 module.exports = router;

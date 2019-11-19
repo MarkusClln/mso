@@ -69,12 +69,12 @@ public class MapFragment extends Fragment {
             @Override
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
 
-                //InputStream is = getResources().openRawResource(R.raw.style);
-                //String style = convertStreamToString(is);
+                InputStream is = getResources().openRawResource(R.raw.style);
+                String style = convertStreamToString(is);
 
 
 
-                mapboxMap.setStyle(Style.DARK, new Style.OnStyleLoaded() {
+                mapboxMap.setStyle(new Style.Builder().fromJson(style), new Style.OnStyleLoaded() {
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
 

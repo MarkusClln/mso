@@ -8,8 +8,11 @@ var mongoose = require("mongoose");
 connect_db();
 
 var indexRouter = require('./routes/index');
-var authRouter = require('./routes/user');
-var testRoute = require("./routes/pin");
+var userRouter = require('./routes/user');
+var pinRoute = require("./routes/pin");
+var eventRoute = require("./routes/event");
+
+
 var app = express();
 
 // view engine setup
@@ -25,8 +28,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/', indexRouter);
-app.use('/user', authRouter);
-app.use('/pin', testRoute);
+
+app.use('/user', userRouter);
+app.use('/pin', pinRoute);
+app.use('/event', eventRoute);
+
+
 
 
 // Connect MongoDB
@@ -58,6 +65,40 @@ function connect_db(){
   });
 }
 
+create_swagger();
+function create_swagger(){
+  var argv = require('minimist')(process.argv.slice(2));
+  var bodyParser = require( 'body-parser' );
+  var subpath = express();
+  app.use(bodyParser());
+  app.use("/v1", subpath);
+  var swagger = require('swagger-node-express').createNew(subpath);
+  app.use(express.static('dist'));
+
+  swagger.setApiInfo({
+    title: "mso API",
+    description: "API from mso Projekt",
+    termsOfServiceUrl: "",
+    contact: "jens@dudu.xxx",
+    license: "",
+    licenseUrl: ""
+  });
+
+  subpath.get('/', function (req, res) {
+    res.sendfile(__dirname + '/dist/index.html');
+  });
+
+  swagger.configureSwaggerPaths('', 'api-docs', '');
+
+  var domain = 'localhost';
+  if(process.env.DOMAIN !== undefined)
+    domain = process.env.DOMAIN;
+  else
+    console.log('No --domain=xxx specified, taking default hostname "localhost".');
+  var applicationUrl = 'http://' + domain;
+  swagger.configure(applicationUrl, '1.0.0');
+
+}
 
 
 // catch 404 and forward to error handler
@@ -76,4 +117,11 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(process.env.PORT, () => console.log("Listen to port 3000"));
+
+var port = 3000;
+if(process.env.PORT !== undefined)
+  port = process.env.PORT;
+else
+  console.log('No --port=xxx specified, taking default port 3000');
+
+app.listen(port, () => console.log("Listen to port 3000"));
