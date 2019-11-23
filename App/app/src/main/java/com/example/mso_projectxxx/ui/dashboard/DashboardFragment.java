@@ -1,5 +1,6 @@
 package com.example.mso_projectxxx.ui.dashboard;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -95,13 +97,16 @@ public class DashboardFragment extends Fragment implements RVAdapter.OnNoteListe
         pair[2] = new Pair<View, String> (person_name, "text_shared");
 
 
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this.getActivity(), pair);
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this.getActivity(), person_photo, ViewCompat.getTransitionName(person_photo));
         Intent i = new Intent(getActivity(), Dashboard_shared.class);
         i.putExtra("name", item.name);
         i.putExtra("age", item.age);
         i.putExtra("pic", item.photoId);
-        //startActivity(i, options.toBundle());
-        startActivity(i);
-        CustomIntent.customType(this.getContext(), "left-to-right");
+        startActivity(i, options.toBundle());
+        //startActivity(i);
+        //CustomIntent.customType(this.getContext(), "left-to-right");
+
+
+
     }
 }
