@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.transition.Fade;
 import android.view.View;
 import android.view.Window;
@@ -40,7 +41,9 @@ public class Dashboard_shared extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
+        getWindow().setExitTransition(new Explode());
 
         setContentView(R.layout.fragment_dashboard_detail);
         String name = getIntent().getStringExtra("name");
@@ -48,10 +51,10 @@ public class Dashboard_shared extends AppCompatActivity {
         int img = getIntent().getIntExtra("pic",0);
 
         ImageView IV_pic = (ImageView)findViewById(R.id.person_photo);
-        TextView TV_name = (TextView)findViewById(R.id.person_name);
+        //TextView TV_name = (TextView)findViewById(R.id.person_name);
         TextView TV_age = (TextView)findViewById(R.id.person_age);
 
-        TV_name.setText(name);
+        //TV_name.setText(name);
         TV_age.setText(age);
         IV_pic.setImageResource(img);
 
@@ -63,6 +66,6 @@ public class Dashboard_shared extends AppCompatActivity {
     @Override
     public void finish(){
         super.finish();
-        CustomIntent.customType(this, "right-to-left");
+        //CustomIntent.customType(this, "right-to-left");
     }
 }

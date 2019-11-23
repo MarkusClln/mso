@@ -21,7 +21,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="16dp"
-            android:transitionName="image_shared"
             android:scaleType="fitXY" />
 
         <TextView
@@ -30,16 +29,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/person_photo"
-            android:textSize="30sp"
-            android:transitionName="text_shared" />
+            android:textSize="30sp"/>
 
         <TextView
             android:id="@+id/person_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/person_name"
-            android:layout_toRightOf="@+id/person_photo"
-            android:transitionName="text2_shared" />
+            android:layout_toRightOf="@+id/person_photo"/>
 
     </RelativeLayout>
 

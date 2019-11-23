@@ -4,7 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.transition.Explode;
 import android.transition.Fade;
+import android.transition.Slide;
+import android.view.Window;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -13,6 +16,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
 
 import org.osmdroid.config.Configuration;
 
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         fade.excludeTarget(android.R.id.navigationBarBackground, true);
         getWindow().setEnterTransition(fade);
         getWindow().setExitTransition(fade);
+
 
         StrictMode.setThreadPolicy(policy);
 

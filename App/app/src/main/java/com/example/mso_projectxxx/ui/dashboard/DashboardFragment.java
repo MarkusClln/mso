@@ -14,13 +14,24 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.ChangeBounds;
+import androidx.transition.ChangeImageTransform;
+import androidx.transition.ChangeTransform;
+import androidx.transition.Fade;
+import androidx.transition.Slide;
+import androidx.transition.TransitionInflater;
+import androidx.transition.TransitionSet;
 
 import com.example.mso_projectxxx.MainActivity;
 import com.example.mso_projectxxx.R;
+import com.example.mso_projectxxx.ui.dashboard.eventDetails;
 
 
 import java.util.ArrayList;
@@ -58,9 +69,6 @@ public class DashboardFragment extends Fragment implements RVAdapter.OnNoteListe
         View item = inflater.inflate(R.layout.item, container, false);
 
 
-        person_photo = (ImageView) item.findViewById(R.id.person_photo);
-        person_age = (TextView)item.findViewById(R.id.person_age);
-        person_name = (TextView)item.findViewById(R.id.person_name);
 
         return root;
 
@@ -75,13 +83,7 @@ public class DashboardFragment extends Fragment implements RVAdapter.OnNoteListe
         items.add(new item("Emma Wilson", "23 years old", R.drawable.bild1));
         items.add(new item("Lavery Maiss", "25 years old", R.drawable.ic_dashboard_black_24dp));
         items.add(new item("Lillie Watts", "35 years old", R.drawable.ic_dashboard_black_24dp));
-        items.add(new item("Lillie Watts", "35 years old", R.drawable.ic_dashboard_black_24dp));
-        items.add(new item("Lillie Watts", "35 years old", R.drawable.ic_dashboard_black_24dp));
-        items.add(new item("Lillie Watts", "35 years old", R.drawable.ic_dashboard_black_24dp));
-        items.add(new item("Lillie Watts", "35 years old", R.drawable.ic_dashboard_black_24dp));
-        items.add(new item("Lillie Watts", "35 years old", R.drawable.ic_dashboard_black_24dp));
-        items.add(new item("Lillie Watts", "35 years old", R.drawable.ic_dashboard_black_24dp));
-        items.add(new item("Lillie Watts", "35 years old", R.drawable.ic_dashboard_black_24dp));
+
 
 
     }
@@ -90,23 +92,29 @@ public class DashboardFragment extends Fragment implements RVAdapter.OnNoteListe
     @Override
     public void onNoteClick(int position) {
 
+        ImageView mViewPhoto = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.person_photo);
+        TextView mViewName = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.person_name);
+        setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image_transform));
+        setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.fade));
+
+        // Create new fragment to add (Fragment B)
         item item = items.get(position);
-        Pair[] pair = new Pair[3];
-        pair[0] = new Pair<View, String> (person_photo, "image_shared");
-        pair[1] = new Pair<View, String> (person_age, "text2_shared");
-        pair[2] = new Pair<View, String> (person_name, "text_shared");
+        String transitionPhoto = "transitionPhoto"+position;
+        String transitionName = "transitionName"+position;
+        Fragment fragment = eventDetails.newInstance(item.name, item.age, item.photoId, transitionPhoto, transitionName);
+        fragment.setSharedElementEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image_transform));
+        fragment.setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.fade));
 
+        // Add Fragment B
+        FragmentTransaction ft = getFragmentManager().beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .addToBackStack("transaction")
+                .addSharedElement(mViewPhoto, transitionPhoto)
+                .addSharedElement(mViewName, transitionName);
 
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this.getActivity(), person_photo, ViewCompat.getTransitionName(person_photo));
-        Intent i = new Intent(getActivity(), Dashboard_shared.class);
-        i.putExtra("name", item.name);
-        i.putExtra("age", item.age);
-        i.putExtra("pic", item.photoId);
-        startActivity(i, options.toBundle());
-        //startActivity(i);
-        //CustomIntent.customType(this.getContext(), "left-to-right");
-
-
-
+        ft.commit();
+        
     }
+
 }
+

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mso_projectxxx.R;
 import com.example.mso_projectxxx.ui.dashboard.item;
@@ -41,6 +42,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
         itemViewHolder.personName.setText(items.get(i).name);
         itemViewHolder.personAge.setText(items.get(i).age);
         itemViewHolder.personPhoto.setImageResource(items.get(i).photoId);
+        itemViewHolder.personPhoto.setTransitionName("transitionPhoto" + i);
+        itemViewHolder.personName.setTransitionName("transitionName" + i);
     }
 
     @Override
@@ -75,5 +78,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ItemViewHolder>{
     public interface OnNoteListener{
         void onNoteClick(int position);
     }
+
 
 }
