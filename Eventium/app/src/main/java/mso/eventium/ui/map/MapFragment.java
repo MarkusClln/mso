@@ -3,15 +3,20 @@ package mso.eventium.ui.map;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -22,7 +27,16 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+
+import java.util.Arrays;
+
+import mso.eventium.MainActivity;
 import mso.eventium.R;
 
 public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
@@ -30,11 +44,13 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private String style = "";
     MapView mMapView;
     private GoogleMap googleMap;
+    AutoCompleteTextView autocompleteFragment;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_map, container, false);
+        final View root = inflater.inflate(R.layout.fragment_map, container, false);
         mMapView = (MapView) root.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
@@ -64,11 +80,36 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(mannheim).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+                googleMap.setOnMarkerClickListener(MapFragment.this);
                 LatLng lu = new LatLng( 48.4874592, 6.4660395);
                 createLocation(lu, "Ludwigshafen");
 
             }
         });
+
+        Places.initialize(root.getContext(), "AIzaSyDHsNp7dZiPYx4fhBm_bU_8R15zGUziJqg");
+        PlacesClient placesClient = Places.createClient(root.getContext());
+        FragmentManager fm = this.getChildFragmentManager();
+
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                fm.findFragmentById(R.id.place_autocomplete);
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Toast.makeText(root.getContext(), place.getName(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Toast.makeText(root.getContext(), "An error occurred: " + status, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         return root;
     }
@@ -100,7 +141,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
     private void createLocation(LatLng location, String title){
         googleMap.addMarker(new MarkerOptions().position(location)
-                .title(title));
+                .title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
     }
 

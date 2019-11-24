@@ -58,7 +58,7 @@ public class EventCompleteFragment extends Fragment implements EventAdapter.OnNo
     public void onNoteClick(int position) {
         EventDetailFragment detailFragment = new EventDetailFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.root_frame, detailFragment, "2");
+        transaction.replace(R.id.root_frame, detailFragment);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.addToBackStack(null);
         transaction.commit();

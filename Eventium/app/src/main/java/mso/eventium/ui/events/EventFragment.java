@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 import mso.eventium.R;
 import mso.eventium.adapter.ViewPagerAdapter;
 import mso.eventium.ui.events.complete.EventCompleteFragmentRoot;
+import mso.eventium.ui.home.HomeFragment;
 import mso.eventium.ui.map.MapFragment;
 
 public class EventFragment  extends Fragment {
@@ -30,7 +31,7 @@ public class EventFragment  extends Fragment {
         adapter = new ViewPagerAdapter(getFragmentManager());
 
         adapter.AddFragment(new EventCompleteFragmentRoot(), "ALLE");
-        //adapter.AddFragment(new MapFragment(), "GESPEICHERT");
+        adapter.AddFragment(new HomeFragment(), "GESPEICHERT");
         adapter.AddFragment(new MapFragment(), "EIGENE");
 
         viewPager.setAdapter(adapter);
