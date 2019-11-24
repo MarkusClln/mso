@@ -8,4 +8,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <string name="com_auth0_client_id">jCfWvtN7IM0Dqq51X96B9yc1JfMMb1zN</string>
+    <string name="com_auth0_domain">dev-markus.eu.auth0.com</string>
 </resources>

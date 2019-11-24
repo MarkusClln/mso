@@ -4,4 +4,7 @@
     <string name="title_event">Events</string>
     <string name="title_map">Map</string>
     <string name="title_user">User</string>
+
+    <string name="com_auth0_client_id">jCfWvtN7IM0Dqq51X96B9yc1JfMMb1zN</string>
+    <string name="com_auth0_domain">dev-markus.eu.auth0.com</string>
 </resources>

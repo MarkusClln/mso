@@ -1,9 +1,13 @@
 package mso.eventium.ui.map;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,11 +20,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import mso.eventium.R;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
     private String style = "";
     MapView mMapView;
@@ -51,12 +56,17 @@ public class MapFragment extends Fragment {
 
                 // For dropping a marker at a point on the Map
                 LatLng mannheim = new LatLng( 49.4874592, 8.4660395);
-                LatLng lu = new LatLng( 48.4874592, 6.4660395);
+
                 googleMap.addMarker(new MarkerOptions().position(mannheim).title("Marker Title").snippet("Marker Description"));
+
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(mannheim).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                LatLng lu = new LatLng( 48.4874592, 6.4660395);
+                createLocation(lu, "Ludwigshafen");
+
             }
         });
 
@@ -86,5 +96,60 @@ public class MapFragment extends Fragment {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    private void createLocation(LatLng location, String title){
+        googleMap.addMarker(new MarkerOptions().position(location)
+                .title(title));
+
+    }
+
+    private final Handler mHandler = new Handler();
+    private Runnable mAnimation;
+
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        // This causes the marker at Perth to bounce into position when it is clicked.
+        final long start = SystemClock.uptimeMillis();
+        final long duration = 1500L;
+
+        // Cancels the previous animation
+        mHandler.removeCallbacks(mAnimation);
+
+        // Starts the bounce animation
+        mAnimation = new BounceAnimation(start, duration, marker, mHandler);
+        mHandler.post(mAnimation);
+        // for the default behavior to occur (which is for the camera to move such that the
+        // marker is centered and for the marker's info window to open, if it has one).
+        return false;
+    }
+
+    private static class BounceAnimation implements Runnable {
+
+        private final long mStart, mDuration;
+        private final Interpolator mInterpolator;
+        private final Marker mMarker;
+        private final Handler mHandler;
+
+        private BounceAnimation(long start, long duration, Marker marker, Handler handler) {
+            mStart = start;
+            mDuration = duration;
+            mMarker = marker;
+            mHandler = handler;
+            mInterpolator = new BounceInterpolator();
+        }
+
+        @Override
+        public void run() {
+            long elapsed = SystemClock.uptimeMillis() - mStart;
+            float t = Math.max(1 - mInterpolator.getInterpolation((float) elapsed / mDuration), 0f);
+            mMarker.setAnchor(0.5f, 1.0f + 1.2f * t);
+
+            if (t > 0.0) {
+                // Post again 16ms later.
+                mHandler.postDelayed(this, 16L);
+            }
+        }
     }
 }
