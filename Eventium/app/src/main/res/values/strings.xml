@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Eventium</string>
+    <string name="title_home">Home</string>
+    <string name="title_event">Events</string>
+    <string name="title_map">Map</string>
+    <string name="title_user">User</string>
+</resources>
