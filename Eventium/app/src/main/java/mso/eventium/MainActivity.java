@@ -1,12 +1,18 @@
 package mso.eventium;
 
 import android.Manifest;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.preference.PreferenceManager;
 
 import com.auth0.android.Auth0;
 import com.auth0.android.Auth0Exception;
@@ -21,6 +27,7 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -43,9 +50,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         //part for Auth0
         auth0 = new Auth0(this);
         auth0.setOIDCConformant(true);
+        
+StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
 
         ActivityCompat.requestPermissions(this, INITIAL_PERMS, 1331);
