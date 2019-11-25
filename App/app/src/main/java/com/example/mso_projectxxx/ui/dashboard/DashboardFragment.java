@@ -108,9 +108,9 @@ public class DashboardFragment extends Fragment implements RVAdapter.OnNoteListe
         // Add Fragment B
         FragmentTransaction ft = getFragmentManager().beginTransaction()
                 .replace(R.id.nav_host_fragment, fragment)
-                .addToBackStack("transaction")
-                .addSharedElement(mViewPhoto, transitionPhoto)
-                .addSharedElement(mViewName, transitionName);
+                .addToBackStack("transaction");
+               // .addSharedElement(mViewPhoto, transitionPhoto)
+               // .addSharedElement(mViewName, transitionName);
 
         ft.commit();
         
