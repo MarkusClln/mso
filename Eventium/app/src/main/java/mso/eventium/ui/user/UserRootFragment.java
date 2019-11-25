@@ -1,4 +1,4 @@
-package mso.eventium.ui.events.complete;
+package mso.eventium.ui.user;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,21 +10,21 @@ import androidx.fragment.app.FragmentTransaction;
 
 import mso.eventium.R;
 
-public class EventCompleteFragmentRoot extends Fragment {
+public class UserRootFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         /* Inflate the layout for this fragment */
-        View view = inflater.inflate(R.layout.fragment_event_complete_root, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_root, container, false);
 
-        FragmentTransaction transaction = getFragmentManager()
-                .beginTransaction();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
         /*
          * When this container fragment is created, we fill it with our first
          * "real" fragment
          */
-        transaction.replace(R.id.root_frame, new EventCompleteFragment());
-        //transaction.addToBackStack(null);
+        transaction.replace(R.id.user_root_frame, new UserFirstFragment());
+
         transaction.commit();
 
         return view;

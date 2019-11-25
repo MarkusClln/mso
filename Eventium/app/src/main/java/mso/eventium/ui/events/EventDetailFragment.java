@@ -1,5 +1,6 @@
 package mso.eventium.ui.events;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.tabs.TabLayout;
+
 import mso.eventium.R;
 
 public class EventDetailFragment extends Fragment {
@@ -17,6 +20,11 @@ public class EventDetailFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_event_detail, container, false);
+
+
+        TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tablayout);
+        tabLayout.setVisibility(View.GONE);
+
 
         TextView eventName = (TextView) root.findViewById(R.id.eventNameDetail);
         TextView hostName = (TextView) root.findViewById(R.id.eventHostDetail);
