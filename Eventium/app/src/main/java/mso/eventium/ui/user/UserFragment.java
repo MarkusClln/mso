@@ -5,40 +5,47 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
+import com.auth0.android.Auth0;
 
+import mso.eventium.MainActivity;
 import mso.eventium.R;
-import mso.eventium.adapter.ViewPagerAdapter;
-import mso.eventium.ui.events.complete.EventCompleteFragmentRoot;
-import mso.eventium.ui.map.MapFragment;
 
 public class UserFragment extends Fragment {
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private ViewPagerAdapter adapter;
+
+    private Auth0 auth0;
+    public static final String EXTRA_CLEAR_CREDENTIALS = "com.auth0.CLEAR_CREDENTIALS";
+    public static final String EXTRA_ACCESS_TOKEN = "com.auth0.ACCESS_TOKEN";
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_user, container, false);
+        final View root = inflater.inflate(R.layout.fragment_user, container, false);
 
-        tabLayout = (TabLayout) root.findViewById(R.id.tablayoutuser);
-        viewPager = (ViewPager) root.findViewById(R.id.viewpageruser);
-        adapter = new ViewPagerAdapter(getFragmentManager());
+        auth0 = new Auth0(root.getContext());
+        auth0.setOIDCConformant(true);
 
-        adapter.AddFragment(new UserRootFragment(), "ALLE");
-        adapter.AddFragment(new MapFragment(), "GESPEICHERT");
-        adapter.AddFragment(new MapFragment(), "EIGENE");
+        //Check if the activity was launched to log the user out
 
-        viewPager.setAdapter(adapter);
-
-        tabLayout.setupWithViewPager(viewPager);
-
+        Button loginButton = root.findViewById(R.id.logout);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((MainActivity)getActivity()).login){
+                    ((MainActivity)getActivity()).login();
+                }else{
+                    ((MainActivity)getActivity()).logout();
+                }
+            }
+        });
         return root;
     }
+
+
+
 }

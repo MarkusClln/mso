@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:id="@+id/contraintlayout">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginRight="@dimen/default_margin"
+        app:layout_constraintTop_toTopOf="parent"
+       >
+
+        <ImageView
+            android:id="@+id/event_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:elevation="2dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_dashboard_black_24dp"
+
+            android:layout_margin="@dimen/default_margin"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            app:cardBackgroundColor="@android:color/white">
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/event_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="@dimen/default_margin2"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    android:minHeight="60dp"
+                    android:text="Eine Event Beschreibung"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/event_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_name"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:text="27.03-2019"
+                    android:textColor="@color/event_text"/>
+
+                <TextView
+                    android:id="@+id/event_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_name"
+                    android:layout_marginLeft="@dimen/default_margin2"
+                    android:layout_toEndOf="@+id/event_date"
+                    android:text="12:05"
+                    android:textColor="@color/event_text"/>
+
+                <TextView
+                    android:id="@+id/event_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_name"
+                    android:layout_marginLeft="@dimen/default_margin2"
+                    android:layout_toEndOf="@+id/event_time"
+                    android:text="1km entfernt"
+                    android:textColor="@color/event_text"/>
+
+                <TextView
+                    android:id="@+id/event_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_date"
+                    android:layout_margin="@dimen/default_margin"
+                    android:text="Schnellen es viehmarkt verstehen behaglich grundlich pa. Unrecht beinahe das solange zum endlich von ich. Fehlen jemals feinen hin vor gesagt tun kirche schien. Wo gelernt verband er wu einfand bereits stopfen ja. Grundstuck launischen zu verdrossen da dachkammer bescheiden fluchtigen. Zog zur all ruth gewi kerl gern fur. "
+                    android:textColor="@color/event_text"/>
+
+            </RelativeLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

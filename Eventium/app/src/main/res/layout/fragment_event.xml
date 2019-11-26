@@ -3,24 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_search_grey_24dp"
+        android:textColor="@color/quantum_grey"
+        android:hint="Suche hier doch :^)"
+        android:background="@drawable/search_input_style"
+        android:id="@+id/searchBox"
+        android:layout_margin="@dimen/default_margin"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+
+        />
+
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabMode="fixed"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@android:color/black"
-        app:tabTextColor="@android:color/black"
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabTextColor="@color/colorPrimary"
         android:id="@+id/tablayout"/>
 
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/viewpager"/>
-<!--    <androidx.viewpager2.widget.ViewPager2-->
-<!--        xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--        android:orientation="vertical"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/viewpager"/>-->
 
 </LinearLayout>
