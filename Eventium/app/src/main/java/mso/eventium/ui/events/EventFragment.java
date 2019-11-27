@@ -27,9 +27,9 @@ public class EventFragment  extends Fragment {
     private EditText searchInput;
 
 
-    private EventListFragment df1 = EventListFragment.newInstance("df1");
-    private EventListFragment df2 = EventListFragment.newInstance("df2");
-    private EventListFragment df3 = EventListFragment.newInstance("df3");
+    private EventListFragment eventListFragmentAll = EventListFragment.newInstance("df1");
+    private EventListFragment eventListFragmentSaved = EventListFragment.newInstance("df2");
+    private EventListFragment eventListFragmentOwned = EventListFragment.newInstance("df3");
 
 
 
@@ -47,9 +47,9 @@ public class EventFragment  extends Fragment {
         adapter = new ViewPagerAdapter(fm);
 
 
-        adapter.AddFragment(df1, "ALLE");
-        adapter.AddFragment(df2, "GESPEICHERT");
-        adapter.AddFragment(df3, "EIGENE");
+        adapter.AddFragment(eventListFragmentAll, "ALLE");
+        adapter.AddFragment(eventListFragmentSaved, "GESPEICHERT");
+        adapter.AddFragment(eventListFragmentOwned, "EIGENE");
 
         //FragmentStateAdapter adapter = new ViewPagerAdapter2(getActivity());
         viewPager.setAdapter(adapter);
@@ -65,12 +65,12 @@ public class EventFragment  extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                df1.mAdapter.getFilter().filter(s);
-                df2.mAdapter.getFilter().filter(s);
-                df3.mAdapter.getFilter().filter(s);
-                df1.search=s;
-                df2.search=s;
-                df3.search=s;
+                eventListFragmentAll.mAdapter.getFilter().filter(s);
+                eventListFragmentSaved.mAdapter.getFilter().filter(s);
+                eventListFragmentOwned.mAdapter.getFilter().filter(s);
+                eventListFragmentAll.search=s;
+                eventListFragmentSaved.search=s;
+                eventListFragmentAll.search=s;
 
             }
 

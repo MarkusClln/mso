@@ -36,6 +36,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         this.mOnNoteListener = onNoteListener;
         this.EventModelsFiltered = i;
     }
+
     @Override
     public int getItemCount() {
         return EventModelsFiltered.size();
@@ -44,8 +45,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_events_list_element, viewGroup, false);
-        EventViewHolder pvh = new EventViewHolder(v, mOnNoteListener);
-        return pvh;
+        EventViewHolder evh = new EventViewHolder(v, mOnNoteListener);
+        return evh;
     }
 
     @Override

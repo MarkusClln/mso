@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_search_grey_24dp"
-        android:textColor="@color/quantum_grey"
-        android:hint="Suche hier doch :^)"
-        android:background="@drawable/search_input_style"
         android:id="@+id/searchBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
+        android:background="@drawable/search_input_style"
+        android:drawableLeft="@drawable/ic_search_grey_24dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:hint="Suche hier doch :^)"
         android:imeOptions="actionDone"
+        android:inputType="textPersonName"
         android:singleLine="true"
+        android:textColor="@color/quantum_grey"
 
         />
 
