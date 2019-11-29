@@ -10,9 +10,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -70,6 +73,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventDistance.setTransitionName("transitionDistance" + i);
         EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
 
+        if(i == EventModelsFiltered.size() - 1){
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) EventViewHolder.eventConstraintLayout.getLayoutParams();
+            layoutParams.setMargins(layoutParams.leftMargin,layoutParams.topMargin,layoutParams.rightMargin, 300);
+        }
+
     }
 
     @Override
@@ -123,6 +131,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         TextView eventDistance;
         ImageView eventIcon;
         CardView eventCardView;
+        ConstraintLayout eventConstraintLayout;
+
 
         OnNoteListener onNoteListener;
 
@@ -135,6 +145,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             eventDistance = (TextView)itemView.findViewById(R.id.event_distance);
             eventIcon = (ImageView)itemView.findViewById(R.id.event_icon);
             eventCardView = (CardView) itemView.findViewById(R.id.cardview);
+            eventConstraintLayout = (ConstraintLayout) itemView.findViewById(R.id.Constraintlayout);
 
             this.onNoteListener = onNoteListener;
 

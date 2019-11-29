@@ -1,30 +1,25 @@
 package mso.eventium.ui.events;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.view.MenuItem;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.util.Pair;
+import androidx.core.app.NavUtils;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import mso.eventium.MainActivity;
 import mso.eventium.R;
-import mso.eventium.ui.map.MapFragment;
 
 
 public class ActivityEventDetail extends AppCompatActivity {
@@ -58,7 +53,7 @@ public class ActivityEventDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mName = getIntent().getStringExtra(ARG_EVENT_NAME);
         mDescription = getIntent().getStringExtra(ARG_EVENT_DESCRIPTION);
@@ -74,7 +69,7 @@ public class ActivityEventDetail extends AppCompatActivity {
         mTransitionDescription = getIntent().getStringExtra(ARG_TRANSITION_EVENT_DESCRIPTION);
 
 
-        setContentView(R.layout.fragment_event_detail);
+        setContentView(R.layout.activity_event_detail);
 
         TextView mNameView;
         TextView mDescriptionView;
@@ -160,6 +155,5 @@ public class ActivityEventDetail extends AppCompatActivity {
         startActivity(intent);
         finishAffinity();
     }
-
 
 }

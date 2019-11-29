@@ -36,6 +36,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 
 import java.util.Arrays;
 
+
 import mso.eventium.MainActivity;
 import mso.eventium.R;
 
@@ -76,7 +77,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
                 LatLng lu = new LatLng( 49.477409, 8.445180);
 
-                MainActivity ac = (MainActivity) getActivity();
+                MainActivity ac = (MainActivity)getActivity();
+
                 if(ac.lat != -1 && ac.lng!= -1){
                     LatLng pos = new LatLng( ac.lat, ac.lng);
                     googleMap.addMarker(new MarkerOptions().position(pos).title("Your Event").snippet("zoom after trans"));

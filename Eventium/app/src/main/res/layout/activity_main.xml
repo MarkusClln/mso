@@ -1,29 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/container"
+    tools:context=".MainActivity">
 
-    <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/mobile_navigation"/>
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav_menu">
+        <fragment
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true" />
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
+            style="@style/Widget.MaterialComponents.BottomAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:elevation="3dp"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:theme="@style/BottomMenuColor"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabAlignmentMode="center"
+            app:fabCradleRoundedCornerRadius="16dp">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp">
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/first_menu_item"
+
+                    app:icon="@drawable/ic_message_white_24dp"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    app:iconSize="24dp"
+                    app:iconPadding="0dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Rounded"
+                    android:stateListAnimator="@null"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/second_menu_item"
+
+                    app:icon="@drawable/ic_favorite_white_24dp"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/textView"
+                    app:layout_constraintStart_toEndOf="@+id/first_menu_item"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    app:iconSize="24dp"
+                    app:iconPadding="0dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Rounded"
+                    android:stateListAnimator="@null"/>
+
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/third_menu_item"
+
+                    app:icon="@drawable/ic_create_white_24dp"
+                    app:layout_constraintEnd_toStartOf="@+id/fourth_menu_item"
+                    app:layout_constraintStart_toEndOf="@+id/textView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:backgroundTint="@color/colorPrimary"
+
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    app:iconSize="24dp"
+                    app:iconPadding="0dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Rounded"
+                    android:stateListAnimator="@null"
+
+                    />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/fourth_menu_item"
+                    app:icon="@drawable/ic_person_white_24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:backgroundTint="@color/colorPrimary"
+
+
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    app:iconSize="24dp"
+                    app:iconPadding="0dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Rounded"
+                    android:stateListAnimator="@null"/>
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </com.google.android.material.bottomappbar.BottomAppBar>
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/fab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:foregroundTint="@android:color/white"
+                            android:src="@drawable/ic_map_white_24dp"
+                            app:backgroundTint="@color/colorPrimary"
+                            app:fabSize="normal"
+                            app:layout_anchor="@+id/bottomAppBar"
+                            app:rippleColor="#FFFFFF"
+                            app:tint="@null" />
+
+                    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+                </LinearLayout>

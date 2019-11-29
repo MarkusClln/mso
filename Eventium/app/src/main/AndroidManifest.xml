@@ -22,7 +22,10 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +34,10 @@
         </activity>
         <activity
             android:name=".ui.events.ActivityEventDetail"
-            android:label="@string/titel_event_detail" />
+            android:label="@string/titel_event_detail"
+            android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
+            android:parentActivityName=".MainActivity"/>
+
     </application>
 
 </manifest>
