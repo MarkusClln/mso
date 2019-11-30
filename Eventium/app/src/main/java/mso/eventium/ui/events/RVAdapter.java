@@ -5,11 +5,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -63,6 +68,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventDistance.setText(EventModelsFiltered.get(i).getEvent_distance());
         EventViewHolder.eventIcon.setImageResource(EventModelsFiltered.get(i).getEvent_icon());
 
+        EventViewHolder.saveEventButton.setChecked(true);
+
         EventViewHolder.eventName.setTransitionName("transitionName" + i);
         EventViewHolder.eventDescription.setTransitionName("transitionDescription" + i);
         EventViewHolder.eventDate.setTransitionName("transitionDate" + i);
@@ -70,10 +77,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventDistance.setTransitionName("transitionDistance" + i);
         EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
 
+
+
         if(i == EventModelsFiltered.size() - 1){
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) EventViewHolder.eventConstraintLayout.getLayoutParams();
             layoutParams.setMargins(layoutParams.leftMargin,layoutParams.topMargin,layoutParams.rightMargin, 300);
         }
+
+
+
+
+
 
     }
 
@@ -120,7 +134,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     }
 
 
-    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView eventName;
         TextView eventDescription;
         TextView eventDate;
@@ -129,7 +143,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         ImageView eventIcon;
         CardView eventCardView;
         ConstraintLayout eventConstraintLayout;
-
+        ToggleButton saveEventButton;
 
         OnNoteListener onNoteListener;
 
@@ -143,10 +157,29 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             eventIcon = (ImageView)itemView.findViewById(R.id.event_icon);
             eventCardView = (CardView) itemView.findViewById(R.id.cardview);
             eventConstraintLayout = (ConstraintLayout) itemView.findViewById(R.id.Constraintlayout);
-
+            saveEventButton = (ToggleButton) itemView.findViewById((R.id.button_save));
             this.onNoteListener = onNoteListener;
 
             itemView.setOnClickListener(this);
+
+
+            saveEventButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
+                    scaleAnimation.setDuration(500);
+                    BounceInterpolator bounceInterpolator = new BounceInterpolator();
+                    scaleAnimation.setInterpolator(bounceInterpolator);
+                    buttonView.startAnimation(scaleAnimation);
+
+                    if(isChecked){
+                        //add to users saved events
+                    }else{
+                        //remove
+                    }
+
+                }
+            });
         }
 
         @Override

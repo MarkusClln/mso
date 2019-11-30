@@ -127,10 +127,9 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
     @Override
     public void onNoteClick(int position) {
-
         transitionActivity(position);
-
     }
+
 
     private void transitionActivity(int position){
         setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image_transform));
