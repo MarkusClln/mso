@@ -4,11 +4,9 @@ package mso.eventium.ui.events;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -27,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mso.eventium.R;
+import mso.eventium.model.Event;
 
 
 public class EventListFragment extends Fragment implements RVAdapter.OnNoteListener, SwipeRefreshLayout.OnRefreshListener {
@@ -58,7 +57,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
         initializeData();
         root = inflater.inflate(R.layout.fragment_event_list, container, false);
-        eventFragment = inflater.inflate(R.layout.fragment_event, container, false);
+        //eventFragment = inflater.inflate(R.layout.fragment_event, container, false);
 
 
         mRecyclerView = (RecyclerView)root.findViewById(R.id.rv);
@@ -102,7 +101,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
 
-    public List<EventModel> EventModels;
+    public List<Event> EventModels;
 
     private int times =0;
     private void initializeData(){
@@ -111,14 +110,14 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         String des3 = "Te braunen pa am kapelle gerbers zu heruber. He am meisten bessern steigst kriegen da. Sterne keinen allein ihr des. Naturlich getrunken ist alt hin schwachem kam grundlich. Tadelte lebhaft aus niemand spielen nah konnten. Ten mut mehrere heiland nachtun brummte bereits. Sei von tun der vergnugen schreibet vogelnest. Heftig da fragen feinen durren la erregt mi. Konnte ins ich soviel schade fallen lassen.";
         String des4 = "In la ausdenken fu ertastete sorglosen am filzhutes schwemmen. Im vollends hinabsah gebogene funkelte du en irgendwo. Als vor sagst ferne ihn kinde spiel durch. Lieb tust ubel gar alt froh. Harmlos kleines offnung da heiland in spiegel anderen la wu. Sah geheimnis schonheit furchtete gar magdebett tanzmusik zufrieden. Roten litze krank abend sag die denkt seine. Ordentlich bei getunchten leuchtturm auf geschlafen geschwatzt und. Und messingnen handarbeit der hinstellte ihr uberwunden ich.";
         EventModels = new ArrayList<>();
-        EventModels.add(new EventModel("Loaded: "+times++, des1,"24.12.1993","12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
-        EventModels.add(new EventModel("Das zweite Event", des2,"23.01.2019","24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails));
-        EventModels.add(new EventModel("kurzer Name", des3,"07.03.2020","12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen));
-        EventModels.add(new EventModel("Das ist ein Event mit einem sehr langen Namen", des4,"24.12.1993", "12:00","distance: 1km", R.drawable.img_drink, R.drawable.ic_best_choice));
-        EventModels.add(new EventModel("Das  Event", des1,"23.01.2019","12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_cocktails));
-        EventModels.add(new EventModel("Das  Event", des2,"07.03.2020","12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_flaschen));
-        EventModels.add(new EventModel("Das  Event", des3,"24.12.1993","12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
-        EventModels.add(new EventModel("Das  Event", des4,"23.01.2019","12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_cocktails));
+        EventModels.add(new Event("Loaded: "+times++, des1,"24.12.1993","12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
+        EventModels.add(new Event("Das zweite Event", des2,"23.01.2019","24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails));
+        EventModels.add(new Event("kurzer Name", des3,"07.03.2020","12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen));
+        EventModels.add(new Event("Das ist ein Event mit einem sehr langen Namen", des4,"24.12.1993", "12:00","distance: 1km", R.drawable.img_drink, R.drawable.ic_best_choice));
+        EventModels.add(new Event("Das  Event", des1,"23.01.2019","12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_cocktails));
+        EventModels.add(new Event("Das  Event", des2,"07.03.2020","12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_flaschen));
+        EventModels.add(new Event("Das  Event", des3,"24.12.1993","12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
+        EventModels.add(new Event("Das  Event", des4,"23.01.2019","12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_cocktails));
 
 
 
@@ -137,7 +136,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image_transform));
         setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.slide_bottom));
 
-        EventModel EventModel = EventModels.get(position);
+        Event EventModel = EventModels.get(position);
 
 
         String transitionName = "transitionName"+position;
@@ -157,12 +156,12 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
         Intent intent = new Intent(getContext(), ActivityEventDetail.class);
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_NAME, EventModel.event_name);
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_DESCRIPTION, EventModel.event_description);
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_ICON, EventModel.event_icon);
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_PHOTO, EventModel.event_photo);
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_DATE, EventModel.event_date);
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_TIME, EventModel.event_time);
+        intent.putExtra(ActivityEventDetail.ARG_EVENT_NAME, EventModel.getEvent_name());
+        intent.putExtra(ActivityEventDetail.ARG_EVENT_DESCRIPTION, EventModel.getEvent_description());
+        intent.putExtra(ActivityEventDetail.ARG_EVENT_ICON, EventModel.getEvent_icon());
+        intent.putExtra(ActivityEventDetail.ARG_EVENT_PHOTO, EventModel.getEvent_photo());
+        intent.putExtra(ActivityEventDetail.ARG_EVENT_DATE, EventModel.getEvent_date());
+        intent.putExtra(ActivityEventDetail.ARG_EVENT_TIME, EventModel.getEvent_time());
         intent.putExtra(ActivityEventDetail.ARG_TRANSITION_EVENT_NAME, transitionName);
         intent.putExtra(ActivityEventDetail.ARG_TRANSITION_EVENT_ICON, transitionIcon);
         intent.putExtra(ActivityEventDetail.ARG_TRANSITION_EVENT_DESCRIPTION, transitionDescription);
