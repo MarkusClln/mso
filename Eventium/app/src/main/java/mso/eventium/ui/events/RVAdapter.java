@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -27,13 +29,13 @@ import mso.eventium.model.Event;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> implements Filterable {
 
-    private List<EventModel> EventModels;
-    private List<EventModel> EventModelsFiltered;
+    private List<Event> EventModels;
+    private List<Event> EventModelsFiltered;
     private OnNoteListener mOnNoteListener;
     private Context mContext;
 
 
-    public RVAdapter(Context mContext, List<EventModel> i, OnNoteListener onNoteListener){
+    public RVAdapter(Context mContext, List<Event> i, OnNoteListener onNoteListener){
         this.mContext = mContext;
         this.EventModels = i;
         this.mOnNoteListener = onNoteListener;
@@ -59,12 +61,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventCardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
 
 
-        EventViewHolder.eventName.setText(EventModelsFiltered.get(i).event_name);
-        EventViewHolder.eventDescription.setText(EventModelsFiltered.get(i).event_description);
-        EventViewHolder.eventDate.setText(EventModelsFiltered.get(i).event_date);
-        EventViewHolder.eventTime.setText(EventModelsFiltered.get(i).event_time);
-        EventViewHolder.eventDistance.setText(EventModelsFiltered.get(i).event_distance);
-        EventViewHolder.eventIcon.setImageResource(EventModelsFiltered.get(i).event_icon);
+        EventViewHolder.eventName.setText(EventModelsFiltered.get(i).getEvent_name());
+        EventViewHolder.eventDescription.setText(EventModelsFiltered.get(i).getEvent_description());
+        EventViewHolder.eventDate.setText(EventModelsFiltered.get(i).getEvent_date());
+        EventViewHolder.eventTime.setText(EventModelsFiltered.get(i).getEvent_time());
+        EventViewHolder.eventDistance.setText(EventModelsFiltered.get(i).getEvent_distance());
+        EventViewHolder.eventIcon.setImageResource(EventModelsFiltered.get(i).getEvent_icon());
+
+        EventViewHolder.saveEventButton.setChecked(true);
 
         EventViewHolder.eventName.setTransitionName("transitionName" + i);
         EventViewHolder.eventDescription.setTransitionName("transitionDescription" + i);
@@ -73,10 +77,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventDistance.setTransitionName("transitionDistance" + i);
         EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
 
+
+
         if(i == EventModelsFiltered.size() - 1){
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) EventViewHolder.eventConstraintLayout.getLayoutParams();
             layoutParams.setMargins(layoutParams.leftMargin,layoutParams.topMargin,layoutParams.rightMargin, 300);
         }
+
+
+
+
+
 
     }
 
@@ -94,8 +105,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                 if(Key.isEmpty()){
                     EventModelsFiltered = EventModels;
                 }else{
-                    List<EventModel> lstFiltered = new ArrayList<>();
-                    for( EventModel row : EventModels){
+                    List<Event> lstFiltered = new ArrayList<>();
+                    for( Event row : EventModels){
                         //Config here search inputs
                         if(row.getName().toLowerCase().contains(Key.toLowerCase())||
                                 row.getEvent_description().toLowerCase().contains(Key.toLowerCase())||
@@ -116,14 +127,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                EventModelsFiltered = (List<EventModel>) results.values;
+                EventModelsFiltered = (List<Event>) results.values;
                 notifyDataSetChanged();
             }
         };
     }
 
 
-    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView eventName;
         TextView eventDescription;
         TextView eventDate;
@@ -132,7 +143,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         ImageView eventIcon;
         CardView eventCardView;
         ConstraintLayout eventConstraintLayout;
-
+        ToggleButton saveEventButton;
 
         OnNoteListener onNoteListener;
 
@@ -146,10 +157,29 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             eventIcon = (ImageView)itemView.findViewById(R.id.event_icon);
             eventCardView = (CardView) itemView.findViewById(R.id.cardview);
             eventConstraintLayout = (ConstraintLayout) itemView.findViewById(R.id.Constraintlayout);
-
+            saveEventButton = (ToggleButton) itemView.findViewById((R.id.button_save));
             this.onNoteListener = onNoteListener;
 
             itemView.setOnClickListener(this);
+
+
+            saveEventButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
+                    scaleAnimation.setDuration(500);
+                    BounceInterpolator bounceInterpolator = new BounceInterpolator();
+                    scaleAnimation.setInterpolator(bounceInterpolator);
+                    buttonView.startAnimation(scaleAnimation);
+
+                    if(isChecked){
+                        //add to users saved events
+                    }else{
+                        //remove
+                    }
+
+                }
+            });
         }
 
         @Override
