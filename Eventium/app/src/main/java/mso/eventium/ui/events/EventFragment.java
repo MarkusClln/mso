@@ -12,12 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
 import mso.eventium.R;
 import mso.eventium.adapter.ViewPagerAdapter;
+import mso.eventium.ui.fragments.FilterFragment;
+import mso.eventium.ui.map.MapFragment;
 
 
 public class EventFragment  extends Fragment {
@@ -36,6 +39,9 @@ public class EventFragment  extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_event, container, false);
+
+
+        setFilterFragment();
 
 
 
@@ -80,10 +86,20 @@ public class EventFragment  extends Fragment {
             }
         });
 
+
+
+
         return root;
     }
 
+    public void setFilterFragment(){
+        FilterFragment filterFragment = new FilterFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.filter_fragment, filterFragment);
+        fragmentTransaction.commit();
 
+    }
 
     @Override
     public void onResume() {

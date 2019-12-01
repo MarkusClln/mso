@@ -19,12 +19,12 @@
         android:singleLine="true"
         android:textColor="@color/quantum_grey"
 
-        app:layout_constraintEnd_toStartOf="@+id/button_save"
+        app:layout_constraintEnd_toStartOf="@+id/filter_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatToggleButton
-        android:id="@+id/button_save"
+        android:id="@+id/filter_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
@@ -38,54 +38,125 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/line1"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@+id/searchBox"
+
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBox">
+        app:layout_constraintTop_toBottomOf="@+id/searchBox"
+        android:animateLayoutChanges="true">
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/Slider1"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/rageSliderDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin2"
+            android:text="Umkreis:"
+            android:textSize="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.slider.Slider
-            android:id="@+id/Slider2"
-            android:layout_width="wrap_content"
+            android:id="@+id/rangeSlider"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Slider1" />
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin2"
+            android:layout_marginEnd="80dp"
+            app:floatingLabel="true"
+            app:layout_constraintBottom_toBottomOf="@+id/rageSliderDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/rageSliderDescription"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.476" />
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/Slider3"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/slider_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
+            android:text="default"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/rageSliderDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="@+id/rageSliderDescription"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dateTextDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:text="Datum:"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dateText"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Slider2" />
+            app:layout_constraintTop_toTopOf="@+id/dateText" />
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_margin"
             android:layout_marginTop="@dimen/default_margin"
-            android:text="Some Date"
+            android:text="Wähle Datum hier!"
             android:textSize="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toEndOf="@+id/rageSliderDescription"
+            app:layout_constraintTop_toBottomOf="@+id/rangeSlider" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timeTextDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:text="Uhrzeit:"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/timeText"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Slider3" />
+            app:layout_constraintTop_toTopOf="@+id/timeText" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:textColor="@color/colorPrimary"
+            android:text="Wähle Uhrzeit hier!"
+            android:textSize="30dp"
+            app:layout_constraintStart_toEndOf="@+id/rageSliderDescription"
+            app:layout_constraintTop_toBottomOf="@+id/dateText" />
 
+        <View
+            android:id="@+id/line2"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/default_margin"
+            android:background="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/timeText"
+
+            app:layout_constraintStart_toStartOf="parent"/>
 
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
