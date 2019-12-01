@@ -6,15 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-//import com.auth0.android.Auth0;
-
 import mso.eventium.MainActivity;
 import mso.eventium.R;
+
+//import com.auth0.android.Auth0;
 
 public class UserFragment extends Fragment {
 
@@ -28,8 +27,8 @@ public class UserFragment extends Fragment {
 
         final View root = inflater.inflate(R.layout.fragment_user, container, false);
 
-       // auth0 = new Auth0(root.getContext());
-       // auth0.setOIDCConformant(true);
+        // auth0 = new Auth0(root.getContext());
+        // auth0.setOIDCConformant(true);
 
         //Check if the activity was launched to log the user out
 
@@ -39,16 +38,15 @@ public class UserFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((MainActivity)getActivity()).login){
-                    ((MainActivity)getActivity()).login();
-                }else{
-                    ((MainActivity)getActivity()).logout();
+                if (((MainActivity) getActivity()).login) {
+                    ((MainActivity) getActivity()).login();
+                } else {
+                    ((MainActivity) getActivity()).logout();
                 }
             }
         });
         return root;
     }
-
 
 
 }

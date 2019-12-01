@@ -1,18 +1,16 @@
 package mso.eventium.model;
 
-import java.util.Date;
-
 public class Event {
 
 
+    private String event_name;
+    private String event_description;
+    private String event_date;
+    private String event_time;
+    private int event_photo;
+    private int event_icon;
+    private String event_distance;
 
-    String event_name;
-    String event_description;
-    String event_date;
-    String event_time;
-    int event_photo;
-    int event_icon;
-    String event_distance;
     public Event(String name, String description, String date, String event_time, String distance, int event_photo, int event_icon) {
         this.event_name = name;
         this.event_description = description;

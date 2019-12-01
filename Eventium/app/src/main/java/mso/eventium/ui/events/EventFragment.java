@@ -23,7 +23,7 @@ import mso.eventium.ui.fragments.FilterFragment;
 import mso.eventium.ui.map.MapFragment;
 
 
-public class EventFragment  extends Fragment {
+public class EventFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -33,7 +33,6 @@ public class EventFragment  extends Fragment {
     private EventListFragment eventListFragmentAll = EventListFragment.newInstance("df1");
     private EventListFragment eventListFragmentSaved = EventListFragment.newInstance("df2");
     private EventListFragment eventListFragmentOwned = EventListFragment.newInstance("df3");
-
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -74,9 +73,8 @@ public class EventFragment  extends Fragment {
                 eventListFragmentAll.mAdapter.getFilter().filter(s);
                 eventListFragmentSaved.mAdapter.getFilter().filter(s);
                 eventListFragmentOwned.mAdapter.getFilter().filter(s);
-                eventListFragmentAll.search=s;
-                eventListFragmentSaved.search=s;
-                eventListFragmentAll.search=s;
+                eventListFragmentAll.search = s;
+                eventListFragmentSaved.search = s;
 
             }
 
@@ -85,9 +83,6 @@ public class EventFragment  extends Fragment {
 
             }
         });
-
-
-
 
         return root;
     }

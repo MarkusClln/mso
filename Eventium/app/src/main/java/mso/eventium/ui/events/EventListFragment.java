@@ -3,23 +3,20 @@ package mso.eventium.ui.events;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.TransitionInflater;
-
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +35,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     private View eventFragment;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    public CharSequence search="";
-
+    public CharSequence search = "";
 
 
     public static EventListFragment newInstance(String someParams) {
@@ -51,7 +47,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -60,7 +55,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         //eventFragment = inflater.inflate(R.layout.fragment_event, container, false);
 
 
-        mRecyclerView = (RecyclerView)root.findViewById(R.id.rv);
+        mRecyclerView = root.findViewById(R.id.rv);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(root.getContext());
         mAdapter = new RVAdapter(getContext(), EventModels, this);
@@ -70,7 +65,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
         // SwipeRefreshLayout
-        mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout = root.findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
                 android.R.color.holo_green_dark,
@@ -94,32 +89,30 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         });
 
 
-
         return root;
 
 
     }
 
 
-    public List<Event> EventModels;
+    private List<Event> EventModels;
 
-    private int times =0;
-    private void initializeData(){
+    private int times = 0;
+
+    private void initializeData() {
         String des1 = "Gefallen eigentum schuppen so ei feinheit. Gegen er kinde kenne mu se. Im zu sauber labsal werden en heraus sterne mu. Trostlos der das streckte gefallts ins tag begierig. Gebrauch eleonora horchend gedanken als ich befehlen. Geschirr manchmal an spateren hinunter es sichtbar er ri einander. Herkommen betrubtes einfacher es so am kreiselnd verwegene schnupfen.";
         String des2 = "Lief die wege als wohl. Tun zog angenommen nun dienstmagd mancherlei federdecke hat augenblick wohnzimmer. Schwemmen verweilen zufrieden stadtchen in zu wo. Erisch spinat gut mochte karten spahte stille ich. Te wu eines ja warum lobte gehen. Flecken lacheln bei schoner anblick mut beschlo sie. Luften keinem la he sterne es. In em sorgen besuch es kissen stille. In schlafen lampchen verlohnt feinheit sichtbar ab vorliebe.";
         String des3 = "Te braunen pa am kapelle gerbers zu heruber. He am meisten bessern steigst kriegen da. Sterne keinen allein ihr des. Naturlich getrunken ist alt hin schwachem kam grundlich. Tadelte lebhaft aus niemand spielen nah konnten. Ten mut mehrere heiland nachtun brummte bereits. Sei von tun der vergnugen schreibet vogelnest. Heftig da fragen feinen durren la erregt mi. Konnte ins ich soviel schade fallen lassen.";
         String des4 = "In la ausdenken fu ertastete sorglosen am filzhutes schwemmen. Im vollends hinabsah gebogene funkelte du en irgendwo. Als vor sagst ferne ihn kinde spiel durch. Lieb tust ubel gar alt froh. Harmlos kleines offnung da heiland in spiegel anderen la wu. Sah geheimnis schonheit furchtete gar magdebett tanzmusik zufrieden. Roten litze krank abend sag die denkt seine. Ordentlich bei getunchten leuchtturm auf geschlafen geschwatzt und. Und messingnen handarbeit der hinstellte ihr uberwunden ich.";
         EventModels = new ArrayList<>();
-        EventModels.add(new Event("Loaded: "+times++, des1,"24.12.1993","12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
-        EventModels.add(new Event("Das zweite Event", des2,"23.01.2019","24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails));
-        EventModels.add(new Event("kurzer Name", des3,"07.03.2020","12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen));
-        EventModels.add(new Event("Das ist ein Event mit einem sehr langen Namen", des4,"24.12.1993", "12:00","distance: 1km", R.drawable.img_drink, R.drawable.ic_best_choice));
-        EventModels.add(new Event("Das  Event", des1,"23.01.2019","12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_cocktails));
-        EventModels.add(new Event("Das  Event", des2,"07.03.2020","12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_flaschen));
-        EventModels.add(new Event("Das  Event", des3,"24.12.1993","12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
-        EventModels.add(new Event("Das  Event", des4,"23.01.2019","12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_cocktails));
-
-
+        EventModels.add(new Event("Loaded: " + times++, des1, "24.12.1993", "12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
+        EventModels.add(new Event("Das zweite Event", des2, "23.01.2019", "24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails));
+        EventModels.add(new Event("kurzer Name", des3, "07.03.2020", "12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen));
+        EventModels.add(new Event("Das ist ein Event mit einem sehr langen Namen", des4, "24.12.1993", "12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_best_choice));
+        EventModels.add(new Event("Das  Event", des1, "23.01.2019", "12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_cocktails));
+        EventModels.add(new Event("Das  Event", des2, "07.03.2020", "12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_flaschen));
+        EventModels.add(new Event("Das  Event", des3, "24.12.1993", "12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
+        EventModels.add(new Event("Das  Event", des4, "23.01.2019", "12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_cocktails));
 
 
     }
@@ -131,16 +124,16 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
 
-    private void transitionActivity(int position){
+    private void transitionActivity(int position) {
         setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image_transform));
         setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.slide_bottom));
 
         Event EventModel = EventModels.get(position);
 
 
-        String transitionName = "transitionName"+position;
-        String transitionIcon = "transitionIcon"+position;
-        String transitionDescription = "transitionDescription"+position;
+        String transitionName = "transitionName" + position;
+        String transitionIcon = "transitionIcon" + position;
+        String transitionDescription = "transitionDescription" + position;
 
 
         TextView mViewName = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_name);
@@ -151,7 +144,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         mViewName.setTransitionName(transitionName);
         mViewDescription.setTransitionName(transitionDescription);
         mViewIcon.setTransitionName(transitionIcon);
-
 
 
         Intent intent = new Intent(getContext(), ActivityEventDetail.class);
@@ -175,8 +167,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         startActivity(intent, options.toBundle());
 
 
-
-
     }
 
 
@@ -186,8 +176,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
 
-    private void loadRecyclerViewData()
-    {
+    private void loadRecyclerViewData() {
         // Showing refresh animation before making http call
         mSwipeRefreshLayout.setRefreshing(true);
 

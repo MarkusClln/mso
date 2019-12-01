@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".ui.events.ActivityEventDetail"
-            android:label="@string/titel_event_detail"
+            android:label="@string/title_event_detail"
             android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
             android:parentActivityName=".MainActivity"/>
 
