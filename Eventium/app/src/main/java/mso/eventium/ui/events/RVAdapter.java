@@ -35,7 +35,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     private Context mContext;
 
 
-    public RVAdapter(Context mContext, List<Event> i, OnNoteListener onNoteListener){
+    public RVAdapter(Context mContext, List<Event> i, OnNoteListener onNoteListener) {
         this.mContext = mContext;
         this.EventModels = i;
         this.mOnNoteListener = onNoteListener;
@@ -78,15 +78,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
 
 
-
-        if(i == EventModelsFiltered.size() - 1){
+        if (i == EventModelsFiltered.size() - 1) {
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) EventViewHolder.eventConstraintLayout.getLayoutParams();
-            layoutParams.setMargins(layoutParams.leftMargin,layoutParams.topMargin,layoutParams.rightMargin, 300);
+            layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, 300);
         }
-
-
-
-
 
 
     }
@@ -102,17 +97,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String Key = constraint.toString();
-                if(Key.isEmpty()){
+                if (Key.isEmpty()) {
                     EventModelsFiltered = EventModels;
-                }else{
+                } else {
                     List<Event> lstFiltered = new ArrayList<>();
-                    for( Event row : EventModels){
+                    for (Event row : EventModels) {
                         //Config here search inputs
-                        if(row.getName().toLowerCase().contains(Key.toLowerCase())||
-                                row.getEvent_description().toLowerCase().contains(Key.toLowerCase())||
-                                row.getEvent_date().toLowerCase().contains(Key.toLowerCase())||
-                                row.getEvent_time().toLowerCase().contains(Key.toLowerCase())||
-                                row.getEvent_distance().toLowerCase().contains(Key.toLowerCase())){
+                        if (row.getName().toLowerCase().contains(Key.toLowerCase()) ||
+                                row.getEvent_description().toLowerCase().contains(Key.toLowerCase()) ||
+                                row.getEvent_date().toLowerCase().contains(Key.toLowerCase()) ||
+                                row.getEvent_time().toLowerCase().contains(Key.toLowerCase()) ||
+                                row.getEvent_distance().toLowerCase().contains(Key.toLowerCase())) {
                             lstFiltered.add(row);
                         }
 
@@ -134,7 +129,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     }
 
 
-    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView eventName;
         TextView eventDescription;
         TextView eventDate;
@@ -149,15 +144,15 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
         EventViewHolder(View itemView, OnNoteListener onNoteListener) {
             super(itemView);
-            eventName = (TextView)itemView.findViewById(R.id.event_name);
-            eventDescription = (TextView)itemView.findViewById(R.id.event_description);
-            eventDate = (TextView)itemView.findViewById(R.id.event_date);
-            eventTime = (TextView)itemView.findViewById(R.id.event_time);
-            eventDistance = (TextView)itemView.findViewById(R.id.event_distance);
-            eventIcon = (ImageView)itemView.findViewById(R.id.event_icon);
-            eventCardView = (CardView) itemView.findViewById(R.id.cardview);
-            eventConstraintLayout = (ConstraintLayout) itemView.findViewById(R.id.Constraintlayout);
-            saveEventButton = (ToggleButton) itemView.findViewById((R.id.button_save));
+            eventName = itemView.findViewById(R.id.event_name);
+            eventDescription = itemView.findViewById(R.id.event_description);
+            eventDate = itemView.findViewById(R.id.event_date);
+            eventTime = itemView.findViewById(R.id.event_time);
+            eventDistance = itemView.findViewById(R.id.event_distance);
+            eventIcon = itemView.findViewById(R.id.event_icon);
+            eventCardView = itemView.findViewById(R.id.cardview);
+            eventConstraintLayout = itemView.findViewById(R.id.Constraintlayout);
+            saveEventButton = itemView.findViewById((R.id.button_save));
             this.onNoteListener = onNoteListener;
 
             itemView.setOnClickListener(this);
@@ -172,9 +167,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                     scaleAnimation.setInterpolator(bounceInterpolator);
                     buttonView.startAnimation(scaleAnimation);
 
-                    if(isChecked){
+                    if (isChecked) {
                         //add to users saved events
-                    }else{
+                    } else {
                         //remove
                     }
 
@@ -188,7 +183,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         }
     }
 
-    public interface OnNoteListener{
+    public interface OnNoteListener {
         void onNoteClick(int position);
     }
 

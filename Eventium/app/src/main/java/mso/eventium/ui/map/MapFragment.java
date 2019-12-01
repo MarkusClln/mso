@@ -3,7 +3,6 @@ package mso.eventium.ui.map;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,19 +32,15 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
-
 import java.util.Arrays;
 
-
-import mso.eventium.MainActivity;
 import mso.eventium.R;
 
 public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
     private String style = "";
-    MapView mMapView;
+    private MapView mMapView;
     private GoogleMap googleMap;
-    AutoCompleteTextView autocompleteFragment;
 
     public static MapFragment newInstance(double lat, double lng) {
         MapFragment mapFragment = new MapFragment();
@@ -59,11 +54,12 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     }
 
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_map, container, false);
-        mMapView = (MapView) root.findViewById(R.id.mapView);
+        mMapView = root.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately
@@ -85,22 +81,20 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                 // For dropping a marker at a point on the Map
 
 
-
-                LatLng lu = new LatLng( 49.477409, 8.445180);
+                LatLng lu = new LatLng(49.477409, 8.445180);
 
 
                 double lat = getArguments().getDouble("lat");
                 double lng = getArguments().getDouble("lng");
 
 
-
-                if(lat != -1 && lng!= -1){
-                    LatLng pos = new LatLng( lat, lng);
+                if (lat != -1 && lng != -1) {
+                    LatLng pos = new LatLng(lat, lng);
                     googleMap.addMarker(new MarkerOptions().position(pos).title("Your Event").snippet("zoom after trans"));
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(pos).zoom(15).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                }else{
+                } else {
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(lu).zoom(13).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
@@ -136,7 +130,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         });
 
 
-
         return root;
     }
 
@@ -165,7 +158,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         mMapView.onLowMemory();
     }
 
-    private void createLocation(LatLng location, String title){
+    private void createLocation(LatLng location, String title) {
         googleMap.addMarker(new MarkerOptions().position(location)
                 .title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 

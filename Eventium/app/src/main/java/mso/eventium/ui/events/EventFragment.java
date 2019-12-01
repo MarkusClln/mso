@@ -11,7 +11,6 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -20,7 +19,7 @@ import mso.eventium.R;
 import mso.eventium.adapter.ViewPagerAdapter;
 
 
-public class EventFragment  extends Fragment {
+public class EventFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -32,16 +31,14 @@ public class EventFragment  extends Fragment {
     private EventListFragment eventListFragmentOwned = EventListFragment.newInstance("df3");
 
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_event, container, false);
 
 
-
-        tabLayout = (TabLayout) root.findViewById(R.id.tablayout);
-        viewPager = (ViewPager) root.findViewById(R.id.viewpager);
-        searchInput =(EditText) root.findViewById(R.id.searchBox);
+        tabLayout = root.findViewById(R.id.tablayout);
+        viewPager = root.findViewById(R.id.viewpager);
+        searchInput = root.findViewById(R.id.searchBox);
 
         FragmentManager fm = getFragmentManager();
         adapter = new ViewPagerAdapter(fm);
@@ -68,9 +65,8 @@ public class EventFragment  extends Fragment {
                 eventListFragmentAll.mAdapter.getFilter().filter(s);
                 eventListFragmentSaved.mAdapter.getFilter().filter(s);
                 eventListFragmentOwned.mAdapter.getFilter().filter(s);
-                eventListFragmentAll.search=s;
-                eventListFragmentSaved.search=s;
-                eventListFragmentAll.search=s;
+                eventListFragmentAll.search = s;
+                eventListFragmentSaved.search = s;
 
             }
 
@@ -84,7 +80,6 @@ public class EventFragment  extends Fragment {
     }
 
 
-
     @Override
     public void onResume() {
 
@@ -96,6 +91,5 @@ public class EventFragment  extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
     }
-
 
 }

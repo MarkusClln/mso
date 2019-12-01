@@ -1,19 +1,9 @@
 package mso.eventium.ui.host;
 
 import android.os.Bundle;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import mso.eventium.R;
 
@@ -48,7 +38,7 @@ public class HostDetailActivity extends AppCompatActivity {
         TextView mNameView;
         //ImageView mIconView;
 
-        mNameView = (TextView)findViewById(R.id.hostDetailName);
+        mNameView = findViewById(R.id.hostDetailName);
         //mIconView = (ImageView)findViewById(R.id.hostDetailImage);
 
         mNameView.setText(mName);

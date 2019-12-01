@@ -9,24 +9,22 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import mso.eventium.R;
-import mso.eventium.model.Event;
 import mso.eventium.model.User;
-import mso.eventium.ui.events.RVAdapter;
 
 
 public class FavoriteHostsAdapter extends RecyclerView.Adapter<FavoriteHostsAdapter.HostViewHolder> {
+
     private List<User> Hosts;
     private OnNoteListener mOnNoteListener;
     private Context mContext;
 
-    public FavoriteHostsAdapter(Context mContext, List<User> i, FavoriteHostsAdapter.OnNoteListener onNoteListener){
+    public FavoriteHostsAdapter(Context mContext, List<User> i, FavoriteHostsAdapter.OnNoteListener onNoteListener) {
         this.mContext = mContext;
         this.Hosts = i;
         this.mOnNoteListener = onNoteListener;
@@ -38,11 +36,11 @@ public class FavoriteHostsAdapter extends RecyclerView.Adapter<FavoriteHostsAdap
         return Hosts.size();
     }
 
+    @NonNull
     @Override
     public FavoriteHostsAdapter.HostViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_favorite_hosts_list_element, viewGroup, false);
-        FavoriteHostsAdapter.HostViewHolder hostViewHolder = new FavoriteHostsAdapter.HostViewHolder(v, mOnNoteListener);
-        return hostViewHolder;
+        return new HostViewHolder(v, mOnNoteListener);
     }
 
     @Override
@@ -50,12 +48,11 @@ public class FavoriteHostsAdapter extends RecyclerView.Adapter<FavoriteHostsAdap
         HostViewHolder.hostName.setText(Hosts.get(i).getFirstName() + " " + Hosts.get(i).getLastName());
         //HostViewHolder.hostProfileImage.setImageResource(Hosts.get(i).getProfileImage());
         HostViewHolder.ratingBar.setRating(3.5f);
-        if(i == Hosts.size() - 1){
+        if (i == Hosts.size() - 1) {
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) HostViewHolder.hostLinearLayout.getLayoutParams();
-            layoutParams.setMargins(layoutParams.leftMargin,layoutParams.topMargin,layoutParams.rightMargin, 300);
+            layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, 300);
         }
     }
-
 
 
     public static class HostViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -69,11 +66,11 @@ public class FavoriteHostsAdapter extends RecyclerView.Adapter<FavoriteHostsAdap
 
         HostViewHolder(View itemView, FavoriteHostsAdapter.OnNoteListener onNoteListener) {
             super(itemView);
-            hostName = (TextView)itemView.findViewById(R.id.host_name);
-            hostProfileImage = (ImageView)itemView.findViewById(R.id.host_profile_image);
+            hostName = itemView.findViewById(R.id.host_name);
+            hostProfileImage = itemView.findViewById(R.id.host_profile_image);
             //eventCardView = (CardView) itemView.findViewById(R.id.cardview);
-            hostLinearLayout = (LinearLayout) itemView.findViewById(R.id.hostLinearLayout);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.host_fixed_ratingbar);
+            hostLinearLayout = itemView.findViewById(R.id.hostLinearLayout);
+            ratingBar = itemView.findViewById(R.id.host_fixed_ratingbar);
             this.onNoteListener = onNoteListener;
 
             itemView.setOnClickListener(this);
@@ -85,7 +82,7 @@ public class FavoriteHostsAdapter extends RecyclerView.Adapter<FavoriteHostsAdap
         }
     }
 
-    public interface OnNoteListener{
+    public interface OnNoteListener {
         void onNoteClick(int position);
     }
 }

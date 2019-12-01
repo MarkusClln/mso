@@ -45,9 +45,8 @@ public class ActivityEventDetail extends AppCompatActivity {
     private String mTransitionIcon;
     private String mTransitionName;
     private String mTransitionDescription;
-    MapView mMapView;
+    private MapView mMapView;
     private GoogleMap googleMap;
-
 
 
     @Override
@@ -61,8 +60,8 @@ public class ActivityEventDetail extends AppCompatActivity {
         mTime = getIntent().getStringExtra(ARG_EVENT_TIME);
 
         //Todo Change default Value to default Icon and Image
-        mIcon = getIntent().getIntExtra(ARG_EVENT_ICON,0);
-        mPhoto = getIntent().getIntExtra(ARG_EVENT_PHOTO,0);
+        mIcon = getIntent().getIntExtra(ARG_EVENT_ICON, 0);
+        mPhoto = getIntent().getIntExtra(ARG_EVENT_PHOTO, 0);
 
         mTransitionIcon = getIntent().getStringExtra(ARG_TRANSITION_EVENT_ICON);
         mTransitionName = getIntent().getStringExtra(ARG_TRANSITION_EVENT_NAME);
@@ -78,12 +77,12 @@ public class ActivityEventDetail extends AppCompatActivity {
         ImageView mIconView;
         ImageView mPhotoView;
 
-        mNameView = (TextView)findViewById(R.id.event_name);
-        mDescriptionView = (TextView)findViewById(R.id.event_description);
-        mDateView = (TextView)findViewById(R.id.event_date);
-        mTimeView = (TextView)findViewById(R.id.event_time);
-        mIconView = (ImageView)findViewById(R.id.event_icon);
-        mPhotoView = (ImageView)findViewById(R.id.event_photo);
+        mNameView = findViewById(R.id.event_name);
+        mDescriptionView = findViewById(R.id.event_description);
+        mDateView = findViewById(R.id.event_date);
+        mTimeView = findViewById(R.id.event_time);
+        mIconView = findViewById(R.id.event_icon);
+        mPhotoView = findViewById(R.id.event_photo);
 
         mNameView.setText(mName);
         mDescriptionView.setText(mDescription);
@@ -101,7 +100,7 @@ public class ActivityEventDetail extends AppCompatActivity {
         mPhotoView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_event_detail_photo));
 
 
-        mMapView = (MapView) findViewById(R.id.mapView);
+        mMapView = findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately
@@ -121,17 +120,15 @@ public class ActivityEventDetail extends AppCompatActivity {
                 googleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
-                LatLng mannheim = new LatLng( 49.4874592, 8.4660395);
+                LatLng mannheim = new LatLng(49.4874592, 8.4660395);
 
                 googleMap.addMarker(new MarkerOptions().position(mannheim).title("Ein Event").snippet("Hier ist das Event"));
 
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mannheim, 15));
 
-                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
-                {
+                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
-                    public void onMapClick(LatLng arg0)
-                    {
+                    public void onMapClick(LatLng arg0) {
                         backToMapActivity(arg0);
                     }
                 });
@@ -144,11 +141,9 @@ public class ActivityEventDetail extends AppCompatActivity {
         });
 
 
-
-
     }
 
-    public void backToMapActivity(LatLng arg0){
+    public void backToMapActivity(LatLng arg0) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("intentFragment", "mapFragment");
         intent.putExtra("location_lat", arg0.latitude);
