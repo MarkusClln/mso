@@ -5,6 +5,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -135,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
         }
         floatingActionButton = findViewById(R.id.fab);
         bottomAppBar = findViewById(R.id.bottomAppBar);
+
+
         //main line for setting menu in bottom app bar
         setSupportActionBar(bottomAppBar);
 
@@ -148,7 +153,11 @@ public class MainActivity extends AppCompatActivity {
 
 
                 if (!isMapActive) {
-                    floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
+
+                    floatingActionButton.setImageDrawable(getDrawable(R.drawable.test));
+                    AnimatedVectorDrawable animation = (AnimatedVectorDrawable)floatingActionButton.getDrawable();
+                    animation.start();
+                    //floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
 
                     MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag("MAP");
                     if (mapFragment == null) {
