@@ -40,67 +40,62 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:id="@+id/eventNameWithFav"
-                    android:layout_width="wrap_content"
+                <ToggleButton
+                    android:id="@+id/button_save"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
+
+                <TextView
+                    android:id="@+id/event_name"
+                    android:layout_width="215dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_alignParentTop="true">
-
-                    <TextView
-                        android:id="@+id/event_name"
-                        android:layout_width="215dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginStart="@dimen/default_margin2"
-                        android:layout_marginTop="@dimen/default_margin"
-                        android:layout_marginEnd="@dimen/default_margin"
-                        android:layout_marginBottom="@dimen/default_margin"
-                        android:minHeight="60dp"
-                        android:text="Eine Event Beschreibung"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="30sp" />
-
-                    <ToggleButton
-                        android:id="@+id/button_save"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/button_favorite"
-                        android:checked="false"
-                        android:text=""
-                        android:textOff=""
-                        android:textOn="" />
-
-                </LinearLayout>
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="@dimen/default_margin2"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    android:minHeight="60dp"
+                    android:text="Eine Event Beschreibung"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp" />
 
                 <TextView
                     android:id="@+id/event_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/eventNameWithFav"
+                    android:layout_below="@+id/event_name"
                     android:layout_marginStart="@dimen/default_margin"
                     android:text="27.03-2019"
-                    android:textColor="@color/event_text"/>
+                    android:textColor="@color/event_text" />
 
                 <TextView
                     android:id="@+id/event_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/eventNameWithFav"
+                    android:layout_below="@+id/event_name"
                     android:layout_marginLeft="@dimen/default_margin2"
                     android:layout_toEndOf="@+id/event_date"
                     android:text="12:05"
-                    android:textColor="@color/event_text"/>
+                    android:textColor="@color/event_text" />
 
                 <TextView
                     android:id="@+id/event_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/eventNameWithFav"
+                    android:layout_below="@+id/event_name"
                     android:layout_marginLeft="@dimen/default_margin2"
                     android:layout_toEndOf="@+id/event_time"
                     android:text="1km entfernt"
-                    android:textColor="@color/event_text"/>
+                    android:textColor="@color/event_text" />
 
                 <TextView
                     android:id="@+id/event_description"

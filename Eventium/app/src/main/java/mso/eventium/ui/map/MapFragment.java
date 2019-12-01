@@ -47,6 +47,17 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private GoogleMap googleMap;
     AutoCompleteTextView autocompleteFragment;
 
+    public static MapFragment newInstance(double lat, double lng) {
+        MapFragment mapFragment = new MapFragment();
+
+        Bundle args = new Bundle();
+        args.putDouble("lat", lat);
+        args.putDouble("lng", lng);
+        mapFragment.setArguments(args);
+
+        return mapFragment;
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -77,15 +88,18 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
                 LatLng lu = new LatLng( 49.477409, 8.445180);
 
-                MainActivity ac = (MainActivity)getActivity();
 
-                if(ac.lat != -1 && ac.lng!= -1){
-                    LatLng pos = new LatLng( ac.lat, ac.lng);
+                double lat = getArguments().getDouble("lat");
+                double lng = getArguments().getDouble("lng");
+
+
+
+                if(lat != -1 && lng!= -1){
+                    LatLng pos = new LatLng( lat, lng);
                     googleMap.addMarker(new MarkerOptions().position(pos).title("Your Event").snippet("zoom after trans"));
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(pos).zoom(15).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    ac.lat = -1;
-                    ac.lng = -1;
+
                 }else{
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(lu).zoom(13).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));

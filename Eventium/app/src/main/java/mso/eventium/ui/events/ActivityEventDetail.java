@@ -150,6 +150,7 @@ public class ActivityEventDetail extends AppCompatActivity {
 
     public void backToMapActivity(LatLng arg0){
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("intentFragment", "mapFragment");
         intent.putExtra("location_lat", arg0.latitude);
         intent.putExtra("location_lng", arg0.longitude);
         startActivity(intent);
