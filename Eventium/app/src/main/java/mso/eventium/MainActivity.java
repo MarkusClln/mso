@@ -2,6 +2,8 @@ package mso.eventium;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -50,12 +52,14 @@ public class MainActivity extends AppCompatActivity {
     //Activity starts with this set fragment
     public ActiveFragments activeFragment = ActiveFragments.EVENTS;
 
-    public boolean login = true;
+    public boolean login;
     private FloatingActionButton floatingActionButton;
     private BottomAppBar bottomAppBar;
     private MaterialButton accountButton;
     private MaterialButton favoriteHostsButton;
     private Auth0 auth0;
+    private String token;
+    private SharedPreferences prefs;
 
 
     private static final String[] INITIAL_PERMS = {
@@ -66,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        prefs = this.getSharedPreferences("mso.eventium", Context.MODE_PRIVATE);
 
         setupAuth0();
 
@@ -136,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (activeFragment == ActiveFragments.USER) {
 
-            UserFragment userFragment = new UserFragment();
+            UserFragment userFragment = UserFragment.newInstance(token);
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment, userFragment);
@@ -201,6 +205,14 @@ public class MainActivity extends AppCompatActivity {
     private void setupAuth0() {
         auth0 = new Auth0(this);
         auth0.setOIDCConformant(true);
+
+        token = prefs.getString("token", null);
+        if(token!=null){
+            login=false;
+        }else{
+            login=true;
+        }
+
     }
 
     public void login() {
@@ -235,18 +247,19 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
+                                token = credentials.getAccessToken();
                                 TextView textView = findViewById(R.id.credentials);
-                                textView.setText(credentials.getAccessToken());
+                                textView.setText(token);
                                 Button loginButton = findViewById(R.id.logout);
                                 loginButton.setText("Logout");
                                 login = false;
+                                SharedPreferences.Editor mEditor = prefs.edit();
+                                mEditor.putString("token", token).apply();
 
                             }
                         });
                     }
                 });
-
     }
 
     public void logout() {
@@ -256,12 +269,14 @@ public class MainActivity extends AppCompatActivity {
                 .start(this, new VoidCallback() {
                     @Override
                     public void onSuccess(Void payload) {
-
+                        token = null;
                         TextView textView = findViewById(R.id.credentials);
                         textView.setText("");
                         Button loginButton = findViewById(R.id.logout);
                         loginButton.setText("Login");
                         login = true;
+                        SharedPreferences.Editor mEditor = prefs.edit();
+                        mEditor.remove("token").apply();
 
                     }
 
@@ -273,4 +288,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+    }
 }

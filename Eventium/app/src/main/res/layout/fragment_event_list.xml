@@ -12,6 +12,8 @@
         android:layout_height="match_parent"
         android:id="@+id/rv"
         android:scrollbars="vertical"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
 
         android:background="@color/event_bg"
         />

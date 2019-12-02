@@ -60,7 +60,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventIcon.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_transition_animation));
         EventViewHolder.eventCardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
 
-
         EventViewHolder.eventName.setText(EventModelsFiltered.get(i).getEvent_name());
         EventViewHolder.eventDescription.setText(EventModelsFiltered.get(i).getEvent_description());
         EventViewHolder.eventDate.setText(EventModelsFiltered.get(i).getEvent_date());
@@ -78,10 +77,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
 
 
-        if (i == EventModelsFiltered.size() - 1) {
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) EventViewHolder.eventConstraintLayout.getLayoutParams();
-            layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, 300);
-        }
 
 
     }

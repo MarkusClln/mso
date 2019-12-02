@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.auth0.android.result.Credentials;
 
 import mso.eventium.MainActivity;
 import mso.eventium.R;
@@ -17,22 +20,40 @@ import mso.eventium.R;
 
 public class UserFragment extends Fragment {
 
-    //private Auth0 auth0;
-    public static final String EXTRA_CLEAR_CREDENTIALS = "com.auth0.CLEAR_CREDENTIALS";
-    public static final String EXTRA_ACCESS_TOKEN = "com.auth0.ACCESS_TOKEN";
+    private static String ARGS_TOKEN = "args_token";
 
+    public static UserFragment newInstance(String token) {
+
+        Bundle args = new Bundle();
+        if(token!= null){
+            args.putString(ARGS_TOKEN, token);
+        }
+        UserFragment fragment = new UserFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
+    private String token;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_user, container, false);
-
-        // auth0 = new Auth0(root.getContext());
-        // auth0.setOIDCConformant(true);
-
-        //Check if the activity was launched to log the user out
-
         Button loginButton = root.findViewById(R.id.logout);
+        TextView textView = root.findViewById(R.id.credentials);
+
+        token =getArguments().getString(ARGS_TOKEN);
+
+        if(token != null){
+            loginButton.setText("Logout");
+            textView.setText(token);
+        }else{
+            loginButton.setText("Login");
+        }
+
+
+
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
