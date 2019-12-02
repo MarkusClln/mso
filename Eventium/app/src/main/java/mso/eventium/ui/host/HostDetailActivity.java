@@ -1,11 +1,22 @@
 package mso.eventium.ui.host;
 
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import mso.eventium.R;
+import mso.eventium.adapter.ViewPagerAdapter;
+import mso.eventium.ui.events.EventListFragment;
+import mso.eventium.ui.map.MapFragment;
 
 public class HostDetailActivity extends AppCompatActivity {
     public static final String ARG_HOST_NAME = "name";
@@ -20,6 +31,10 @@ public class HostDetailActivity extends AppCompatActivity {
 
     private String mTransitionIcon;
     private String mTransitionName;
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +62,29 @@ public class HostDetailActivity extends AppCompatActivity {
 
         mNameView.setTransitionName(mTransitionName);
         //mIconView.setTransitionName(mTransitionIcon);
+
+        tabLayout = (TabLayout) findViewById(R.id.hostDetailTabLayout);
+        viewPager = (ViewPager) findViewById(R.id.hostDetailViewPager);
+
+        FragmentManager fm = getSupportFragmentManager();
+        adapter = new ViewPagerAdapter(fm);
+         EventListFragment eventListFragmentAll = EventListFragment.newInstance("df1");
+         EventListFragment eventListFragmentSaved = EventListFragment.newInstance("df2");
+
+        List<String> test = new ArrayList<String>();
+
+        adapter.AddFragment(eventListFragmentAll, "Aktuelle");
+        adapter.AddFragment(eventListFragmentSaved, "Vergangene");
+
+
+        //FragmentStateAdapter adapter = new ViewPagerAdapter2(getActivity());
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
+
+        tabLayout.setupWithViewPager(viewPager);
+
+
+
 
     }
 }
