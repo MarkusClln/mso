@@ -2,16 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/client/backendClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/middleware/check-auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/middleware/check-auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/models/eventSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/eventSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/models/pinSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/pinSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/models/userSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/userSchema.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/event.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/event.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/pin.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/pin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/EventListFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/EventListFragment.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -121,6 +119,8 @@
       <workItem from="1574180565897" duration="2746000" />
       <workItem from="1574183325967" duration="6695000" />
       <workItem from="1575369979908" duration="15219000" />
+      <workItem from="1575393506188" duration="1454000" />
+      <workItem from="1575407678552" duration="6187000" />
     </task>
     <servers />
   </component>

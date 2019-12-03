@@ -16,15 +16,20 @@ const ckeck_auth = require("../middleware/check-auth");
 router.post('/', ckeck_auth, function(req, res, next) {
 
     const body = req.body;
+
     date = new Date(body.event.date);
-    console.log(date);
+
+
+
+
     const event = new eventSchema({
         _id: new mongoose.Types.ObjectId(),
         pin_id: body.event.pin_id,
+        user_id: req.user.sub,
         name: body.event.name,
         description: body.event.description,
-        date: date,
-        user_id: req.authData.userId
+        shortDescription: body.event.shortDescription,
+        date: date
     });
 
     event.save(function (err, result) {
@@ -33,7 +38,7 @@ router.post('/', ckeck_auth, function(req, res, next) {
     });
 });
 
-router.get('/getAll',  function(req, res, next) {
+router.get('/all',  function(req, res, next) {
     var lat = req.query.Lat;
     var lng = req.query.Lng;
     var distance = req.query.Distance

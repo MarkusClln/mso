@@ -25,14 +25,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.auth0.android.Auth0;
 import com.auth0.android.Auth0Exception;
 import com.auth0.android.authentication.AuthenticationException;
 import com.auth0.android.callback.BaseCallback;
-import com.auth0.android.management.ManagementException;
-import com.auth0.android.management.UsersAPIClient;
 import com.auth0.android.provider.AuthCallback;
 import com.auth0.android.provider.VoidCallback;
 import com.auth0.android.provider.WebAuthProvider;
@@ -42,13 +39,13 @@ import com.auth0.android.result.UserProfile;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import mso.eventium.client.backendClient;
 import mso.eventium.ui.events.EventFragment;
 import mso.eventium.ui.host.FavoriteHostsFragment;
 import mso.eventium.ui.map.MapFragment;
@@ -72,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Activity starts with this set fragment
     public ActiveFragments activeFragment = ActiveFragments.EVENTS;
-
+    private String ip;
+    public backendClient bc;
     public boolean login;
     private FloatingActionButton floatingActionButton;
     private BottomAppBar bottomAppBar;
@@ -82,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private String token;
     private SharedPreferences prefs;
     private AuthenticationAPIClient authenticationAPIClient;
-    private RequestQueue queue;
+    public RequestQueue queue;
 
 
     private static final String[] INITIAL_PERMS = {
@@ -95,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         prefs = this.getSharedPreferences("mso.eventium", Context.MODE_PRIVATE);
 
+        ip = getResources().getString(R.string.IP_Server);
+        bc = new backendClient(ip);
         setupAuth0();
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -295,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
     public void getProfile() {
         getProfile(false);
     }
+
     public void getProfile(boolean createUser2) {
         final boolean createUser = createUser2;
         authenticationAPIClient.
@@ -307,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
                         nameTV.setText(userinfo.getNickname());
                         emailTV.setText(userinfo.getEmail());
                         if(createUser){
-                            DB_createUser(userinfo.getEmail(), userinfo.getId(), userinfo.getNickname());
+                            queue.add(bc.createUser(token,userinfo.getEmail(), userinfo.getId(), userinfo.getNickname()));
                         }
 
                     }
@@ -341,7 +342,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -355,42 +355,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void DB_createUser(final String email, final String auth0_id, final String name){
-        String server_ip = getResources().getString(R.string.IP_Server);
-        final String url = "http://"+server_ip+"/user";
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("email", email);
-        params.put("name", name);
-        params.put("auth0_id", auth0_id);
-
-
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                url, new JSONObject(params),
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("JSONPost", response.toString());
-                        //pDialog.hide();
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("JSONPost", "Error: " + error.getMessage());
-                //pDialog.hide();
-            }
-
-        }){@Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("Content-Type", "application/json; charset=UTF-8");
-            params.put("Authorization", "Bearer "+token);
-            return params;
-        }};
-
-        queue.add(jsonObjReq);
-    }
 
 }

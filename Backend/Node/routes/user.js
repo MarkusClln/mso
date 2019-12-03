@@ -55,7 +55,4 @@ router.get('/:id',check_auth, (req, res) => {
 
 });
 
-
-
-
 module.exports = router;

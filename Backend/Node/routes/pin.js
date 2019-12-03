@@ -13,7 +13,7 @@ const ckeck_auth = require("../middleware/check-auth");
 
 
 
-router.post('/set', ckeck_auth, function(req, res, next) {
+router.post('/', ckeck_auth, function(req, res, next) {
 
     const body = req.body;
     console.log(req.user);
@@ -57,7 +57,7 @@ router.get('/getAll',  function(req, res, next) {
     }
 });
 
-router.get('/getById/:id', function(req, res, next) {
+router.get('/:id', function(req, res, next) {
     var id = req.params.id;
     pinSchema.findById(id,function (err, result) {
         if (err) return console.error(err);
