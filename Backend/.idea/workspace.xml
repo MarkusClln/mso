@@ -2,20 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Node/dist/api-docs.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Node/middleware/check-auth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Node/models/eventSchema.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Node/routes/event.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../App/app/src/main/java/com/example/mso_projectxxx/ui/map/MapFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../App/app/src/main/java/com/example/mso_projectxxx/ui/map/MapFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../App/app/src/main/res/raw/style.json" beforeDir="false" afterPath="$PROJECT_DIR$/../App/app/src/main/res/raw/style.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/models/pin.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/pinSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/userSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Node/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Node/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/middleware/check-auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/middleware/check-auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/models/eventSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/eventSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/models/pinSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/pinSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/models/userSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/userSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/routes/event.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/event.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/pin.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/pin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +43,7 @@
     <property name="last_opened_file_path" value="H:/coding_stuff/WebStorm/MapTiles" />
     <property name="nodejs_interpreter_path" value="$APPLICATION_CONFIG_DIR$/node/node-v10.16.0-win-x64/node" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -66,8 +62,21 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Node.js.app.js">
+  <component name="RunManager" selected="Docker.docker-compose.yml.node2: Compose Deployment">
     <configuration name="app.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/Node/app.js" working-dir="$PROJECT_DIR$/Node">
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.node2: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="node2" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
       <method v="2" />
     </configuration>
     <configuration name="docker-compose.yml.rest-node: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
@@ -85,6 +94,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.docker-compose.yml.node2: Compose Deployment" />
         <item itemvalue="Node.js.app.js" />
         <item itemvalue="Docker.docker-compose.yml.rest-node: Compose Deployment" />
       </list>
@@ -110,6 +120,7 @@
       <workItem from="1574173691808" duration="5896000" />
       <workItem from="1574180565897" duration="2746000" />
       <workItem from="1574183325967" duration="6695000" />
+      <workItem from="1575369979908" duration="15219000" />
     </task>
     <servers />
   </component>

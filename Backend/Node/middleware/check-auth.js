@@ -1,22 +1,17 @@
-var jwt = require("jsonwebtoken");
+
+var jwt = require("express-jwt");
+var jwks = require('jwks-rsa');
 
 
-module.exports = (req, res, next) => {
+module.exports = jwt({
+    secret: jwks.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 100,
+        jwksUri: 'https://dev-markus.eu.auth0.com/.well-known/jwks.json'
+    }),
+    audience: 'https://mso-api',
+    algorithms: ['RS256']
+});
 
-    const bearerHeader = req.headers['authorization'];
-    if(typeof bearerHeader !== 'undefined'){
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        jwt.verify(bearerToken, process.env.JWT_Secret, (err, authData) => {
-            if (err) {
-                res.sendStatus(403);
-            } else {
-               req.authData = authData;
-               next();
-            }
-        });
-    }else{
-        //Forbidden
-        res.sendStatus(403);
-    }
-};
+

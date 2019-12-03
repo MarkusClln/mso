@@ -41,15 +41,23 @@ public class UserFragment extends Fragment {
 
         final View root = inflater.inflate(R.layout.fragment_user, container, false);
         Button loginButton = root.findViewById(R.id.logout);
-        TextView textView = root.findViewById(R.id.credentials);
 
         token =getArguments().getString(ARGS_TOKEN);
 
         if(token != null){
             loginButton.setText("Logout");
-            textView.setText(token);
+            ((MainActivity) getActivity()).getProfile();
         }else{
             loginButton.setText("Login");
+            TextView nameTV = root.findViewById(R.id.userName);
+            TextView emailTV = root.findViewById(R.id.email);
+            nameTV.setVisibility(View.INVISIBLE);
+            emailTV.setVisibility(View.INVISIBLE);
+
+            TextView nameTVdesc = root.findViewById(R.id.userNameDesc);
+            TextView emailTVdesc = root.findViewById(R.id.emailDesc);
+            nameTVdesc.setVisibility(View.INVISIBLE);
+            emailTVdesc.setVisibility(View.INVISIBLE);
         }
 
 
@@ -61,8 +69,30 @@ public class UserFragment extends Fragment {
             public void onClick(View v) {
                 if (((MainActivity) getActivity()).login) {
                     ((MainActivity) getActivity()).login();
+                    TextView nameTV = root.findViewById(R.id.userName);
+                    TextView emailTV = root.findViewById(R.id.email);
+                    nameTV.setVisibility(View.VISIBLE);
+                    emailTV.setVisibility(View.VISIBLE);
+
+                    TextView nameTVdesc = root.findViewById(R.id.userNameDesc);
+                    TextView emailTVdesc = root.findViewById(R.id.emailDesc);
+                    nameTVdesc.setVisibility(View.VISIBLE);
+                    emailTVdesc.setVisibility(View.VISIBLE);
                 } else {
                     ((MainActivity) getActivity()).logout();
+                    Button loginButton = root.findViewById(R.id.logout);
+                    TextView nameTV = root.findViewById(R.id.userName);
+                    TextView emailTV = root.findViewById(R.id.email);
+                    loginButton.setText("Login");
+                    nameTV.setVisibility(View.INVISIBLE);
+                    emailTV.setVisibility(View.INVISIBLE);
+                    nameTV.setText("");
+                    emailTV.setText("");
+
+                    TextView nameTVdesc = root.findViewById(R.id.userNameDesc);
+                    TextView emailTVdesc = root.findViewById(R.id.emailDesc);
+                    nameTVdesc.setVisibility(View.INVISIBLE);
+                    emailTVdesc.setVisibility(View.INVISIBLE);
                 }
             }
         });

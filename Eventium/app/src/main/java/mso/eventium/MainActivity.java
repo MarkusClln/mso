@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,16 +18,36 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.auth0.android.Auth0;
 import com.auth0.android.Auth0Exception;
 import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.callback.BaseCallback;
+import com.auth0.android.management.ManagementException;
+import com.auth0.android.management.UsersAPIClient;
 import com.auth0.android.provider.AuthCallback;
 import com.auth0.android.provider.VoidCallback;
 import com.auth0.android.provider.WebAuthProvider;
+import com.auth0.android.authentication.AuthenticationAPIClient;
 import com.auth0.android.result.Credentials;
+import com.auth0.android.result.UserProfile;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import mso.eventium.ui.events.EventFragment;
 import mso.eventium.ui.host.FavoriteHostsFragment;
@@ -60,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     private Auth0 auth0;
     private String token;
     private SharedPreferences prefs;
+    private AuthenticationAPIClient authenticationAPIClient;
+    private RequestQueue queue;
 
 
     private static final String[] INITIAL_PERMS = {
@@ -85,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
         createFloatingActionButton();
         createBottomNavBarButtons();
+        queue = Volley.newRequestQueue(this);
 
 
     }
@@ -147,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.commit();
             floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
 
+
         }
         if (activeFragment == ActiveFragments.HOSTS) {
             FavoriteHostsFragment favoriteHostsFragment = new FavoriteHostsFragment();
@@ -205,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupAuth0() {
         auth0 = new Auth0(this);
         auth0.setOIDCConformant(true);
+        authenticationAPIClient = new AuthenticationAPIClient(auth0);
 
         token = prefs.getString("token", null);
         if(token!=null){
@@ -218,8 +244,9 @@ public class MainActivity extends AppCompatActivity {
     public void login() {
 
         WebAuthProvider.login(auth0)
-                .withScheme("demo")
-                .withAudience(String.format("https://%s/userinfo", getString(R.string.com_auth0_domain)))
+                .withScheme("demo").withAudience("https://mso-api")
+                .withScope("openid profile email offline_access read:current_user update:current_user_metadata")
+                //.withAudience(String.format("https://%s/userinfo", getString(R.string.com_auth0_domain)))
                 .start(this, new AuthCallback() {
                     @Override
                     public void onFailure(@NonNull final Dialog dialog) {
@@ -248,16 +275,46 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 token = credentials.getAccessToken();
-                                TextView textView = findViewById(R.id.credentials);
-                                textView.setText(token);
+                                System.out.println(credentials.getIdToken());
                                 Button loginButton = findViewById(R.id.logout);
                                 loginButton.setText("Logout");
                                 login = false;
                                 SharedPreferences.Editor mEditor = prefs.edit();
                                 mEditor.putString("token", token).apply();
 
+                                getProfile(true);
+
+
+
                             }
                         });
+                    }
+                });
+    }
+
+    public void getProfile() {
+        getProfile(false);
+    }
+    public void getProfile(boolean createUser2) {
+        final boolean createUser = createUser2;
+        authenticationAPIClient.
+                userInfo(token)
+                .start(new BaseCallback<UserProfile, AuthenticationException>() {
+                    @Override
+                    public void onSuccess(UserProfile userinfo) {
+                        TextView nameTV = findViewById(R.id.userName);
+                        TextView emailTV = findViewById(R.id.email);
+                        nameTV.setText(userinfo.getNickname());
+                        emailTV.setText(userinfo.getEmail());
+                        if(createUser){
+                            DB_createUser(userinfo.getEmail(), userinfo.getId(), userinfo.getNickname());
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(AuthenticationException error) {
+                        // Show error
                     }
                 });
     }
@@ -270,10 +327,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void payload) {
                         token = null;
-                        TextView textView = findViewById(R.id.credentials);
-                        textView.setText("");
-                        Button loginButton = findViewById(R.id.logout);
-                        loginButton.setText("Login");
                         login = true;
                         SharedPreferences.Editor mEditor = prefs.edit();
                         mEditor.remove("token").apply();
@@ -301,4 +354,43 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void DB_createUser(final String email, final String auth0_id, final String name){
+        String server_ip = getResources().getString(R.string.IP_Server);
+        final String url = "http://"+server_ip+"/user";
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("email", email);
+        params.put("name", name);
+        params.put("auth0_id", auth0_id);
+
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                url, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JSONPost", response.toString());
+                        //pDialog.hide();
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("JSONPost", "Error: " + error.getMessage());
+                //pDialog.hide();
+            }
+
+        }){@Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("Content-Type", "application/json; charset=UTF-8");
+            params.put("Authorization", "Bearer "+token);
+            return params;
+        }};
+
+        queue.add(jsonObjReq);
+    }
+
 }
