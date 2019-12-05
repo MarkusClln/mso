@@ -1,15 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="116dp">
+
+        <ImageView
+            android:id="@+id/hostDetailImage"
+            android:layout_width="110dp"
+            android:layout_height="117dp"
+            android:src="@drawable/ic_cocktails"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/hostDetailName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Langer Name Huehue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/hostDetailImage"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="?android:attr/ratingBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.521"
+            app:layout_constraintStart_toEndOf="@+id/hostDetailImage"
+            app:layout_constraintTop_toBottomOf="@+id/hostDetailName" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/hostDetailViewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/hostDetailImage"
-        android:src="@drawable/ic_event_black_24dp"/>
-<TextView
-    android:id="@+id/hostDetailName"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="HALLO"/>
+        android:animateLayoutChanges="true">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/hostDetailTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabMode="fixed"
+            app:tabTextColor="@color/colorPrimary" />
+    </androidx.viewpager.widget.ViewPager>
+
+
 </LinearLayout>

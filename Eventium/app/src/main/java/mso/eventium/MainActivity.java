@@ -2,8 +2,11 @@ package mso.eventium;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,17 +18,34 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.auth0.android.Auth0;
 import com.auth0.android.Auth0Exception;
 import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.callback.BaseCallback;
 import com.auth0.android.provider.AuthCallback;
 import com.auth0.android.provider.VoidCallback;
 import com.auth0.android.provider.WebAuthProvider;
+import com.auth0.android.authentication.AuthenticationAPIClient;
 import com.auth0.android.result.Credentials;
+import com.auth0.android.result.UserProfile;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import mso.eventium.client.backendClient;
 import mso.eventium.ui.events.EventFragment;
 import mso.eventium.ui.host.FavoriteHostsFragment;
 import mso.eventium.ui.map.EventiumMapFragment;
@@ -49,13 +69,18 @@ public class MainActivity extends AppCompatActivity {
 
     //Activity starts with this set fragment
     public ActiveFragments activeFragment = ActiveFragments.EVENTS;
-
-    public boolean login = true;
+    private String ip;
+    public backendClient bc;
+    public boolean login;
     private FloatingActionButton floatingActionButton;
     private BottomAppBar bottomAppBar;
     private MaterialButton accountButton;
     private MaterialButton favoriteHostsButton;
     private Auth0 auth0;
+    private String token;
+    private SharedPreferences prefs;
+    private AuthenticationAPIClient authenticationAPIClient;
+    public RequestQueue queue;
 
 
     private static final String[] INITIAL_PERMS = {
@@ -66,8 +91,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        prefs = this.getSharedPreferences("mso.eventium", Context.MODE_PRIVATE);
 
-
+        ip = getResources().getString(R.string.IP_Server);
+        bc = new backendClient(ip);
         setupAuth0();
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -81,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
         createFloatingActionButton();
         createBottomNavBarButtons();
+        queue = Volley.newRequestQueue(this);
 
 
     }
@@ -136,12 +164,13 @@ public class MainActivity extends AppCompatActivity {
         }
         if (activeFragment == ActiveFragments.USER) {
 
-            UserFragment userFragment = new UserFragment();
+            UserFragment userFragment = UserFragment.newInstance(token);
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment, userFragment);
             fragmentTransaction.commit();
             floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
+
 
         }
         if (activeFragment == ActiveFragments.HOSTS) {
@@ -201,13 +230,23 @@ public class MainActivity extends AppCompatActivity {
     private void setupAuth0() {
         auth0 = new Auth0(this);
         auth0.setOIDCConformant(true);
+        authenticationAPIClient = new AuthenticationAPIClient(auth0);
+
+        token = prefs.getString("token", null);
+        if(token!=null){
+            login=false;
+        }else{
+            login=true;
+        }
+
     }
 
     public void login() {
 
         WebAuthProvider.login(auth0)
-                .withScheme("demo")
-                .withAudience(String.format("https://%s/userinfo", getString(R.string.com_auth0_domain)))
+                .withScheme("demo").withAudience("https://mso-api")
+                .withScope("openid profile email offline_access read:current_user update:current_user_metadata")
+                //.withAudience(String.format("https://%s/userinfo", getString(R.string.com_auth0_domain)))
                 .start(this, new AuthCallback() {
                     @Override
                     public void onFailure(@NonNull final Dialog dialog) {
@@ -235,18 +274,50 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                TextView textView = findViewById(R.id.credentials);
-                                textView.setText(credentials.getAccessToken());
+                                token = credentials.getAccessToken();
+                                System.out.println(credentials.getIdToken());
                                 Button loginButton = findViewById(R.id.logout);
                                 loginButton.setText("Logout");
                                 login = false;
+                                SharedPreferences.Editor mEditor = prefs.edit();
+                                mEditor.putString("token", token).apply();
+
+                                getProfile(true);
+
+
 
                             }
                         });
                     }
                 });
+    }
 
+    public void getProfile() {
+        getProfile(false);
+    }
+
+    public void getProfile(boolean createUser2) {
+        final boolean createUser = createUser2;
+        authenticationAPIClient.
+                userInfo(token)
+                .start(new BaseCallback<UserProfile, AuthenticationException>() {
+                    @Override
+                    public void onSuccess(UserProfile userinfo) {
+                        TextView nameTV = findViewById(R.id.userName);
+                        TextView emailTV = findViewById(R.id.email);
+                        nameTV.setText(userinfo.getNickname());
+                        emailTV.setText(userinfo.getEmail());
+                        if(createUser){
+                            queue.add(bc.createUser(token,userinfo.getEmail(), userinfo.getId(), userinfo.getNickname()));
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(AuthenticationException error) {
+                        // Show error
+                    }
+                });
     }
 
     public void logout() {
@@ -256,12 +327,10 @@ public class MainActivity extends AppCompatActivity {
                 .start(this, new VoidCallback() {
                     @Override
                     public void onSuccess(Void payload) {
-
-                        TextView textView = findViewById(R.id.credentials);
-                        textView.setText("");
-                        Button loginButton = findViewById(R.id.logout);
-                        loginButton.setText("Login");
+                        token = null;
                         login = true;
+                        SharedPreferences.Editor mEditor = prefs.edit();
+                        mEditor.remove("token").apply();
 
                     }
 
@@ -272,5 +341,19 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+    }
+
 
 }

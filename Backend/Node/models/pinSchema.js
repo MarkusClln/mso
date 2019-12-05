@@ -6,8 +6,7 @@ const pinsSchema = new mongoose.Schema({
         coordinates: []
     },
     name: String,
-    description: String,
-    user_id: String
+    description: String
 });
 
 pinsSchema.index({location:"2dsphere"});

@@ -4,20 +4,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/searchBox"
+    <fragment
+        android:name="mso.eventium.ui.fragments.FilterFragment"
+        android:id="@+id/filter_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
-        android:background="@drawable/search_input_style"
-        android:drawableLeft="@drawable/ic_search_grey_24dp"
-        android:ems="10"
-        android:hint="Suche hier doch :^)"
-        android:imeOptions="actionDone"
-        android:inputType="textPersonName"
-        android:singleLine="true"
-        android:textColor="@color/quantum_grey"
-
+        android:animateLayoutChanges="true"
         />
 
     <com.google.android.material.tabs.TabLayout
@@ -27,11 +19,13 @@
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabTextColor="@color/colorPrimary"
-        android:id="@+id/tablayout"/>
+        android:id="@+id/tablayout"
+        android:animateLayoutChanges="true"/>
 
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/viewpager"/>
+        android:id="@+id/viewpager"
+        android:animateLayoutChanges="true"/>
 
 </LinearLayout>

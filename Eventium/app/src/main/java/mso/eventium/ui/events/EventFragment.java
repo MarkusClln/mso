@@ -11,12 +11,16 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
 import mso.eventium.R;
 import mso.eventium.adapter.ViewPagerAdapter;
+import mso.eventium.ui.fragments.FilterFragment;
+import mso.eventium.ui.map.MapFragment;
 
 
 public class EventFragment extends Fragment {
@@ -36,9 +40,13 @@ public class EventFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_event, container, false);
 
 
-        tabLayout = root.findViewById(R.id.tablayout);
-        viewPager = root.findViewById(R.id.viewpager);
-        searchInput = root.findViewById(R.id.searchBox);
+        setFilterFragment();
+
+
+
+        tabLayout = (TabLayout) root.findViewById(R.id.tablayout);
+        viewPager = (ViewPager) root.findViewById(R.id.viewpager);
+        searchInput =(EditText) root.findViewById(R.id.searchBox);
 
         FragmentManager fm = getFragmentManager();
         adapter = new ViewPagerAdapter(fm);
@@ -79,6 +87,14 @@ public class EventFragment extends Fragment {
         return root;
     }
 
+    public void setFilterFragment(){
+        FilterFragment filterFragment = new FilterFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.filter_fragment, filterFragment);
+        fragmentTransaction.commit();
+
+    }
 
     @Override
     public void onResume() {
@@ -91,5 +107,6 @@ public class EventFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
     }
+
 
 }

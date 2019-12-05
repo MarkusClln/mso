@@ -21,6 +21,7 @@ import androidx.transition.TransitionInflater;
 import java.util.ArrayList;
 import java.util.List;
 
+import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.model.Event;
 

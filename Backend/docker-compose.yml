@@ -31,7 +31,7 @@ services:
       - "mongodb"
     environment:
       PORT: 3000
-      JWT_Secret: "the_secret_jwt_key"
+      JWT_Secret: "1gm2M3yhSwmwy8KJgzuJUt-QfClhx-wabT0mLQ_csP87BcaIgVYuLren5m9oSpN6"
       DB_IP: "172.23.0.2"
       DB_PORT: "27017"
       DB_NAME: "mso"
@@ -44,7 +44,7 @@ services:
       - "mongodb"
     environment:
       PORT: 3000
-      JWT_Secret: "the_secret_jwt_key"
+      JWT_Secret: "1gm2M3yhSwmwy8KJgzuJUt-QfClhx-wabT0mLQ_csP87BcaIgVYuLren5m9oSpN6"
       DB_IP: "172.23.0.2"
       DB_PORT: "27017"
       DB_NAME: "mso"
@@ -57,7 +57,7 @@ services:
       - "mongodb"
     environment:
       PORT: 3000
-      JWT_Secret: "the_secret_jwt_key"
+      JWT_Secret: "1gm2M3yhSwmwy8KJgzuJUt-QfClhx-wabT0mLQ_csP87BcaIgVYuLren5m9oSpN6"
       DB_IP: "172.23.0.2"
       DB_PORT: "27017"
       DB_NAME: "mso"

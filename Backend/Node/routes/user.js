@@ -6,82 +6,51 @@ var bcrypt = require("bcryptjs");
 
 const User = require("../models/userSchema");
 
+const check_auth = require("../middleware/check-auth");
 
-router.post('/signin', (req, res) => {
-    User.find({email: req.body.email})
-        .exec()
-        .then(user =>{
-            if (user.length < 1){
-                return res.status(401).json({
-                    message: "Auth failed"
-                })
-            }
-            bcrypt.compare(req.body.password, user[0].password, (err, result) =>{
-                if(err){
-                    return res.status(401).json({
-                        message: "Auth failed"
-                    })
-                }
-                if(result){
-
-                    var token = jwt.sign({
-                        email: user[0].email,
-                        userId: user[0]._id }, process.env.JWT_Secret);
-                    return res.status(200).json({
-                        message : "Auth successful",
-                        token : token
+router.post('/',check_auth, (req, res) => {
+    User.find({auth0_id: req.body.auth0_id}).exec().then(user => {
+        if(user.length >=1){
+            return res.status(409).json({
+                    message: "User exists"
+            })
+        }else{
+            const user = new User({
+                _id: new mongoose.Types.ObjectId(),
+                email: req.body.email,
+                auth0_id: req.body.auth0_id,
+                rating: 0,
+                name: req.body.name
+            });
+            user
+                .save()
+                .then(result => {
+                    console.log(result);
+                    res.status(201).json({
+                        message: "User created"
                     });
-
-                }else{
-                    return res.status(401).json({
-                        message: "Auth failed"
+                })
+                .catch(err => {
+                    res.status(500).json({
+                        error: err
                     })
-                }
-            })
-        })
-        .catch(err => {
-            return res.status(200).json({
-                message : "Auth successful"
-            })
+                });
+        }
     });
 });
 
-router.post('/signup', (req, res, next) => {
+router.get('/:id',check_auth, (req, res) => {
 
-    User.find({email: req.body.email}).exec().then(user => {
-        if(user.length >=1){
-            return res.status(409).json({
-                message: "Mail exists"
+    console.log(req.params.id);
+    User.find({auth0_id: req.params.id}).exec().then(user =>{
+        if (user.length < 1){
+            return res.status(401).json({
+                message: "Auth failed"
             })
         }else{
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
-                if (err) {
-                    return res.statusCode(500)
-                } else {
-                    const user = new User({
-                        _id: new mongoose.Types.ObjectId(),
-                        email: req.body.email,
-                        password: hash
-                    });
-                    user
-                        .save()
-                        .then(result => {
-                            console.log(result);
-                            res.status(201).json({
-                                message: "User created"
-                            });
-                        })
-                        .catch(err => {
-                                res.status(500).json({
-                                    error: err
-                                })
-                        });
-
-                }
-
-            });
+            res.end(JSON.stringify(user));
         }
-    });
+    })
 
 
 });
