@@ -20,7 +20,6 @@ import com.google.android.material.tabs.TabLayout;
 import mso.eventium.R;
 import mso.eventium.adapter.ViewPagerAdapter;
 import mso.eventium.ui.fragments.FilterFragment;
-import mso.eventium.ui.map.MapFragment;
 
 
 public class EventFragment extends Fragment {

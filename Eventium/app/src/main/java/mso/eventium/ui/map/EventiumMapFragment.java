@@ -37,6 +37,9 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import java.util.Arrays;
 
 import mso.eventium.R;
+import mso.eventium.model.Event;
+import mso.eventium.model.User;
+import mso.eventium.ui.host.FavoriteHostsFragment;
 
 public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
@@ -75,14 +78,6 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
         final FragmentManager fm = getChildFragmentManager();
         fragment = (SupportMapFragment) fm.findFragmentById(R.id.locationMap);
-        if (fragment == null) {
-            new Logger("DEBUG").e("FRAGMENT new");
-            fragment = SupportMapFragment.newInstance();
-            fm.beginTransaction().replace(R.id.locationMap, fragment).commit();
-        } else {
-            new Logger("DEBUG").e("FRAGMENT existed");
-        }
-
         fragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
@@ -91,31 +86,33 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                 // For showing a move to my location button
                 googleMap.setMyLocationEnabled(true);
 
-                // For dropping a marker at a point on the Map
-
-
-                LatLng lu = new LatLng(49.477409, 8.445180);
-
 
                 double lat = getArguments().getDouble("lat");
                 double lng = getArguments().getDouble("lng");
 
+                LatLng lu = new LatLng(49.477409, 8.445180);
 
                 if (lat != -1 && lng != -1) {
                     LatLng pos = new LatLng(lat, lng);
                     googleMap.addMarker(new MarkerOptions().position(pos).title("Your Event").snippet("zoom after trans"));
+
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(pos).zoom(15).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                 } else {
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(lu).zoom(13).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
                     googleMap.setOnMarkerClickListener(EventiumMapFragment.this);
                 }
 
-
                 createLocation(lu, "Ludwigshafen");
+
+
+                for (User user : new FavoriteHostsFragment().getDummyData()) {
+                    for (Event event : user.getHostedEvents()) {
+                        addMarker(event);
+                    }
+                }
 
             }
         });
@@ -145,6 +142,16 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
     }
 
 
+    private void addMarker(Event event) {
+        googleMap.addMarker(
+                new MarkerOptions()
+                        .snippet("WOHOO")
+                        .position(event.getEvent_location())
+                        .title(event.getEvent_name())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+        ).setTag(event);
+    }
+
     private void createLocation(LatLng location, String title) {
         googleMap.addMarker(new MarkerOptions().position(location)
                 .title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
@@ -156,6 +163,9 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
+        new Logger("MARKER").e("getTitle " + marker.getTitle());
+        new Logger("MARKER").e("getTag " + marker.getTag());
+
         // This causes the marker at Perth to bounce into position when it is clicked.
         final long start = SystemClock.uptimeMillis();
         final long duration = 1500L;

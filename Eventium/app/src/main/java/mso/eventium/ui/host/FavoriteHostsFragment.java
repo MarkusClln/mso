@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,14 +51,14 @@ public class FavoriteHostsFragment extends Fragment implements FavoriteHostsAdap
     public ArrayList<User> getDummyData() {
         ArrayList<User> users = new ArrayList<User>();
         List<Event> userEvents1 = new ArrayList<Event>();
-        userEvents1.add(new Event("Event1_1", "", "23.01.2019", "24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails));
-        userEvents1.add(new Event("Event1_2", "", "07.03.2020", "12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen));
+        userEvents1.add(new Event("Event1_1", "", "23.01.2019", "24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, new LatLng(49.4755193, 8.4645026)));
+        userEvents1.add(new Event("Event1_2", "", "07.03.2020", "12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen, new LatLng(49.483103, 8.4656613)));
         List<Event> userEvents2 = new ArrayList<Event>();
-        userEvents1.add(new Event("Event2_1", "", "23.01.2019", "24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails));
-        userEvents1.add(new Event("Event2_2", "", "07.03.2020", "12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen));
+        userEvents1.add(new Event("Event2_1", "", "23.01.2019", "24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, new LatLng(49.463103, 8.4656613)));
+        userEvents1.add(new Event("Event2_2", "", "07.03.2020", "12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen, new LatLng(49.453103, 8.4656613)));
         List<Event> userEvents3 = new ArrayList<Event>();
-        userEvents1.add(new Event("Event3_1", "", "23.01.2019", "24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails));
-        userEvents1.add(new Event("Event3_2", "", "07.03.2020", "12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen));
+        userEvents1.add(new Event("Event3_1", "", "23.01.2019", "24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, new LatLng(49.443103, 8.4656613)));
+        userEvents1.add(new Event("Event3_2", "", "07.03.2020", "12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen, new LatLng(49.433103, 8.4656613)));
 
 
         users.add(new User("Hans", "Wurst", userEvents1));

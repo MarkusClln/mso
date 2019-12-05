@@ -1,7 +1,6 @@
 package mso.eventium.ui.host;
 
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import java.util.List;
 import mso.eventium.R;
 import mso.eventium.adapter.ViewPagerAdapter;
 import mso.eventium.ui.events.EventListFragment;
-import mso.eventium.ui.map.MapFragment;
 
 public class HostDetailActivity extends AppCompatActivity {
     public static final String ARG_HOST_NAME = "name";
