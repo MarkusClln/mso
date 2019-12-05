@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,11 +15,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.logging.Logger;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -36,22 +38,33 @@ import java.util.Arrays;
 
 import mso.eventium.R;
 
-public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
+public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
-    private String style = "";
-    private MapView mMapView;
+    private SupportMapFragment fragment;
     private GoogleMap googleMap;
 
-    public static MapFragment newInstance(double lat, double lng) {
-        MapFragment mapFragment = new MapFragment();
+    public static EventiumMapFragment newInstance(double lat, double lng) {
+        final EventiumMapFragment eventiumMapFragment = new EventiumMapFragment();
 
         Bundle args = new Bundle();
         args.putDouble("lat", lat);
         args.putDouble("lng", lng);
-        mapFragment.setArguments(args);
+        eventiumMapFragment.setArguments(args);
 
-        return mapFragment;
+        return eventiumMapFragment;
     }
+
+    /**
+     * @Override public void onActivityCreated(Bundle savedInstanceState) {
+     * super.onActivityCreated(savedInstanceState);
+     * FragmentManager fm = getChildFragmentManager();
+     * fragment = (SupportMapFragment) fm.findFragmentById(R.id.locationMap);
+     * if (fragment == null) {
+     * fragment = SupportMapFragment.newInstance();
+     * fm.beginTransaction().replace(R.id.locationMap, fragment).commit();
+     * }
+     * }
+     **/
 
 
     @Override
@@ -59,18 +72,18 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_map, container, false);
-        mMapView = root.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
 
-        mMapView.onResume(); // needed to get the map to display immediately
-
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
+        final FragmentManager fm = getChildFragmentManager();
+        fragment = (SupportMapFragment) fm.findFragmentById(R.id.locationMap);
+        if (fragment == null) {
+            new Logger("DEBUG").e("FRAGMENT new");
+            fragment = SupportMapFragment.newInstance();
+            fm.beginTransaction().replace(R.id.locationMap, fragment).commit();
+        } else {
+            new Logger("DEBUG").e("FRAGMENT existed");
         }
 
-        mMapView.getMapAsync(new OnMapReadyCallback() {
+        fragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
@@ -98,7 +111,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(lu).zoom(13).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                    googleMap.setOnMarkerClickListener(MapFragment.this);
+                    googleMap.setOnMarkerClickListener(EventiumMapFragment.this);
                 }
 
 
@@ -109,7 +122,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
         Places.initialize(root.getContext(), "AIzaSyDHsNp7dZiPYx4fhBm_bU_8R15zGUziJqg");
         PlacesClient placesClient = Places.createClient(root.getContext());
-        FragmentManager fm = this.getChildFragmentManager();
 
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 fm.findFragmentById(R.id.place_autocomplete);
@@ -129,39 +141,13 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
             }
         });
 
-
         return root;
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
-    }
-
     private void createLocation(LatLng location, String title) {
         googleMap.addMarker(new MarkerOptions().position(location)
                 .title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
     }
 
     private final Handler mHandler = new Handler();
