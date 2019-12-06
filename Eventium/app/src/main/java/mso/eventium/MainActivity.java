@@ -48,7 +48,7 @@ import java.util.Map;
 import mso.eventium.client.backendClient;
 import mso.eventium.ui.events.EventFragment;
 import mso.eventium.ui.host.FavoriteHostsFragment;
-import mso.eventium.ui.map.MapFragment;
+import mso.eventium.ui.map.EventiumMapFragment;
 import mso.eventium.ui.user.UserFragment;
 
 //
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
             getIntent().removeExtra("location_lng");
 
 
-            MapFragment mapFragment = MapFragment.newInstance(lat, lng);
+            EventiumMapFragment mapFragment = EventiumMapFragment.newInstance(lat, lng);
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment, mapFragment);
