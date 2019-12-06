@@ -5,20 +5,25 @@ public class Event {
 
     private String event_name;
     private String event_description;
+    private String pin_id;
+
+    private String event_short_description;
     private String event_date;
-    private String event_time;
     private int event_photo;
     private int event_icon;
     private String event_distance;
 
-    public Event(String name, String description, String date, String event_time, String distance, int event_photo, int event_icon) {
+
+
+    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, int event_icon, String pin_id) {
         this.event_name = name;
         this.event_description = description;
         this.event_date = date;
         this.event_photo = event_photo;
         this.event_icon = event_icon;
         this.event_distance = distance;
-        this.event_time = event_time;
+        this.event_short_description = event_short_description;
+        this.pin_id = pin_id;
     }
 
     public String getName() {
@@ -37,8 +42,8 @@ public class Event {
         return event_date;
     }
 
-    public String getEvent_time() {
-        return event_time;
+    public String getPin_id() {
+        return pin_id;
     }
 
     public int getEvent_photo() {
@@ -51,5 +56,9 @@ public class Event {
 
     public String getEvent_distance() {
         return event_distance;
+    }
+
+    public String getEvent_short_description() {
+        return event_short_description;
     }
 }

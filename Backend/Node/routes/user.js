@@ -55,4 +55,22 @@ router.get('/:id',check_auth, (req, res) => {
 
 });
 
+router.post('/fav',check_auth, (req, res) => {
+
+    console.log(req.body.event_id);
+    User.find({auth0_id: req.user.sub}).exec().then(user => {
+        if(user.length >=1){
+            user[0].likedEvents.push("TestString");
+            //user.likedEvents.push(req.body.event_id);
+            user[0].save(function(err, result) {
+                res.json(result);
+            });
+
+        }
+    });
+
+
+});
+
+
 module.exports = router;

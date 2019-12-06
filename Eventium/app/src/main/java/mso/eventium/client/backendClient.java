@@ -7,7 +7,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,48 +74,78 @@ public class backendClient {
         return jsonObjReq;
     }
 
-    public JsonObjectRequest getAllEvents(final double lng, final double lat, final double distance, final List<Event> EventModels){
+    public StringRequest getAllEvents(final double lng, final double lat, final double distance, final Response.Listener<String> responseListener){
+
+        final String url = "http://"+server_ip+"/event/all";
+
+        //but params here
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("lng", Double.toString(lng));
+        params.put("lat",  Double.toString(lat));
+        params.put("distance",  Double.toString(distance));
+
+        Log.i("TESTEN", params.toString());
+
+
+
+        StringRequest postRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                responseListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ) {
+            // here is params will add to your url using post method
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("lng", Double.toString(lng));
+                params.put("lat",  Double.toString(lat));
+                params.put("distance",  Double.toString(distance));
+                return params;
+            }
+        };
+
+        return postRequest;
+    }
+
+    public StringRequest getAllPins(final double lng, final double lat, final double distance, final Response.Listener<String> responseListener){
 
         final String url = "http://"+server_ip+"/pin/all";
 
         //but params here
         Map<String, String> params = new HashMap<String, String>();
-        params.put("Lng", Double.toString(lng));
-        params.put("Lat",  Double.toString(lat));
-        params.put("Distance",  Double.toString(distance));
+        params.put("lng", Double.toString(lng));
+        params.put("lat",  Double.toString(lat));
+        params.put("distance",  Double.toString(distance));
 
-
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                url, new JSONObject(params),
-                new Response.Listener<JSONObject>() {
-
+        StringRequest getRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                responseListener,
+                new Response.ErrorListener() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        try{
-                            JSONObject jsonObject=new JSONObject(response.toString());
-                            if(jsonObject.has("data") && !jsonObject.isNull("data"))
-                            {
-                                Log.d("jsonObject", jsonObject.toString());
-                            }else{
-                                // get message using error key
-                            }
-                        }catch (JSONException e){
-
-                        }
-
+                    public void onErrorResponse(VolleyError error) {
 
                     }
-                }, new Response.ErrorListener() {
-
+                }
+        ) {
+            // here is params will add to your url using post method
             @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("JSONPost", "Error: " + error.getMessage());
-                //pDialog.hide();
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("lng", Double.toString(lng));
+                params.put("lat",  Double.toString(lat));
+                params.put("distance",  Double.toString(distance));
+                return params;
             }
+        };
 
-        });
-
-        return jsonObjReq;
+        return getRequest;
     }
 
     public JsonObjectRequest createPin(final String auth_token, final double lng, final double lat, final String name, final String desc, Response.Listener responseListener) {
@@ -224,6 +257,24 @@ public class backendClient {
 
     }
 
+    public StringRequest getPin(final String pin_id, final Response.Listener<String> responseListener){
+
+        final String url = "http://"+server_ip+"/pin/"+pin_id;
+
+        StringRequest getRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                responseListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+
+        return getRequest;
+    }
 
 
 }

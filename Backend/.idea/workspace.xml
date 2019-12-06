@@ -2,16 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/client/backendClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/models/eventSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/eventSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/models/pinSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/pinSchema.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/event.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/event.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/pin.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/pin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/client/backendClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/client/backendClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/model/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/model/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/ActivityEventDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/ActivityEventDetail.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/EventListFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/EventListFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/RVAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/RVAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/host/FavoriteHostsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/host/FavoriteHostsFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/MapFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/MapFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,11 +41,17 @@
   </component>
   <component name="ProjectId" id="1TCAPyvJfhmSi4AVSZzrXX2f4Z9" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="H:/coding_stuff/WebStorm/MapTiles" />
-    <property name="nodejs_interpreter_path" value="$APPLICATION_CONFIG_DIR$/node/node-v10.16.0-win-x64/node" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="settings.nodejs" />
   </component>
@@ -48,20 +60,27 @@
       <recent name="C:\Users\Markus\Desktop\mso\Backend\Node\dist" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Docker.docker-compose.yml.node2: Compose Deployment">
+  <component name="RunManager" selected="Docker.docker-compose.yml.mongodb: Compose Deployment">
     <configuration name="app.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/Node/app.js" working-dir="$PROJECT_DIR$/Node">
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.mongodb: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="mongodb" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
       <method v="2" />
     </configuration>
     <configuration name="docker-compose.yml.node2: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
@@ -90,13 +109,33 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.node2: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.rest-node: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.mongodb: Compose Deployment" />
+      <item itemvalue="Node.js.app.js" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.docker-compose.yml.mongodb: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.node2: Compose Deployment" />
         <item itemvalue="Node.js.app.js" />
         <item itemvalue="Docker.docker-compose.yml.rest-node: Compose Deployment" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -121,6 +160,9 @@
       <workItem from="1575369979908" duration="15219000" />
       <workItem from="1575393506188" duration="1454000" />
       <workItem from="1575407678552" duration="6187000" />
+      <workItem from="1575530122873" duration="18305000" />
+      <workItem from="1575563061749" duration="1858000" />
+      <workItem from="1575575560765" duration="12404000" />
     </task>
     <servers />
   </component>
@@ -139,5 +181,27 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="552" y="177" key="#Docker" timestamp="1575530245616">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="177" key="#Docker/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1575530245616" />
+    <state x="552" y="178" key="#Notifications" timestamp="1575530154620">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="178" key="#Notifications/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1575530154620" />
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575530251747">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1575530251747" />
+    <state x="674" y="243" key="#docker-compose.yml:_Compose_Deployment" timestamp="1575530262518">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="674" y="243" key="#docker-compose.yml:_Compose_Deployment/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1575530262518" />
+    <state x="2687" y="431" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1575544947457">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2687" y="431" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1575544947457" />
   </component>
 </project>

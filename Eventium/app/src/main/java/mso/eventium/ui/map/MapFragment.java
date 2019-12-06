@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,10 +33,20 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.gson.JsonArray;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
+import mso.eventium.MainActivity;
 import mso.eventium.R;
+import mso.eventium.model.Event;
+import mso.eventium.ui.events.EventListFragment;
+import mso.eventium.ui.events.RVAdapter;
 
 public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
@@ -80,6 +92,41 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
                 // For dropping a marker at a point on the Map
 
+                Response.Listener rl = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+
+                        try {
+                            JSONArray array = new JSONArray(s);
+
+                            for(int i=0; i<array.length(); i++)
+                            {
+                                JSONObject o = array.getJSONObject(i);
+
+                                JSONArray coordinates =o.getJSONObject("location").getJSONArray("coordinates");
+                                int events =o.getJSONArray("events").length();
+                                LatLng pos = new LatLng(coordinates.getDouble(0), coordinates.getDouble(1));
+
+                                googleMap.addMarker(new MarkerOptions().position(pos).title(o.getString("name")).snippet(events+" Events"));
+
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Stopping swipe refresh
+                    }
+
+                };
+
+
+
+                StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(49.466633, 8.259154,100, rl);
+                ((MainActivity) getActivity()).queue.add(req1);
+
 
                 LatLng lu = new LatLng(49.477409, 8.445180);
 
@@ -90,7 +137,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
                 if (lat != -1 && lng != -1) {
                     LatLng pos = new LatLng(lat, lng);
-                    googleMap.addMarker(new MarkerOptions().position(pos).title("Your Event").snippet("zoom after trans"));
+                    //googleMap.addMarker(new MarkerOptions().position(pos).title("Your Event").snippet("zoom after trans"));
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(pos).zoom(15).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 

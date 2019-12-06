@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public ActiveFragments activeFragment = ActiveFragments.EVENTS;
     private String ip;
     public backendClient bc;
+    public RequestQueue queue;
     public boolean login;
     private FloatingActionButton floatingActionButton;
     private BottomAppBar bottomAppBar;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private String token;
     private SharedPreferences prefs;
     private AuthenticationAPIClient authenticationAPIClient;
-    public RequestQueue queue;
+
 
 
     private static final String[] INITIAL_PERMS = {
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         ip = getResources().getString(R.string.IP_Server);
         bc = new backendClient(ip);
+        queue = Volley.newRequestQueue(this);
         setupAuth0();
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         createFloatingActionButton();
         createBottomNavBarButtons();
-        queue = Volley.newRequestQueue(this);
+
 
 
     }
@@ -355,5 +357,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public String getToken(){
+        return this.token;
+    }
 
 }

@@ -8,6 +8,7 @@ router.use(bodyParser.json());
 const eventSchema = require("../models/eventSchema");
 const pinSchema = require("../models/pinSchema");
 
+
 const ckeck_auth = require("../middleware/check-auth");
 
 
@@ -38,13 +39,21 @@ router.post('/', ckeck_auth, function(req, res, next) {
     });
 });
 
-router.get('/all',  function(req, res, next) {
-    var lat = req.query.Lat;
-    var lng = req.query.Lng;
-    var distance = req.query.Distance
+router.post('/all',  function(req, res, next) {
+
+    var lat = req.body.lat;
+    var lng = req.body.lng;
+    var distance = req.body.distance;
+
+    console.log(lat);
+    console.log(lng);
+    console.log(distance);
+
+
     if(lat != undefined && lng != undefined && distance != undefined){
 
-        var query_pins = pinSchema.find({
+
+        var query_pins_ids = pinSchema.find({
             location: {
                 $nearSphere: {
                     $maxDistance: distance,
@@ -56,25 +65,49 @@ router.get('/all',  function(req, res, next) {
                 }
             }
         }).distinct("_id").lean();
-        var pins;
-        query_pins.exec(function (err, result) {
+
+
+        query_pins_ids.exec(function (err, result) {
             if (err) return console.error(err);
 
-            var query_events = eventSchema.find({ "pin_id": result });
+            var query_events = eventSchema.find({ "pin_id": result});
 
-            query_events.exec(function (err, result) {
-                if (err) return console.error(err);
-                res.json(result)
+            query_events.exec(function (err, events) {
+                    if (err) return console.error(err);
+                    console.log(events);
+                    res.json(events)
             });
         });
 
 
-
-
-
-
-
     }
+
 });
+
+
+
+
+
+function distance(lat1, lon1, lat2, lon2, unit) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+        return 0;
+    }
+    else {
+        var radlat1 = Math.PI * lat1/180;
+        var radlat2 = Math.PI * lat2/180;
+        var theta = lon1-lon2;
+        var radtheta = Math.PI * theta/180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180/Math.PI;
+        dist = dist * 60 * 1.1515;
+        if (unit=="K") { dist = dist * 1.609344 }
+        if (unit=="N") { dist = dist * 0.8684 }
+        return dist;
+    }
+}
 
 module.exports = router;

@@ -3,6 +3,7 @@ package mso.eventium.ui.events;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.TransitionInflater;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import mso.eventium.MainActivity;
@@ -33,9 +47,8 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     public RVAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View root;
-    private View eventFragment;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
+    private List<Event> EventModels;
     public CharSequence search = "";
 
 
@@ -48,19 +61,22 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        initializeData();
+
+
         root = inflater.inflate(R.layout.fragment_event_list, container, false);
         //eventFragment = inflater.inflate(R.layout.fragment_event, container, false);
 
-
+        EventModels = new ArrayList<>();
+        //EventModels.add(new Event("Event1_1", "","", "23.01.2019", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, ""));
         mRecyclerView = root.findViewById(R.id.rv);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(root.getContext());
         mAdapter = new RVAdapter(getContext(), EventModels, this);
 
+        mLayoutManager = new LinearLayoutManager(root.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -96,27 +112,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
 
-    private List<Event> EventModels;
 
-    private int times = 0;
-
-    private void initializeData() {
-        String des1 = "Gefallen eigentum schuppen so ei feinheit. Gegen er kinde kenne mu se. Im zu sauber labsal werden en heraus sterne mu. Trostlos der das streckte gefallts ins tag begierig. Gebrauch eleonora horchend gedanken als ich befehlen. Geschirr manchmal an spateren hinunter es sichtbar er ri einander. Herkommen betrubtes einfacher es so am kreiselnd verwegene schnupfen.";
-        String des2 = "Lief die wege als wohl. Tun zog angenommen nun dienstmagd mancherlei federdecke hat augenblick wohnzimmer. Schwemmen verweilen zufrieden stadtchen in zu wo. Erisch spinat gut mochte karten spahte stille ich. Te wu eines ja warum lobte gehen. Flecken lacheln bei schoner anblick mut beschlo sie. Luften keinem la he sterne es. In em sorgen besuch es kissen stille. In schlafen lampchen verlohnt feinheit sichtbar ab vorliebe.";
-        String des3 = "Te braunen pa am kapelle gerbers zu heruber. He am meisten bessern steigst kriegen da. Sterne keinen allein ihr des. Naturlich getrunken ist alt hin schwachem kam grundlich. Tadelte lebhaft aus niemand spielen nah konnten. Ten mut mehrere heiland nachtun brummte bereits. Sei von tun der vergnugen schreibet vogelnest. Heftig da fragen feinen durren la erregt mi. Konnte ins ich soviel schade fallen lassen.";
-        String des4 = "In la ausdenken fu ertastete sorglosen am filzhutes schwemmen. Im vollends hinabsah gebogene funkelte du en irgendwo. Als vor sagst ferne ihn kinde spiel durch. Lieb tust ubel gar alt froh. Harmlos kleines offnung da heiland in spiegel anderen la wu. Sah geheimnis schonheit furchtete gar magdebett tanzmusik zufrieden. Roten litze krank abend sag die denkt seine. Ordentlich bei getunchten leuchtturm auf geschlafen geschwatzt und. Und messingnen handarbeit der hinstellte ihr uberwunden ich.";
-        EventModels = new ArrayList<>();
-        EventModels.add(new Event("Loaded: " + times++, des1, "24.12.1993", "12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
-        EventModels.add(new Event("Das zweite Event", des2, "23.01.2019", "24:00", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails));
-        EventModels.add(new Event("kurzer Name", des3, "07.03.2020", "12:00", "distance: 300m", R.drawable.img_disco, R.drawable.ic_flaschen));
-        EventModels.add(new Event("Das ist ein Event mit einem sehr langen Namen", des4, "24.12.1993", "12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_best_choice));
-        EventModels.add(new Event("Das  Event", des1, "23.01.2019", "12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_cocktails));
-        EventModels.add(new Event("Das  Event", des2, "07.03.2020", "12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_flaschen));
-        EventModels.add(new Event("Das  Event", des3, "24.12.1993", "12:00", "distance: 1km", R.drawable.img_disco, R.drawable.ic_best_choice));
-        EventModels.add(new Event("Das  Event", des4, "23.01.2019", "12:00", "distance: 1km", R.drawable.img_drink, R.drawable.ic_cocktails));
-
-
-    }
 
 
     @Override
@@ -153,18 +149,19 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         intent.putExtra(ActivityEventDetail.ARG_EVENT_ICON, EventModel.getEvent_icon());
         intent.putExtra(ActivityEventDetail.ARG_EVENT_PHOTO, EventModel.getEvent_photo());
         intent.putExtra(ActivityEventDetail.ARG_EVENT_DATE, EventModel.getEvent_date());
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_TIME, EventModel.getEvent_time());
+        intent.putExtra(ActivityEventDetail.ARG_EVENT_DISTANCE, EventModel.getEvent_distance());
+        intent.putExtra(ActivityEventDetail.ARG_EVENT_PIN_ID, EventModel.getPin_id());
         intent.putExtra(ActivityEventDetail.ARG_TRANSITION_EVENT_NAME, transitionName);
         intent.putExtra(ActivityEventDetail.ARG_TRANSITION_EVENT_ICON, transitionIcon);
-        intent.putExtra(ActivityEventDetail.ARG_TRANSITION_EVENT_DESCRIPTION, transitionDescription);
+
 
         Pair<View, String> p1 = Pair.create((View) mViewName, transitionName);
         Pair<View, String> p2 = Pair.create((View) mViewIcon, transitionIcon);
-        Pair<View, String> p3 = Pair.create((View) mViewDescription, transitionDescription);
+
 
 
         ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(this.getActivity(), p1, p2, p3);
+                makeSceneTransitionAnimation(this.getActivity(), p1, p2);
         startActivity(intent, options.toBundle());
 
 
@@ -181,12 +178,78 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         // Showing refresh animation before making http call
         mSwipeRefreshLayout.setRefreshing(true);
 
-        initializeData();
 
-        mAdapter = new RVAdapter(getContext(), EventModels, this);
-        mAdapter.getFilter().filter(search);
-        mRecyclerView.setAdapter(mAdapter);
-        mSwipeRefreshLayout.setRefreshing(false);
+        Response.Listener rl = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+                try {
+                    JSONArray array = new JSONArray(s);
+                    EventModels = new ArrayList<>();
+                    for(int i=0; i<array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+
+                        JSONArray events = o.getJSONArray("events");
+
+                        for(int j=0; j<events.length(); j++)
+                        {
+                            JSONObject event = events.getJSONObject(j);
+
+                            try {
+                                double distance = o.getDouble("distance");
+                                int distance_rounded = (int) distance;
+                                String distance_str = "";
+                                if(distance_rounded<1000){
+                                    distance_str = distance_rounded +" m";
+                                }else{
+                                    distance_rounded = (int) distance/1000;
+                                    distance_str = distance_rounded +" m";
+                                }
+
+                                Event item = new Event(
+                                        event.getString("name"),
+                                        event.getString("description"),
+                                        event.getString("shortDescription"),
+                                        event.getString("date"),
+                                        distance_str,
+                                        R.drawable.img_drink,
+                                        R.drawable.ic_cocktails,
+                                        event.getString("pin_id")
+
+                                );
+                                EventModels.add(item);
+                            }
+                            catch (NumberFormatException nfe) {
+                                System.err.println("NumberFormatException: " + nfe.getMessage());
+                            }
+
+
+
+                        }
+
+                    }
+
+                    mAdapter = new RVAdapter(getContext(), EventModels, EventListFragment.this);
+                    mRecyclerView.setAdapter(mAdapter);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                // Stopping swipe refresh
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+        };
+
+
+
+        StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(49.466633, 8.259154,1000, rl);
+        ((MainActivity) getActivity()).queue.add(req1);
+
+
+
 
         //for requests look at
         //https://stackoverflow.com/questions/44454797/pull-to-refresh-recyclerview-android

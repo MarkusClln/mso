@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 
 const pinSchema = require("../models/pinSchema");
+const eventSchema = require("../models/eventSchema");
 const ckeck_auth = require("../middleware/check-auth");
 
 
@@ -32,29 +33,50 @@ router.post('/', ckeck_auth, function(req, res, next) {
     });
 });
 
-router.get('/getAll',  function(req, res, next) {
-    var lat = req.query.Lat
-    var lng = req.query.Lng
-    var distance = req.query.Distance
+router.post('/all',  function(req, res, next) {
+
+    var lat = req.body.lat;
+    var lng = req.body.lng;
+    var distance = req.body.distance;
+
     if(lat != undefined && lng != undefined && distance != undefined){
 
-        pinSchema.find({
-            location: {
-                $nearSphere: {
-                    $maxDistance: distance,
-                    $minDistance: 0,
-                    $geometry: {
-                        type: "Point",
-                        coordinates: [lng, lat]
-                    }
-                }
+        mongoose.model("Pins").aggregate(
+            [
+            {$geoNear: {
+                near: {
+                    type: "Point",
+                    coordinates: [ parseFloat(lng) , parseFloat(lat) ]
+                },
+                distanceField: "distance",
+                maxDistance: parseFloat(distance),
+                spherical: true
             }
-        }).find((error, results) => {
+            },
+                {
+                    "$project": {
+                        "_id": {
+                            "$toString": "$_id"
+                        },
+                        "location": true,
+                        "name": true,
+                        "description": true,
+                        "distance": true
+                    }
+                },
+            {$lookup:{
+                    from: eventSchema.collection.name,
+                    localField: "_id",
+                    foreignField:"pin_id",
+                    as: "events"
+                }}
+        ]).exec((error, results) => {
             if (error) console.log(error);
             res.json(results);
         });
 
     }
+
 });
 
 router.get('/:id', function(req, res, next) {

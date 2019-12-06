@@ -20,8 +20,13 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import mso.eventium.R;
 import mso.eventium.model.Event;
@@ -61,9 +66,26 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventCardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
 
         EventViewHolder.eventName.setText(EventModelsFiltered.get(i).getEvent_name());
-        EventViewHolder.eventDescription.setText(EventModelsFiltered.get(i).getEvent_description());
-        EventViewHolder.eventDate.setText(EventModelsFiltered.get(i).getEvent_date());
-        EventViewHolder.eventTime.setText(EventModelsFiltered.get(i).getEvent_time());
+        EventViewHolder.eventDescription.setText(EventModelsFiltered.get(i).getEvent_short_description());
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+        try {
+            final Calendar myCalendar = Calendar.getInstance();
+            Date date = format.parse(EventModelsFiltered.get(i).getEvent_date());
+            myCalendar.setTime(date);
+            String myFormat = "MM/dd/yy"; //In which you need put here
+            SimpleDateFormat sdf1 = new SimpleDateFormat(myFormat, Locale.GERMANY);
+
+            EventViewHolder.eventDate.setText(sdf1.format(myCalendar.getTime()));
+
+            SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm");
+            EventViewHolder.eventTime.setText(sdf2.format(myCalendar.getTime()));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         EventViewHolder.eventDistance.setText(EventModelsFiltered.get(i).getEvent_distance());
         EventViewHolder.eventIcon.setImageResource(EventModelsFiltered.get(i).getEvent_icon());
 
@@ -101,7 +123,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                         if (row.getName().toLowerCase().contains(Key.toLowerCase()) ||
                                 row.getEvent_description().toLowerCase().contains(Key.toLowerCase()) ||
                                 row.getEvent_date().toLowerCase().contains(Key.toLowerCase()) ||
-                                row.getEvent_time().toLowerCase().contains(Key.toLowerCase()) ||
                                 row.getEvent_distance().toLowerCase().contains(Key.toLowerCase())) {
                             lstFiltered.add(row);
                         }
