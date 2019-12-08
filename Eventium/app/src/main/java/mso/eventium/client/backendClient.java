@@ -273,5 +273,130 @@ public class backendClient {
         return getRequest;
     }
 
+    public JsonObjectRequest pushFavEvent(final String auth_token, final String pin_id, Response.Listener responseListener) {
+        final String url = "http://" + server_ip + "/user/fav/"+pin_id;
+
+        Response.ErrorListener responseErrorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("JSONPost", "Error: " + error.getMessage());
+                //pDialog.hide();
+            }
+        };
+
+        final JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                null,
+                responseListener,
+                responseErrorListener) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", "Bearer " + auth_token);
+                return params;
+            }
+
+        };
+
+        return jsonObjReq;
+
+
+
+    }
+
+    public JsonObjectRequest deleteFavEvent(final String auth_token, final String pin_id, Response.Listener responseListener) {
+        final String url = "http://" + server_ip + "/user/fav/"+pin_id;
+
+        Response.ErrorListener responseErrorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("JSONPost", "Error: " + error.getMessage());
+                //pDialog.hide();
+            }
+        };
+
+        final JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.DELETE,
+                url,
+                null,
+                responseListener,
+                responseErrorListener) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", "Bearer " + auth_token);
+                return params;
+            }
+
+        };
+
+        return jsonObjReq;
+
+
+
+    }
+
+    public StringRequest getFavEvents(final String auth_token , final Response.Listener<String> responseListener){
+
+        final String url = "http://"+server_ip+"/event/fav";
+
+
+
+        StringRequest postRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                responseListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", "Bearer " + auth_token);
+                return params;
+            }
+        };
+
+        return postRequest;
+    }
+
+    public StringRequest getFavEventIDs(final String auth_token , final Response.Listener<String> responseListener){
+
+        final String url = "http://"+server_ip+"/user/fav_ids";
+
+
+        StringRequest postRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                responseListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", "Bearer " + auth_token);
+                return params;
+            }
+        };
+
+        return postRequest;
+    }
+
 
 }

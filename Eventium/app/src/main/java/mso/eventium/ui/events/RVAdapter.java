@@ -2,6 +2,7 @@ package mso.eventium.ui.events;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,18 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.model.Event;
 
@@ -38,6 +47,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     private List<Event> EventModelsFiltered;
     private OnNoteListener mOnNoteListener;
     private Context mContext;
+
 
 
     public RVAdapter(Context mContext, List<Event> i, OnNoteListener onNoteListener) {
@@ -56,11 +66,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_events_list_element, viewGroup, false);
         EventViewHolder evh = new EventViewHolder(v, mOnNoteListener);
+
         return evh;
     }
 
     @Override
-    public void onBindViewHolder(EventViewHolder EventViewHolder, int i) {
+    public void onBindViewHolder(EventViewHolder EventViewHolder, final int i) {
 
         EventViewHolder.eventIcon.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_transition_animation));
         EventViewHolder.eventCardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
@@ -89,7 +100,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventDistance.setText(EventModelsFiltered.get(i).getEvent_distance());
         EventViewHolder.eventIcon.setImageResource(EventModelsFiltered.get(i).getEvent_icon());
 
-        EventViewHolder.saveEventButton.setChecked(true);
+        boolean isSaved = EventModelsFiltered.get(i).isSaved();
+        EventViewHolder.saveEventButton.setChecked(isSaved);
+
+        //EventViewHolder.saveEventButton.setChecked(true);
 
         EventViewHolder.eventName.setTransitionName("transitionName" + i);
         EventViewHolder.eventDescription.setTransitionName("transitionDescription" + i);
@@ -97,6 +111,43 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventTime.setTransitionName("transitionTime" + i);
         EventViewHolder.eventDistance.setTransitionName("transitionDistance" + i);
         EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
+
+
+        EventViewHolder.saveEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScaleAnimation scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
+                scaleAnimation.setDuration(500);
+                BounceInterpolator bounceInterpolator = new BounceInterpolator();
+                scaleAnimation.setInterpolator(bounceInterpolator);
+                v.startAnimation(scaleAnimation);
+
+                MainActivity activity = (MainActivity) mContext;
+                if (!EventModelsFiltered.get(i).isSaved()) {
+
+                    Response.Listener rl = new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                        }
+                    };
+                    JsonObjectRequest req1 = activity.bc.pushFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
+                    activity.queue.add(req1);
+                    EventModelsFiltered.get(i).setSaved(true);
+
+                } else {
+                    Response.Listener rl = new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                        }
+                    };
+                    JsonObjectRequest req1 = activity.bc.deleteFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
+                    activity.queue.add(req1);
+                    EventModelsFiltered.get(i).setSaved(false);
+                }
+            }
+        });
 
 
 
@@ -121,9 +172,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                     for (Event row : EventModels) {
                         //Config here search inputs
                         if (row.getName().toLowerCase().contains(Key.toLowerCase()) ||
-                                row.getEvent_description().toLowerCase().contains(Key.toLowerCase()) ||
-                                row.getEvent_date().toLowerCase().contains(Key.toLowerCase()) ||
-                                row.getEvent_distance().toLowerCase().contains(Key.toLowerCase())) {
+                                row.getEvent_description().toLowerCase().contains(Key.toLowerCase())) {
                             lstFiltered.add(row);
                         }
 
@@ -173,24 +222,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
             itemView.setOnClickListener(this);
 
-
-            saveEventButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
-                    scaleAnimation.setDuration(500);
-                    BounceInterpolator bounceInterpolator = new BounceInterpolator();
-                    scaleAnimation.setInterpolator(bounceInterpolator);
-                    buttonView.startAnimation(scaleAnimation);
-
-                    if (isChecked) {
-                        //add to users saved events
-                    } else {
-                        //remove
-                    }
-
-                }
-            });
         }
 
         @Override
@@ -202,6 +233,5 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     public interface OnNoteListener {
         void onNoteClick(int position);
     }
-
 
 }

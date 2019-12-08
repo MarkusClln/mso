@@ -29,9 +29,9 @@ public class EventFragment extends Fragment {
     private EditText searchInput;
 
 
-    private EventListFragment eventListFragmentAll = EventListFragment.newInstance("df1");
-    private EventListFragment eventListFragmentSaved = EventListFragment.newInstance("df2");
-    private EventListFragment eventListFragmentOwned = EventListFragment.newInstance("df3");
+    private EventListFragment eventListFragmentAll = EventListFragment.newInstance("all");
+    private EventListFragment eventListFragmentSaved = EventListFragment.newInstance("saved");
+    private EventListFragment eventListFragmentOwned = EventListFragment.newInstance("owned");
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -39,7 +39,6 @@ public class EventFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_event, container, false);
 
 
-        setFilterFragment();
 
 
 
@@ -74,7 +73,6 @@ public class EventFragment extends Fragment {
                 eventListFragmentOwned.mAdapter.getFilter().filter(s);
                 eventListFragmentAll.search = s;
                 eventListFragmentSaved.search = s;
-
             }
 
             @Override
@@ -86,14 +84,6 @@ public class EventFragment extends Fragment {
         return root;
     }
 
-    public void setFilterFragment(){
-        FilterFragment filterFragment = new FilterFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.filter_fragment, filterFragment);
-        fragmentTransaction.commit();
-
-    }
 
     @Override
     public void onResume() {

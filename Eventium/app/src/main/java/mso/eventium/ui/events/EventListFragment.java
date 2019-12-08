@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -50,12 +51,13 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<Event> EventModels;
     public CharSequence search = "";
+    public String ListType;
 
 
-    public static EventListFragment newInstance(String someParams) {
+    public static EventListFragment newInstance(String type) {
         EventListFragment fragment = new EventListFragment();
         Bundle args = new Bundle();
-        args.putString("ParamName", someParams);
+        args.putString("ListType", type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,6 +71,8 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
         root = inflater.inflate(R.layout.fragment_event_list, container, false);
         //eventFragment = inflater.inflate(R.layout.fragment_event, container, false);
+
+        this.ListType = getArguments().getString("ListType");
 
         EventModels = new ArrayList<>();
         //EventModels.add(new Event("Event1_1", "","", "23.01.2019", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, ""));
@@ -110,8 +114,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
     }
-
-
 
 
 
@@ -175,37 +177,100 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
     private void loadRecyclerViewData() {
-        // Showing refresh animation before making http call
+
+        switch(ListType)
+        {
+            case "all":
+                allEvents();
+                break;
+            case "saved":
+                savedEvents();
+                break;
+            case "owned":
+                //comming soon
+                break;
+            default:
+                //error or something
+        }
+
+
+        //for requests look at
+        //https://stackoverflow.com/questions/44454797/pull-to-refresh-recyclerview-android
+        // :-)
+
+    }
+
+
+    private void allEvents(){
         mSwipeRefreshLayout.setRefreshing(true);
 
+        if(((MainActivity) getActivity()).getToken()!= null){
+            Response.Listener rl = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String s) {
 
+                    try {
+                        JSONArray array = new JSONArray(s);
+                        setEvents(array);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            StringRequest req1 = ((MainActivity) getActivity()).bc.getFavEventIDs(((MainActivity) getActivity()).getToken(), rl);
+            ((MainActivity) getActivity()).queue.add(req1);
+        }else{
+            setEvents(null);
+        }
+
+
+    }
+
+    private void setEvents(final JSONArray likedEvents){
         Response.Listener rl = new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
+
+
                 try {
+                    ArrayList<String> likedEventsAsArrayList = new ArrayList<String>();
+                    if (likedEvents != null) {
+                        int len = likedEvents.length();
+                        for (int i=0;i<len;i++){
+                            likedEventsAsArrayList.add(likedEvents.get(i).toString());
+                        }
+                    }
+
+
                     JSONArray array = new JSONArray(s);
                     EventModels = new ArrayList<>();
-                    for(int i=0; i<array.length(); i++)
-                    {
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject o = array.getJSONObject(i);
 
                         JSONArray events = o.getJSONArray("events");
 
-                        for(int j=0; j<events.length(); j++)
-                        {
+                        for (int j = 0; j < events.length(); j++) {
                             JSONObject event = events.getJSONObject(j);
 
                             try {
                                 double distance = o.getDouble("distance");
                                 int distance_rounded = (int) distance;
                                 String distance_str = "";
-                                if(distance_rounded<1000){
-                                    distance_str = distance_rounded +" m";
-                                }else{
-                                    distance_rounded = (int) distance/1000;
-                                    distance_str = distance_rounded +" m";
+                                if (distance_rounded < 1000) {
+                                    distance_str = distance_rounded + " m";
+                                } else {
+                                    distance_rounded = (int) distance / 1000;
+                                    distance_str = distance_rounded + " m";
                                 }
+
+
+
+
+                                String event_id = event.getString("_id");
+                                boolean contains = likedEventsAsArrayList.contains(event_id);
 
                                 Event item = new Event(
                                         event.getString("name"),
@@ -215,23 +280,26 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                         distance_str,
                                         R.drawable.img_drink,
                                         R.drawable.ic_cocktails,
-                                        event.getString("pin_id")
+                                        event.getString("pin_id"),
+                                        contains,
+                                        event.getString("_id")
 
                                 );
                                 EventModels.add(item);
-                            }
-                            catch (NumberFormatException nfe) {
+                            } catch (NumberFormatException nfe) {
                                 System.err.println("NumberFormatException: " + nfe.getMessage());
                             }
-
 
 
                         }
 
                     }
 
+
                     mAdapter = new RVAdapter(getContext(), EventModels, EventListFragment.this);
                     mRecyclerView.setAdapter(mAdapter);
+
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -247,14 +315,65 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
         StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(49.466633, 8.259154,1000, rl);
         ((MainActivity) getActivity()).queue.add(req1);
+    }
 
 
+    private void savedEvents(){
+        mSwipeRefreshLayout.setRefreshing(true);
+        Response.Listener rl = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+                try {
+                    JSONArray events = new JSONArray(s);
+                    EventModels = new ArrayList<>();
+
+                        for(int j=0; j<events.length(); j++)
+                        {
+                            JSONObject event = events.getJSONObject(j);
+
+                                Event item = new Event(
+                                        event.getString("name"),
+                                        event.getString("description"),
+                                        event.getString("shortDescription"),
+                                        event.getString("date"),
+                                        "Fix this",
+                                        R.drawable.img_drink,
+                                        R.drawable.ic_cocktails,
+                                        event.getString("pin_id"),
+                                        true,
+                                        event.getString("_id")
+
+                                );
+                                EventModels.add(item);
+
+                        }
 
 
-        //for requests look at
-        //https://stackoverflow.com/questions/44454797/pull-to-refresh-recyclerview-android
-        // :-)
+                    mAdapter = new RVAdapter(getContext(), EventModels, EventListFragment.this);
+                    mRecyclerView.setAdapter(mAdapter);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                // Stopping swipe refresh
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+        };
+
+
+        if(((MainActivity) getActivity()).getToken()!= null){
+            StringRequest req1 = ((MainActivity) getActivity()).bc.getFavEvents(((MainActivity) getActivity()).getToken(), rl);
+            ((MainActivity) getActivity()).queue.add(req1);
+        }else{
+            //Todo
+            //not logged in
+        }
 
     }
+
+
 }
 

@@ -10,5 +10,5 @@
     <string name="com_auth0_domain">dev-markus.eu.auth0.com</string>
 
     <string name="searchHint">Suche hier doch :^)</string>
-    <string name="IP_Server">172.17.220.97:9001</string>
+    <string name="IP_Server">192.168.48.97:9001</string>
 </resources>

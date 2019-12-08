@@ -63,7 +63,7 @@ public class FilterFragment extends Fragment {
 
 
         final ConstraintLayout constraintLayout = root.findViewById(R.id.constraint_layout);
-        final int targtetHeight = constraintLayout.getMeasuredHeight();
+
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +155,7 @@ public class FilterFragment extends Fragment {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                String myFormat = "MM/dd/yy"; //In which you need put here
+                String myFormat = "dd/MM/yy"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.GERMANY);
 
                 textView.setText(sdf.format(myCalendar.getTime()));
@@ -180,10 +180,11 @@ public class FilterFragment extends Fragment {
 
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
-                myCalendar.set(Calendar.HOUR, hour);
+
+                myCalendar.set(Calendar.HOUR_OF_DAY, hour);
                 myCalendar.set(Calendar.MINUTE, minute);
 
-                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 textView.setText(sdf.format(myCalendar.getTime()));
             }
 

@@ -6,16 +6,18 @@ public class Event {
     private String event_name;
     private String event_description;
     private String pin_id;
-
+    private String event_id;
     private String event_short_description;
     private String event_date;
     private int event_photo;
     private int event_icon;
     private String event_distance;
+    private boolean saved;
 
 
 
-    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, int event_icon, String pin_id) {
+
+    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, int event_icon, String pin_id, boolean saved, String event_id) {
         this.event_name = name;
         this.event_description = description;
         this.event_date = date;
@@ -24,6 +26,8 @@ public class Event {
         this.event_distance = distance;
         this.event_short_description = event_short_description;
         this.pin_id = pin_id;
+        this.saved = saved;
+        this.event_id = event_id;
     }
 
     public String getName() {
@@ -61,4 +65,18 @@ public class Event {
     public String getEvent_short_description() {
         return event_short_description;
     }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public String getEvent_id() {
+        return event_id;
+    }
+
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
+
 }

@@ -7,14 +7,15 @@ router.use(bodyParser.json());
 
 const eventSchema = require("../models/eventSchema");
 const pinSchema = require("../models/pinSchema");
+const userSchema = require("../models/userSchema");
 
 
-const ckeck_auth = require("../middleware/check-auth");
+const check_auth = require("../middleware/check-auth");
 
 
 /* GET home page. */
 
-router.post('/', ckeck_auth, function(req, res, next) {
+router.post('/', check_auth, function(req, res, next) {
 
     const body = req.body;
 
@@ -84,7 +85,25 @@ router.post('/all',  function(req, res, next) {
 
 });
 
+router.post('/fav',check_auth, (req, res) => {
 
+    console.log(req.user.sub);
+    userSchema.find({auth0_id: req.user.sub}).exec().then(user => {
+        if(user.length >=1){
+            const event_ids = user[0].likedEvents;
+            let arr = event_ids.map(ele => new mongoose.Types.ObjectId(ele));
+            console.log(arr);
+
+            eventSchema.find({
+                '_id': { $in: arr}
+            }, function(err, result){
+                res.json(result)
+            });
+        }
+    });
+
+
+});
 
 
 

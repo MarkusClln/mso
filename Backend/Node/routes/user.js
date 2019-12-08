@@ -55,12 +55,26 @@ router.get('/:id',check_auth, (req, res) => {
 
 });
 
-router.post('/fav',check_auth, (req, res) => {
+router.post('/fav/:id',check_auth, (req, res) => {
 
-    console.log(req.body.event_id);
+        console.log(req.params.id);
+        User.find({auth0_id: req.user.sub}).exec().then(user => {
+            if(user.length >=1){
+                user[0].likedEvents.push(req.params.id);
+                //user.likedEvents.push(req.body.event_id);
+                user[0].save(function(err, result) {
+                    res.json(result);
+                });
+
+            }
+        });
+});
+router.delete('/fav/:id',check_auth, (req, res) => {
+
+    console.log(req.params.id);
     User.find({auth0_id: req.user.sub}).exec().then(user => {
         if(user.length >=1){
-            user[0].likedEvents.push("TestString");
+            user[0].likedEvents.pull(req.params.id);
             //user.likedEvents.push(req.body.event_id);
             user[0].save(function(err, result) {
                 res.json(result);
@@ -68,9 +82,23 @@ router.post('/fav',check_auth, (req, res) => {
 
         }
     });
+});
+
+router.post('/fav_ids',check_auth, (req, res) => {
+
+    console.log(req.user.sub);
+    User.find({auth0_id: req.user.sub}).exec().then(user => {
+        if(user.length >=1){
+            const event_ids = user[0].likedEvents;
+            res.json(event_ids);
+
+        }
+    });
 
 
 });
+
+
 
 
 module.exports = router;

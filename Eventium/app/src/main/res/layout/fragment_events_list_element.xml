@@ -46,7 +46,8 @@
                     android:layout_marginTop="@dimen/default_margin"
                     android:layout_marginEnd="@dimen/default_margin"
                     android:background="@drawable/button_favorite"
-                    android:checked="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:text=""
                     android:textOff=""
                     android:textOn="" />
