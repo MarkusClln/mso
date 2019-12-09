@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,13 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.auth0.android.Auth0;
 import com.auth0.android.Auth0Exception;
@@ -40,16 +33,12 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import mso.eventium.client.backendClient;
 import mso.eventium.ui.events.EventFragment;
 import mso.eventium.ui.host.FavoriteHostsFragment;
 import mso.eventium.ui.map.EventiumMapFragment;
 import mso.eventium.ui.user.UserFragment;
+import mso.eventium.ui.create.CreateFragment;
 
 //
 //import com.auth0.android.Auth0;
@@ -64,7 +53,7 @@ import mso.eventium.ui.user.UserFragment;
 public class MainActivity extends AppCompatActivity {
 
     private enum ActiveFragments {
-        MAP, EVENTS, USER, HOSTS
+        MAP, EVENTS, USER, HOSTS, CREATE
     }
 
     //Activity starts with this set fragment
@@ -77,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomAppBar bottomAppBar;
     private MaterialButton accountButton;
     private MaterialButton favoriteHostsButton;
+    private MaterialButton createButton;
     private Auth0 auth0;
     private String token;
     private SharedPreferences prefs;
@@ -133,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
                 case "hostsFragment":
                     activeFragment = ActiveFragments.HOSTS;
                     break;
+                case "CreateFragment":
+                    activeFragment = ActiveFragments.CREATE;
+                    break;
             }
             getIntent().removeExtra("intentFragment");
         }
@@ -183,6 +176,14 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.commit();
             floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
         }
+        if (activeFragment == ActiveFragments.CREATE) {
+            CreateFragment createFragment = new CreateFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.nav_host_fragment, createFragment);
+            fragmentTransaction.commit();
+            floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
+        }
 
 
     }
@@ -217,11 +218,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         favoriteHostsButton = findViewById(R.id.second_menu_item);
         favoriteHostsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 activeFragment = ActiveFragments.HOSTS;
+                setFragmentView();
+            }
+        });
+
+        createButton = findViewById(R.id.third_menu_item);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activeFragment = ActiveFragments.CREATE;
                 setFragmentView();
             }
         });

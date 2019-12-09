@@ -38,7 +38,7 @@
         android:src="@drawable/img_drink"/>
 
     <TextView
-        android:id="@+id/event_name"
+        android:id="@+id/event_name_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/event_photo"
@@ -59,7 +59,7 @@
         android:id="@+id/event_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_name"
+        android:layout_below="@+id/event_name_desc"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/default_margin"
         android:layout_marginRight="@dimen/default_margin"

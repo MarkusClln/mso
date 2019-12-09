@@ -116,7 +116,6 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                             e.printStackTrace();
                         }
 
-                        // Stopping swipe refresh
                     }
 
                 };

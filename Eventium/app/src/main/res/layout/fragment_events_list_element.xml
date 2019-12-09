@@ -53,7 +53,7 @@
                     android:textOn="" />
 
                 <TextView
-                    android:id="@+id/event_name"
+                    android:id="@+id/event_name_desc"
                     android:layout_width="215dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -70,7 +70,7 @@
                     android:id="@+id/event_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/event_name"
+                    android:layout_below="@+id/event_name_desc"
                     android:layout_marginStart="@dimen/default_margin"
                     android:text="27.03-2019"
                     android:textColor="@color/event_text" />
@@ -79,7 +79,7 @@
                     android:id="@+id/event_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/event_name"
+                    android:layout_below="@+id/event_name_desc"
                     android:layout_marginLeft="@dimen/default_margin2"
                     android:layout_toEndOf="@+id/event_date"
                     android:text="12:05"
@@ -89,7 +89,7 @@
                     android:id="@+id/event_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/event_name"
+                    android:layout_below="@+id/event_name_desc"
                     android:layout_marginLeft="@dimen/default_margin2"
                     android:layout_toEndOf="@+id/event_time"
                     android:text="1km entfernt"

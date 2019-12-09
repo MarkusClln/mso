@@ -14,6 +14,8 @@ public class Event {
     private String event_distance;
     private boolean saved;
 
+    public static final String[] categories = {"Bar", "Disco", "Essen"};
+
 
 
 

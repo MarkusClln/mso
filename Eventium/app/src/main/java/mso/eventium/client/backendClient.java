@@ -398,5 +398,52 @@ public class backendClient {
         return postRequest;
     }
 
+    public StringRequest getOwnEvents(final String auth_token , final Response.Listener<String> responseListener){
+
+        final String url = "http://"+server_ip+"/event/own";
+
+
+
+        StringRequest postRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                responseListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", "Bearer " + auth_token);
+                return params;
+            }
+        };
+
+        return postRequest;
+    }
+
+    public StringRequest getPinByName(final String name , final Response.Listener<String> responseListener){
+
+        final String url = "http://"+server_ip+"/pin/getByName/"+name;
+
+        StringRequest getRequest = new StringRequest(
+                Request.Method.GET,
+                url,
+                responseListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+
+        return getRequest;
+    }
 
 }

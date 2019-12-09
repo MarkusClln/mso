@@ -3,7 +3,6 @@ package mso.eventium.ui.events;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,20 +19,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.TransitionInflater;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import mso.eventium.MainActivity;
@@ -135,7 +127,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         String transitionDescription = "transitionDescription" + position;
 
 
-        TextView mViewName = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_name);
+        TextView mViewName = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_name_desc);
         TextView mViewDescription = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_description);
         ImageView mViewIcon = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_icon);
 
@@ -187,7 +179,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                 savedEvents();
                 break;
             case "owned":
-                //comming soon
+                ownedEvents();
                 break;
             default:
                 //error or something
@@ -328,26 +320,26 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                     JSONArray events = new JSONArray(s);
                     EventModels = new ArrayList<>();
 
-                        for(int j=0; j<events.length(); j++)
-                        {
-                            JSONObject event = events.getJSONObject(j);
+                    for(int j=0; j<events.length(); j++)
+                    {
+                        JSONObject event = events.getJSONObject(j);
 
-                                Event item = new Event(
-                                        event.getString("name"),
-                                        event.getString("description"),
-                                        event.getString("shortDescription"),
-                                        event.getString("date"),
-                                        "Fix this",
-                                        R.drawable.img_drink,
-                                        R.drawable.ic_cocktails,
-                                        event.getString("pin_id"),
-                                        true,
-                                        event.getString("_id")
+                        Event item = new Event(
+                                event.getString("name"),
+                                event.getString("description"),
+                                event.getString("shortDescription"),
+                                event.getString("date"),
+                                "Fix this",
+                                R.drawable.img_drink,
+                                R.drawable.ic_cocktails,
+                                event.getString("pin_id"),
+                                true,
+                                event.getString("_id")
 
-                                );
-                                EventModels.add(item);
+                        );
+                        EventModels.add(item);
 
-                        }
+                    }
 
 
                     mAdapter = new RVAdapter(getContext(), EventModels, EventListFragment.this);
@@ -366,6 +358,62 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
         if(((MainActivity) getActivity()).getToken()!= null){
             StringRequest req1 = ((MainActivity) getActivity()).bc.getFavEvents(((MainActivity) getActivity()).getToken(), rl);
+            ((MainActivity) getActivity()).queue.add(req1);
+        }else{
+            //Todo
+            //not logged in
+        }
+
+    }
+
+    private void ownedEvents(){
+        mSwipeRefreshLayout.setRefreshing(true);
+        Response.Listener rl = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+                try {
+                    JSONArray events = new JSONArray(s);
+                    EventModels = new ArrayList<>();
+
+                    for(int j=0; j<events.length(); j++)
+                    {
+                        JSONObject event = events.getJSONObject(j);
+
+                        Event item = new Event(
+                                event.getString("name"),
+                                event.getString("description"),
+                                event.getString("shortDescription"),
+                                event.getString("date"),
+                                "Fix this",
+                                R.drawable.img_drink,
+                                R.drawable.ic_cocktails,
+                                event.getString("pin_id"),
+                                false,
+                                event.getString("_id")
+
+                        );
+                        EventModels.add(item);
+
+                    }
+
+
+                    mAdapter = new RVAdapter(getContext(), EventModels, EventListFragment.this);
+                    mRecyclerView.setAdapter(mAdapter);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                // Stopping swipe refresh
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+        };
+
+
+        if(((MainActivity) getActivity()).getToken()!= null){
+            StringRequest req1 = ((MainActivity) getActivity()).bc.getOwnEvents(((MainActivity) getActivity()).getToken(), rl);
             ((MainActivity) getActivity()).queue.add(req1);
         }else{
             //Todo

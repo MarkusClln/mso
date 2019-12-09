@@ -2,13 +2,11 @@ package mso.eventium.ui.events;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -104,7 +102,7 @@ public class ActivityEventDetail extends AppCompatActivity {
         ImageView mIconView;
         ImageView mPhotoView;
 
-        mNameView = findViewById(R.id.event_name);
+        mNameView = findViewById(R.id.event_name_desc);
         mDescriptionView = findViewById(R.id.event_description);
         mDateView = findViewById(R.id.event_date);
         mTimeView = findViewById(R.id.event_time);

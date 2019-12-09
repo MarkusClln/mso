@@ -2,7 +2,6 @@ package mso.eventium.ui.events;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
-import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.cardview.widget.CardView;
@@ -24,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
 
@@ -209,7 +205,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
         EventViewHolder(View itemView, OnNoteListener onNoteListener) {
             super(itemView);
-            eventName = itemView.findViewById(R.id.event_name);
+            eventName = itemView.findViewById(R.id.event_name_desc);
             eventDescription = itemView.findViewById(R.id.event_description);
             eventDate = itemView.findViewById(R.id.event_date);
             eventTime = itemView.findViewById(R.id.event_time);

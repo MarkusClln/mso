@@ -36,8 +36,18 @@ router.post('/', check_auth, function(req, res, next) {
 
     event.save(function (err, result) {
         if (err) res.send(err);
-        res.json(result);
+        userSchema.find({auth0_id: req.user.sub}).exec().then(user => {
+            if(user.length >=1){
+                user[0].ownEvents.push(result._id);
+                user[0].save(function(err, user) {
+                    res.json(result);
+                });
+
+            }
+        });
+
     });
+
 });
 
 router.post('/all',  function(req, res, next) {
@@ -91,6 +101,24 @@ router.post('/fav',check_auth, (req, res) => {
     userSchema.find({auth0_id: req.user.sub}).exec().then(user => {
         if(user.length >=1){
             const event_ids = user[0].likedEvents;
+            let arr = event_ids.map(ele => new mongoose.Types.ObjectId(ele));
+            console.log(arr);
+
+            eventSchema.find({
+                '_id': { $in: arr}
+            }, function(err, result){
+                res.json(result)
+            });
+        }
+    });
+});
+
+router.post('/own',check_auth, (req, res) => {
+
+    console.log(req.user.sub);
+    userSchema.find({auth0_id: req.user.sub}).exec().then(user => {
+        if(user.length >=1){
+            const event_ids = user[0].ownEvents;
             let arr = event_ids.map(ele => new mongoose.Types.ObjectId(ele));
             console.log(arr);
 
