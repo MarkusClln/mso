@@ -16,7 +16,12 @@ public class Event {
     private int event_photo;
     private int event_icon;
     private String event_distance;
-    private boolean saved;
+    private boolean upvoted;
+    private int event_points;
+
+
+
+    private boolean downvoted;
     private String category;
 
     public static final String[] categories = {"Bar", "Disco", "Essen"};
@@ -36,7 +41,7 @@ public class Event {
 
 
 
-    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, String pin_id, boolean saved, String event_id, String category) {
+    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, String pin_id, boolean upvoted, boolean downvoted, int event_points, String event_id, String category) {
         this.event_name = name;
         this.event_description = description;
         this.event_date = date;
@@ -45,9 +50,11 @@ public class Event {
         this.event_distance = distance;
         this.event_short_description = event_short_description;
         this.pin_id = pin_id;
-        this.saved = saved;
+        this.upvoted = upvoted;
+        this.downvoted = downvoted;
         this.event_id = event_id;
         this.category = category;
+        this.event_points = event_points;
     }
 
     public String getName() {
@@ -86,17 +93,32 @@ public class Event {
         return event_short_description;
     }
 
-    public boolean isSaved() {
-        return saved;
-    }
-
     public String getEvent_id() {
         return event_id;
     }
 
+    public boolean isUpvoted() {
+        return upvoted;
+    }
 
-    public void setSaved(boolean saved) {
-        this.saved = saved;
+    public void setUpvoted(boolean upvoted) {
+        this.upvoted = upvoted;
+    }
+
+    public boolean isDownvoted() {
+        return downvoted;
+    }
+
+    public void setDownvoted(boolean downvoted) {
+        this.downvoted = downvoted;
+    }
+
+    public int getEvent_points() {
+        return event_points;
+    }
+
+    public void setEvent_points(int event_points) {
+        this.event_points = event_points;
     }
 
 }

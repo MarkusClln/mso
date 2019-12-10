@@ -59,15 +59,15 @@ public class FavoriteHostsFragment extends Fragment implements FavoriteHostsAdap
         String des2_short = "short Description 2";
         String des3_short = "short Description 3";
         String des4_short = "short Description 4";
-
-        userEvents1.add(new Event("Event1_1", des1,des1_short, "23.01.2019", "distance: 100m", R.drawable.ic_cocktails, "",false,"", Event.categories[0]));
-        userEvents1.add(new Event("Event1_2", des2,des2_short, "07.03.2020", "distance: 300m", R.drawable.ic_flaschen, "",false,"", Event.categories[0]));
+/*
+        userEvents1.add(new Event("Event1_1", des1,des1_short, "23.01.2019", "distance: 100m", R.drawable.ic_cocktails, "",false,false,"", Event.categories[0]));
+        userEvents1.add(new Event("Event1_2", des2,des2_short, "07.03.2020", "distance: 300m", R.drawable.ic_flaschen, "",false,false,"", Event.categories[0]));
         List<Event> userEvents2 = new ArrayList<Event>();
-        userEvents1.add(new Event("Event2_1", des3,des3_short, "23.01.2019",  "distance: 100m", R.drawable.ic_cocktails, "",false,"", Event.categories[0]));
-        userEvents1.add(new Event("Event2_2", des4,des4_short, "07.03.2020",  "distance: 300m", R.drawable.ic_flaschen, "",false,"", Event.categories[0]));
+        userEvents1.add(new Event("Event2_1", des3,des3_short, "23.01.2019",  "distance: 100m", R.drawable.ic_cocktails, "",false,false,"", Event.categories[0]));
+        userEvents1.add(new Event("Event2_2", des4,des4_short, "07.03.2020",  "distance: 300m", R.drawable.ic_flaschen, "",false,false,"", Event.categories[0]));
         List<Event> userEvents3 = new ArrayList<Event>();
-        userEvents1.add(new Event("Event3_1", des4,des4_short, "23.01.2019",  "distance: 100m", R.drawable.ic_cocktails, "",false,"", Event.categories[0]));
-        userEvents1.add(new Event("Event3_2", des4,des4_short, "07.03.2020",  "distance: 300m", R.drawable.ic_flaschen, "",false,"", Event.categories[0]));
+        userEvents1.add(new Event("Event3_1", des4,des4_short, "23.01.2019",  "distance: 100m", R.drawable.ic_cocktails, "",false,false,"", Event.categories[0]));
+        userEvents1.add(new Event("Event3_2", des4,des4_short, "07.03.2020",  "distance: 300m", R.drawable.ic_flaschen, "",false,false,"", Event.categories[0]));
 
 
         users.add(new User("Hans", "Wurst", userEvents1));
@@ -81,7 +81,7 @@ public class FavoriteHostsFragment extends Fragment implements FavoriteHostsAdap
         users.add(new User("Hans", "Wurst", userEvents1));
         users.add(new User("Ursel", "Mursel", userEvents2));
         users.add(new User("David", "Schneemann", userEvents3));
-
+*/
         return users;
     }
 

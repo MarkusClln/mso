@@ -110,7 +110,7 @@ public class backendClient {
         return postRequest;
     }
 
-    public StringRequest getAllPins(final double lng, final double lat, final double distance, final Response.Listener<String> responseListener){
+    public StringRequest getAllPins(final double lng, final double lat, final double distance, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener){
 
         final String url = "http://"+server_ip+"/pin/all";
 
@@ -124,12 +124,8 @@ public class backendClient {
                 Request.Method.POST,
                 url,
                 responseListener,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                errorListener
 
-                    }
-                }
         ) {
             // here is params will add to your url using post method
             @Override
@@ -371,7 +367,7 @@ public class backendClient {
         return postRequest;
     }
 
-    public StringRequest getFavEventIDs(final String auth_token , final Response.Listener<String> responseListener){
+    public StringRequest getFavEventIDs(final String auth_token , final Response.Listener<String> responseListener, final Response.ErrorListener errorListener){
 
         final String url = "http://"+server_ip+"/user/fav_ids";
 
@@ -380,12 +376,7 @@ public class backendClient {
                 Request.Method.POST,
                 url,
                 responseListener,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }
+                errorListener
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -447,4 +438,26 @@ public class backendClient {
         return getRequest;
     }
 
+
+    public StringRequest getAuth(final String auth_token , final Response.Listener<String> responseListener, Response.ErrorListener errorListener){
+
+        final String url = "http://"+server_ip+"/user/auth0";
+
+        StringRequest postRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                responseListener,
+                errorListener
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", "Bearer " + auth_token);
+                return params;
+            }
+        };
+
+        return postRequest;
+    }
 }

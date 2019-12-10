@@ -39,6 +39,7 @@ router.post('/all',  function(req, res, next) {
     var lng = req.body.lng;
     var distance = req.body.distance;
 
+
     if(lat != undefined && lng != undefined && distance != undefined){
 
         mongoose.model("Pins").aggregate(

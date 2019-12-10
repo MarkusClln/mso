@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/Constraintlayout">
@@ -37,6 +38,52 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="0dp"
+                    android:layout_toEndOf="@+id/event_name_desc">
+
+                    <ImageView
+                        android:id="@+id/ImageView_upvote"
+                        android:layout_width="40dp"
+
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="@dimen/default_margin"
+                        android:gravity="center"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_up_grey_24dp"
+
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textViewPoints"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|right|center_horizontal"
+                        android:text="0"
+                        android:textSize="20dp"
+                        app:layout_constraintEnd_toEndOf="@+id/ImageView_upvote"
+                        app:layout_constraintStart_toStartOf="@+id/ImageView_upvote"
+                        app:layout_constraintTop_toBottomOf="@+id/ImageView_upvote" />
+
+                    <ImageView
+                        android:id="@+id/ImageView_downvote"
+
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_down_grey_24dp"
+                        android:stateListAnimator="@null"
+                        app:layout_constraintEnd_toEndOf="@+id/ImageView_upvote"
+                        app:layout_constraintStart_toStartOf="@+id/ImageView_upvote"
+                        app:layout_constraintTop_toBottomOf="@+id/textViewPoints" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <ToggleButton
                     android:id="@+id/button_save"
                     android:layout_width="30dp"
@@ -50,7 +97,8 @@
                     android:focusableInTouchMode="false"
                     android:text=""
                     android:textOff=""
-                    android:textOn="" />
+                    android:textOn=""
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/event_name_desc"
@@ -62,7 +110,7 @@
                     android:layout_marginEnd="@dimen/default_margin"
                     android:layout_marginBottom="@dimen/default_margin"
                     android:minHeight="60dp"
-                    android:text="Eine Event Beschreibung"
+                    android:text="Eine Event"
                     android:textColor="@color/colorPrimary"
                     android:textSize="30sp" />
 

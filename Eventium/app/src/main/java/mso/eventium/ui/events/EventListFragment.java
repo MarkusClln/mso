@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
@@ -19,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.TransitionInflater;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
@@ -197,13 +199,15 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         mSwipeRefreshLayout.setRefreshing(true);
 
         if(((MainActivity) getActivity()).getToken()!= null){
+
             Response.Listener rl = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String s) {
 
                     try {
-                        JSONArray array = new JSONArray(s);
-                        setEvents(array);
+                        JSONObject auth0 = new JSONObject(s);
+                        setEvents(auth0.getString("auth0"));
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -211,7 +215,18 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                 }
             };
 
-            StringRequest req1 = ((MainActivity) getActivity()).bc.getFavEventIDs(((MainActivity) getActivity()).getToken(), rl);
+            Response.ErrorListener el =new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getContext(), "Oops. Timeout error!", Toast.LENGTH_LONG).show();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    if (mAdapter.getItemCount() == 0) {
+                        mRecyclerView.setBackgroundResource(R.drawable.no_connection);
+                    }
+                }
+            };
+
+            StringRequest req1 = ((MainActivity) getActivity()).bc.getAuth(((MainActivity) getActivity()).getToken(), rl, el);
             ((MainActivity) getActivity()).queue.add(req1);
         }else{
             setEvents(null);
@@ -220,20 +235,12 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
     }
 
-    private void setEvents(final JSONArray likedEvents){
+    private void setEvents(final String token){
         Response.Listener rl = new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
                 try {
-                    ArrayList<String> likedEventsAsArrayList = new ArrayList<String>();
-                    if (likedEvents != null) {
-                        int len = likedEvents.length();
-                        for (int i=0;i<len;i++){
-                            likedEventsAsArrayList.add(likedEvents.get(i).toString());
-                        }
-                    }
-
 
                     JSONArray array = new JSONArray(s);
                     EventModels = new ArrayList<>();
@@ -257,10 +264,31 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                 }
 
 
+                                JSONArray likedEvents = event.getJSONArray("likedUsers");
+                                ArrayList<String> likedEventsAsArrayList = new ArrayList<String>();
+                                if (likedEvents != null) {
+                                    int len = likedEvents.length();
+                                    for (int likedEventCounter=0;likedEventCounter<len;likedEventCounter++){
+                                        likedEventsAsArrayList.add(likedEvents.get(likedEventCounter).toString());
+                                    }
+                                }
+
+                                JSONArray dislikedEvents = event.getJSONArray("dislikedUsers");
+                                ArrayList<String> dislikedEventsAsArrayList = new ArrayList<String>();
+                                if (dislikedEvents != null) {
+                                    int len = dislikedEvents.length();
+                                    for (int dislikedEventCounter=0;dislikedEventCounter<len;dislikedEventCounter++){
+                                        dislikedEventsAsArrayList.add(dislikedEvents.get(dislikedEventCounter).toString());
+                                    }
+                                }
 
 
                                 String event_id = event.getString("_id");
-                                boolean contains = likedEventsAsArrayList.contains(event_id);
+                                boolean liked = likedEventsAsArrayList.contains(token);
+                                boolean disliked = dislikedEventsAsArrayList.contains(token);
+
+                                int points = likedEventsAsArrayList.size()- dislikedEventsAsArrayList.size();
+
 
                                 Event item = new Event(
                                         event.getString("name"),
@@ -270,7 +298,9 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                         distance_str,
                                         R.drawable.img_drink,
                                         event.getString("pin_id"),
-                                        contains,
+                                        liked,
+                                        disliked,
+                                        points,
                                         event.getString("_id"),
                                         event.getString("category")
 
@@ -301,9 +331,21 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
         };
 
+        Response.ErrorListener el =new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), "Oops. Timeout error!", Toast.LENGTH_LONG).show();
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (mAdapter.getItemCount() == 0) {
+                    mRecyclerView.setBackgroundResource(R.drawable.no_connection);
+                }
+            }
+        };
 
 
-        StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(49.466633, 8.259154,1000, rl);
+
+
+        StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(49.466633, 8.259154,1000, rl, el);
         ((MainActivity) getActivity()).queue.add(req1);
     }
 
@@ -319,7 +361,30 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
                     for(int j=0; j<events.length(); j++)
                     {
+
                         JSONObject event = events.getJSONObject(j);
+
+                        JSONArray likedEvents = event.getJSONArray("likedUsers");
+                        ArrayList<String> likedEventsAsArrayList = new ArrayList<String>();
+                        if (likedEvents != null) {
+                            int len = likedEvents.length();
+                            for (int likedEventCounter=0;likedEventCounter<len;likedEventCounter++){
+                                likedEventsAsArrayList.add(likedEvents.get(likedEventCounter).toString());
+                            }
+                        }
+
+                        JSONArray dislikedEvents = event.getJSONArray("dislikedUsers");
+                        ArrayList<String> dislikedEventsAsArrayList = new ArrayList<String>();
+                        if (dislikedEvents != null) {
+                            int len = dislikedEvents.length();
+                            for (int dislikedEventCounter=0;dislikedEventCounter<len;dislikedEventCounter++){
+                                dislikedEventsAsArrayList.add(dislikedEvents.get(dislikedEventCounter).toString());
+                            }
+                        }
+
+
+
+                        int points = likedEventsAsArrayList.size()- dislikedEventsAsArrayList.size();
 
                         Event item = new Event(
                                 event.getString("name"),
@@ -330,6 +395,8 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                 R.drawable.img_drink,
                                 event.getString("pin_id"),
                                 true,
+                                false,
+                                points,
                                 event.getString("_id"),
                                 event.getString("category")
 
@@ -377,6 +444,28 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                     {
                         JSONObject event = events.getJSONObject(j);
 
+                        JSONArray likedEvents = event.getJSONArray("likedUsers");
+                        ArrayList<String> likedEventsAsArrayList = new ArrayList<String>();
+                        if (likedEvents != null) {
+                            int len = likedEvents.length();
+                            for (int likedEventCounter=0;likedEventCounter<len;likedEventCounter++){
+                                likedEventsAsArrayList.add(likedEvents.get(likedEventCounter).toString());
+                            }
+                        }
+
+                        JSONArray dislikedEvents = event.getJSONArray("dislikedUsers");
+                        ArrayList<String> dislikedEventsAsArrayList = new ArrayList<String>();
+                        if (dislikedEvents != null) {
+                            int len = dislikedEvents.length();
+                            for (int dislikedEventCounter=0;dislikedEventCounter<len;dislikedEventCounter++){
+                                dislikedEventsAsArrayList.add(dislikedEvents.get(dislikedEventCounter).toString());
+                            }
+                        }
+
+
+
+                        int points = likedEventsAsArrayList.size()- dislikedEventsAsArrayList.size();
+
                         Event item = new Event(
                                 event.getString("name"),
                                 event.getString("description"),
@@ -386,6 +475,8 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                 R.drawable.img_drink,
                                 event.getString("pin_id"),
                                 false,
+                                false,
+                                points,
                                 event.getString("_id"),
                                 event.getString("category")
 
@@ -418,6 +509,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         }
 
     }
+
 
 
 }

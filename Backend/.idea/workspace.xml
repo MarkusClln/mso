@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="" />
+    <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/drawable-v24/no_connection.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/drawable/ic_down_blue_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/drawable/ic_down_grey_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/drawable/ic_up_blue_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/drawable/ic_up_grey_24dp.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/models/eventSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/eventSchema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/routes/pin.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/pin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/client/backendClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/client/backendClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/model/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/model/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/EventListFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/EventListFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/RVAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/RVAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/host/FavoriteHostsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/host/FavoriteHostsFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/EventiumMapFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/EventiumMapFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_event_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_event_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_events_list_element.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_events_list_element.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -153,7 +172,8 @@
       <workItem from="1575799820573" duration="3388000" />
       <workItem from="1575820094752" duration="3491000" />
       <workItem from="1575876713340" duration="6327000" />
-      <workItem from="1575921474922" duration="3250000" />
+      <workItem from="1575921474922" duration="3283000" />
+      <workItem from="1575969283775" duration="8046000" />
     </task>
     <servers />
   </component>

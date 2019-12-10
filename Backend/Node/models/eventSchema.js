@@ -10,7 +10,9 @@ const eventSchema = new mongoose.Schema({
     shortDescription: String,
     description: String,
     category: String,
-    date: Date
+    date: Date,
+    likedUsers:[String],
+    dislikedUsers:[String]
 
 });
 

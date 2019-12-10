@@ -14,9 +14,9 @@
         android:scrollbars="vertical"
         android:clipToPadding="false"
         android:paddingBottom="100dp"
-
         android:background="@color/event_bg"
-        />
+        >
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

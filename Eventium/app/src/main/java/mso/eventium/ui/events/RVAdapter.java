@@ -2,13 +2,12 @@ package mso.eventium.ui.events;
 
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONObject;
 
@@ -46,6 +46,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
 
 
+
     public RVAdapter(Context mContext, List<Event> i, OnNoteListener onNoteListener) {
         this.mContext = mContext;
         this.EventModels = i;
@@ -67,13 +68,16 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     }
 
     @Override
-    public void onBindViewHolder(EventViewHolder EventViewHolder, final int i) {
+    public void onBindViewHolder(final EventViewHolder EventViewHolder, final int i) {
+
 
         EventViewHolder.eventIcon.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_transition_animation));
         EventViewHolder.eventCardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
 
         EventViewHolder.eventName.setText(EventModelsFiltered.get(i).getEvent_name());
         EventViewHolder.eventDescription.setText(EventModelsFiltered.get(i).getEvent_short_description());
+        int points =EventModelsFiltered.get(i).getEvent_points();
+        EventViewHolder.eventPoints.setText(Integer.toString(points));
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
@@ -96,8 +100,26 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventDistance.setText(EventModelsFiltered.get(i).getEvent_distance());
         EventViewHolder.eventIcon.setImageResource(EventModelsFiltered.get(i).getEvent_icon());
 
-        boolean isSaved = EventModelsFiltered.get(i).isSaved();
-        EventViewHolder.saveEventButton.setChecked(isSaved);
+
+        if(EventModelsFiltered.get(i).isUpvoted()){
+            EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_blue_24dp);
+            EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
+
+            EventViewHolder.btnUpvote.setEnabled(false);
+            EventViewHolder.btnDownvote.setEnabled(true);
+        }else if(EventModelsFiltered.get(i).isDownvoted()){
+            EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
+            EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_blue_24dp);
+
+            EventViewHolder.btnUpvote.setEnabled(true);
+            EventViewHolder.btnDownvote.setEnabled(false);
+        }else{
+            EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
+            EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
+
+            EventViewHolder.btnUpvote.setEnabled(true);
+            EventViewHolder.btnDownvote.setEnabled(true);
+        }
 
         //EventViewHolder.saveEventButton.setChecked(true);
 
@@ -108,19 +130,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventDistance.setTransitionName("transitionDistance" + i);
         EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
 
-
-        EventViewHolder.saveEventButton.setOnClickListener(new View.OnClickListener(){
-
+        final MainActivity activity = (MainActivity) mContext;
+        EventViewHolder.btnUpvote.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                ScaleAnimation scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
-                scaleAnimation.setDuration(500);
-                BounceInterpolator bounceInterpolator = new BounceInterpolator();
-                scaleAnimation.setInterpolator(bounceInterpolator);
-                v.startAnimation(scaleAnimation);
-
-                MainActivity activity = (MainActivity) mContext;
-                if (!EventModelsFiltered.get(i).isSaved()) {
+            public void onClick(View v) {
+                if (!EventModelsFiltered.get(i).isUpvoted()) {
 
                     Response.Listener rl = new Response.Listener<JSONObject>() {
                         @Override
@@ -130,18 +144,62 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                     };
                     JsonObjectRequest req1 = activity.bc.pushFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
                     activity.queue.add(req1);
-                    EventModelsFiltered.get(i).setSaved(true);
 
-                } else {
+                    if(EventModelsFiltered.get(i).isDownvoted()){
+                        EventModelsFiltered.get(i).setEvent_points(EventModelsFiltered.get(i).getEvent_points()+2);
+                        EventViewHolder.eventPoints.setText(Integer.toString(EventModelsFiltered.get(i).getEvent_points()));
+                    }else{
+                        EventModelsFiltered.get(i).setEvent_points(EventModelsFiltered.get(i).getEvent_points()+1);
+                        EventViewHolder.eventPoints.setText(Integer.toString(EventModelsFiltered.get(i).getEvent_points()));
+                    }
+
+                    EventModelsFiltered.get(i).setUpvoted(true);
+                    EventModelsFiltered.get(i).setDownvoted(false);
+
+                    EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_blue_24dp);
+                    EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
+
+                    EventViewHolder.btnUpvote.setEnabled(false);
+                    EventViewHolder.btnDownvote.setEnabled(true);
+
+
+                }
+            }
+        });
+
+        EventViewHolder.btnDownvote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!EventModelsFiltered.get(i).isDownvoted()) {
+
                     Response.Listener rl = new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
 
                         }
                     };
+
+                    if(EventModelsFiltered.get(i).isUpvoted()){
+                        EventModelsFiltered.get(i).setEvent_points(EventModelsFiltered.get(i).getEvent_points()-2);
+                        EventViewHolder.eventPoints.setText(Integer.toString(EventModelsFiltered.get(i).getEvent_points()));
+                    }else{
+                        EventModelsFiltered.get(i).setEvent_points(EventModelsFiltered.get(i).getEvent_points()-1);
+                        EventViewHolder.eventPoints.setText(Integer.toString(EventModelsFiltered.get(i).getEvent_points()));
+                    }
+
                     JsonObjectRequest req1 = activity.bc.deleteFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
                     activity.queue.add(req1);
-                    EventModelsFiltered.get(i).setSaved(false);
+                    EventModelsFiltered.get(i).setDownvoted(true);
+                    EventModelsFiltered.get(i).setUpvoted(false);
+
+
+
+                    EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
+                    EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_blue_24dp);
+
+                    EventViewHolder.btnUpvote.setEnabled(true);
+                    EventViewHolder.btnDownvote.setEnabled(false);
+
                 }
             }
         });
@@ -239,6 +297,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         CardView eventCardView;
         ConstraintLayout eventConstraintLayout;
         ToggleButton saveEventButton;
+        ImageView btnUpvote;
+        ImageView btnDownvote;
+        TextView eventPoints;
 
         OnNoteListener onNoteListener;
 
@@ -253,6 +314,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             eventCardView = itemView.findViewById(R.id.cardview);
             eventConstraintLayout = itemView.findViewById(R.id.Constraintlayout);
             saveEventButton = itemView.findViewById((R.id.button_save));
+            btnUpvote = itemView.findViewById((R.id.ImageView_upvote));
+            btnDownvote = itemView.findViewById((R.id.ImageView_downvote));
+            eventPoints = itemView.findViewById((R.id.textViewPoints));
             this.onNoteListener = onNoteListener;
 
             itemView.setOnClickListener(this);
@@ -268,5 +332,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     public interface OnNoteListener {
         void onNoteClick(int position);
     }
+
 
 }

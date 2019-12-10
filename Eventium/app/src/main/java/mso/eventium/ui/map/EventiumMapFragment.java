@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -117,9 +118,16 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
                 };
 
+                Response.ErrorListener el =new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                };
 
 
-                StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(49.466633, 8.259154,100, rl);
+
+                StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(49.466633, 8.259154,100, rl, el);
                 ((MainActivity) getActivity()).queue.add(req1);
 
 
