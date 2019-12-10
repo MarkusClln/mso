@@ -96,4 +96,16 @@ router.get('/getByUserId/:id', function(req, res, next) {
     });
 });
 
+router.get('/getByName/:name', function(req, res, next) {
+
+    //var pin = mongoose.model('Pins', pinSchema);
+    // find each person with a name contains 'Ghost'
+    pinSchema.find({ "name" : { $regex: req.params.name, $options: 'i' } },
+        function (err, pins) {
+            if (err) return console.error(err);
+            res.json(pins);
+
+        });
+});
+
 module.exports = router;

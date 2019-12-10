@@ -31,7 +31,8 @@ router.post('/', check_auth, function(req, res, next) {
         name: body.event.name,
         description: body.event.description,
         shortDescription: body.event.shortDescription,
-        date: date
+        date: date,
+        category: body.event.category
     });
 
     event.save(function (err, result) {

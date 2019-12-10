@@ -38,6 +38,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import mso.eventium.MainActivity;
@@ -76,6 +77,8 @@ public class FilterFragment extends Fragment {
                     filterButton.setBackgroundDrawable(drawable);
                     collapse(constraintLayout);
                     isVisible =false;
+
+
                 }else{
                     Resources res = getResources();
                     Drawable drawable = ResourcesCompat.getDrawable(res, R.drawable.ic_filter_filled, null);
@@ -83,22 +86,14 @@ public class FilterFragment extends Fragment {
                     expand(constraintLayout, 300, 500);
                     isVisible =true;
                 }
-
-
-
-
             }
         });
-
         setUpCalenderPicker(root);
         setUpTimePicker(root);
         setUpRangeSlider(root);
         return root;
 
-
-
     }
-
 
 
     public static void collapse(final View v) {
@@ -147,6 +142,7 @@ public class FilterFragment extends Fragment {
 
     public void setUpCalenderPicker(View v){
         final TextView textView= (TextView) v.findViewById(R.id.dateText);
+        final TextView fullDateView= (TextView) v.findViewById(R.id.date);
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -159,6 +155,11 @@ public class FilterFragment extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.GERMANY);
 
                 textView.setText(sdf.format(myCalendar.getTime()));
+
+                Date date = myCalendar.getTime();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                String text = format.format(date);
+                fullDateView.setText(text);
             }
 
         };
@@ -186,6 +187,7 @@ public class FilterFragment extends Fragment {
 
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 textView.setText(sdf.format(myCalendar.getTime()));
+
             }
 
         };
@@ -219,4 +221,5 @@ public class FilterFragment extends Fragment {
         });
 
     }
+
 }

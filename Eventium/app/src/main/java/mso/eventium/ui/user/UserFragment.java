@@ -26,6 +26,8 @@ import java.util.List;
 
 import mso.eventium.MainActivity;
 import mso.eventium.R;
+import mso.eventium.model.Event;
+import mso.eventium.model.User;
 
 //import com.auth0.android.Auth0;
 
@@ -172,29 +174,29 @@ public class UserFragment extends Fragment {
         myCalendar.set(Calendar.MINUTE, 16);
 
 
-        JsonObjectRequest req1 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(0),"Ein Event 1", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req1 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(0),"Ein Event 1", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[0], responseListener);
         ((MainActivity) getActivity()).queue.add(req1);
-        JsonObjectRequest req2 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(0),"Ein Event 2", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req2 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(0),"Ein Event 2", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[1], responseListener);
         ((MainActivity) getActivity()).queue.add(req2);
-        JsonObjectRequest req3 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(0),"Ein Event 3", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req3 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(0),"Ein Event 3", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[2], responseListener);
         ((MainActivity) getActivity()).queue.add(req3);
-        JsonObjectRequest req4 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(1),"Ein Event 4", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req4 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(1),"Ein Event 4", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[0], responseListener);
         ((MainActivity) getActivity()).queue.add(req4);
-        JsonObjectRequest req5 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(1),"Ein Event 5", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req5 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(1),"Ein Event 5", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[1], responseListener);
         ((MainActivity) getActivity()).queue.add(req5);
-        JsonObjectRequest req6 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(2),"Ein Event 6", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req6 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(2),"Ein Event 6", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[2], responseListener);
         ((MainActivity) getActivity()).queue.add(req6);
-        JsonObjectRequest req7 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(2),"Ein Event 7", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req7 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(2),"Ein Event 7", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[0], responseListener);
         ((MainActivity) getActivity()).queue.add(req7);
-        JsonObjectRequest req8 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(3),"Ein Event 8", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req8 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(3),"Ein Event 8", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[1], responseListener);
         ((MainActivity) getActivity()).queue.add(req8);
-        JsonObjectRequest req9 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(3),"Ein Event 9", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req9 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(3),"Ein Event 9", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[2], responseListener);
         ((MainActivity) getActivity()).queue.add(req9);
-        JsonObjectRequest req10 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(4),"Ein Event 11", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req10 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(4),"Ein Event 11", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[0], responseListener);
         ((MainActivity) getActivity()).queue.add(req10);
-        JsonObjectRequest req11 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(4),"Ein Event 12", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req11 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(4),"Ein Event 12", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[1], responseListener);
         ((MainActivity) getActivity()).queue.add(req11);
-        JsonObjectRequest req12 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(4),"Ein Event 13", "Ding Dong Lang", "Ding Dong", myCalendar, responseListener);
+        JsonObjectRequest req12 = ((MainActivity) getActivity()).bc.createEvent(token, list.get(4),"Ein Event 13", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[2], responseListener);
         ((MainActivity) getActivity()).queue.add(req12);
 
     }

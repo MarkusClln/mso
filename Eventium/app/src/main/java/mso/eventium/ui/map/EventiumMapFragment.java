@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,8 +19,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -34,26 +31,28 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.gson.JsonArray;
+import com.google.maps.android.MarkerManager;
+import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 import mso.eventium.MainActivity;
 import mso.eventium.R;
-import mso.eventium.model.Event;
-import mso.eventium.ui.events.EventListFragment;
-import mso.eventium.ui.events.RVAdapter;
+import mso.eventium.model.MarkerModel;
 
 public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
     private SupportMapFragment fragment;
     private GoogleMap googleMap;
+    private ClusterManager<MarkerModel> mClusterManager;
+    private final Handler mHandler = new Handler();
+    private Runnable mAnimation;
+
+
 
     public static EventiumMapFragment newInstance(double lat, double lng) {
         final EventiumMapFragment eventiumMapFragment = new EventiumMapFragment();
@@ -65,7 +64,6 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
         return eventiumMapFragment;
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -89,6 +87,8 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                 // For showing a move to my location button
                 googleMap.setMyLocationEnabled(true);
 
+                setUpClusterer();
+
                 // For dropping a marker at a point on the Map
 
                 Response.Listener rl = new Response.Listener<String>() {
@@ -104,10 +104,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
                                 JSONArray coordinates =o.getJSONObject("location").getJSONArray("coordinates");
                                 int events =o.getJSONArray("events").length();
-                                LatLng pos = new LatLng(coordinates.getDouble(0), coordinates.getDouble(1));
-
-                                googleMap.addMarker(new MarkerOptions().position(pos).title(o.getString("name")).snippet(events+" Events"));
-
+                                addItems(coordinates.getDouble(0), coordinates.getDouble(1),o.getString("name"), events+" Events");
 
                             }
 
@@ -147,8 +144,6 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                 }
 
 
-                createLocation(lu, "Ludwigshafen");
-
             }
         });
 
@@ -176,17 +171,6 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
         return root;
     }
-
-
-
-    private void createLocation(LatLng location, String title) {
-        googleMap.addMarker(new MarkerOptions().position(location)
-                .title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
-    }
-
-    private final Handler mHandler = new Handler();
-    private Runnable mAnimation;
 
 
     @Override
@@ -233,4 +217,30 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
             }
         }
     }
+
+    private void setUpClusterer() {
+        // Position the map.
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(51.503186, -0.126446), 10));
+
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<MarkerModel>(this.getContext(), googleMap){
+
+        };
+
+
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        googleMap.setOnCameraIdleListener(mClusterManager);
+        googleMap.setOnMarkerClickListener(mClusterManager);
+
+    }
+
+    private void addItems(double lat, double lng, String title, String snippet) {
+
+        MarkerModel offsetItem = new MarkerModel(lat, lng, title, snippet);
+        mClusterManager.addItem(offsetItem);
+    }
+
+
 }

@@ -225,8 +225,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
             @Override
             public void onResponse(String s) {
 
-
-
                 try {
                     ArrayList<String> likedEventsAsArrayList = new ArrayList<String>();
                     if (likedEvents != null) {
@@ -271,10 +269,10 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                         event.getString("date"),
                                         distance_str,
                                         R.drawable.img_drink,
-                                        R.drawable.ic_cocktails,
                                         event.getString("pin_id"),
                                         contains,
-                                        event.getString("_id")
+                                        event.getString("_id"),
+                                        event.getString("category")
 
                                 );
                                 EventModels.add(item);
@@ -309,7 +307,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         ((MainActivity) getActivity()).queue.add(req1);
     }
 
-
     private void savedEvents(){
         mSwipeRefreshLayout.setRefreshing(true);
         Response.Listener rl = new Response.Listener<String>() {
@@ -331,10 +328,10 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                 event.getString("date"),
                                 "Fix this",
                                 R.drawable.img_drink,
-                                R.drawable.ic_cocktails,
                                 event.getString("pin_id"),
                                 true,
-                                event.getString("_id")
+                                event.getString("_id"),
+                                event.getString("category")
 
                         );
                         EventModels.add(item);
@@ -387,10 +384,10 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                 event.getString("date"),
                                 "Fix this",
                                 R.drawable.img_drink,
-                                R.drawable.ic_cocktails,
                                 event.getString("pin_id"),
                                 false,
-                                event.getString("_id")
+                                event.getString("_id"),
+                                event.getString("category")
 
                         );
                         EventModels.add(item);

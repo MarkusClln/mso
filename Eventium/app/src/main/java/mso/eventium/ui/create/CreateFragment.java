@@ -3,21 +3,20 @@ package mso.eventium.ui.create;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -27,31 +26,28 @@ import androidx.fragment.app.Fragment;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
+import mso.eventium.MainActivity;
 import mso.eventium.R;
+import mso.eventium.adapter.AutoSuggestPinAdapter;
 import mso.eventium.client.backendClient;
 
 
-public class CreateFragment extends Fragment implements SelectCategorieDialogFragment.SingleCoiceListener {
 
-    //private static final String ARG_PARAM1 = "param1";
-    //private String mParam1;
+public class CreateFragment extends Fragment implements SelectCategorieDialogFragment.SingleCoiceListener {
 
     private String ip;
     public backendClient bc;
@@ -66,18 +62,15 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
     EditText descView;
     AutoCompleteTextView locationAutoCompleteTextView;
     String [][] autocomplete_ids = new String[0][0];
-    String [] autocomplete;
-
+    private AutoSuggestPinAdapter autoSuggestPinAdapter;
+    private Handler handler;
 
     final Calendar myCalendar = Calendar.getInstance();
-
 
     public CreateFragment() {
         // Required empty public constructor
     }
 
-
-    // TODO: Rename and change types and number of parameters
     public static CreateFragment newInstance() {
         CreateFragment fragment = new CreateFragment();
         Bundle args = new Bundle();
@@ -110,11 +103,6 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
         setupCategoriesButton();
         setUpCreateButton();
         setUpLocationEdit();
-
-
-        //  https://www.truiton.com/2018/06/android-autocompletetextview-suggestions-from-webservice-call/
-
-
 
         return root;
     }
@@ -228,162 +216,103 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
                         "eventCategorie="+eventCategorie+"\n"+
                         "pinID="+pin_id;
                 Toast.makeText(getContext(),output, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    public void setUpLocationEdit(){
-        locationAutoCompleteTextView = root.findViewById(R.id.event_location);
-
-        String [] init = {"Such doch etwas"};
-        final SpecialAdapter adapter = new SpecialAdapter(getContext(), android.R.layout.simple_dropdown_item_1line, init);
-
-        locationAutoCompleteTextView.setAdapter(adapter);
-        locationAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(final CharSequence s, int start, int before, int count) {
-
-                Response.Listener rl = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray array = new JSONArray(response);
-                            autocomplete = new String[array.length()];
-                            autocomplete_ids = new String[array.length()][2];
-
-                            if(array.length()==0){
-                                autocomplete = new String[1];
-                                autocomplete[0] = s.toString()+"...no match found";
-                            }else {
-                                for (int i = 0; i < array.length(); i++) {
-                                    JSONObject event = array.getJSONObject(i);
-                                    autocomplete[i] = event.getString("name");
-                                    autocomplete_ids[i][0] = event.getString("_id");
-                                    autocomplete_ids[i][1] = event.getString("name");
-                                }
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                if(eventName!="" && eventShortDesc!="" &&eventDesc!="" && !eventCategorie.equals("Wähle aus!") &&pin_id!=""){
+                    Response.Listener responseListener = new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("JSONPost", response.toString());
+                            //pDialog.hide();
                         }
+                    };
 
-                    }
-
-                };
-                if(!s.toString().equals("")) {
-                    StringRequest req1 = bc.getPinByName(s.toString(), rl);
+                    JsonObjectRequest req1 = bc.createEvent(((MainActivity) getActivity()).getToken(), pin_id,eventName, eventDesc, eventShortDesc, myCalendar, eventCategorie, responseListener);
                     queue.add(req1);
                 }
-                if(autocomplete!=null){
-                    adapter.updateResults(autocomplete);
-                    adapter.updateResults(autocomplete);
-
-                }
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
 
             }
         });
-
     }
 
+    private static final int TRIGGER_AUTO_COMPLETE = 100;
+    private static final long AUTO_COMPLETE_DELAY = 300;
 
+    public void setUpLocationEdit(){
 
+        locationAutoCompleteTextView = root.findViewById(R.id.event_location);
+        autoSuggestPinAdapter = new AutoSuggestPinAdapter(this.getContext(), android.R.layout.simple_dropdown_item_1line);
+        locationAutoCompleteTextView.setThreshold(2);
+        locationAutoCompleteTextView.setAdapter(autoSuggestPinAdapter);
+        locationAutoCompleteTextView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        locationAutoCompleteTextView.setText(autoSuggestPinAdapter.getObject(position));
+                    }
+                });
 
-
-    public class SpecialAdapter extends BaseAdapter implements Filterable {
-
-        private List<String> originalItems;
-        private List<String> filteredItems;
-        private int layoutResource;
-        private Context context;
-
-        public SpecialAdapter(Context context, int resource, String[] items) {
-            this.context = context;
-            this.layoutResource = resource;
-            this.originalItems = new ArrayList<String>(Arrays.asList(items));
-            this.filteredItems = new ArrayList<String>(originalItems);
-        }
-
-        @Override
-        public int getCount() {
-            return filteredItems.size();
-        }
-
-        @Override
-        public String getItem(int position) {
-            return filteredItems.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            String item = getItem(position);
-            if(convertView == null) {
-                convertView = inflater.inflate(layoutResource, parent, false);
-            }
-            ((TextView) convertView).setText(item);
-            return convertView;
-        }
-
-        @Override
-        public Filter getFilter() {
-            return new SpecialFilter();
-        }
-
-        public void updateResults(String[] results) {
-            originalItems.clear();
-            originalItems.addAll(new ArrayList<String>(Arrays.asList(results)));
-            this.notifyDataSetChanged();
-
-        }
-
-        private class SpecialFilter extends Filter {
-
+        locationAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
-            protected FilterResults performFiltering(final CharSequence constraint) {
-                FilterResults results = new FilterResults();
-
-
-                ArrayList<String> list = new ArrayList<String>(originalItems);
-                results.values = list;
-                results.count = list.size();
-
-                return results;
+            public void beforeTextChanged(CharSequence s, int start, int
+                    count, int after) {
             }
-
             @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                filteredItems = (List<String>) results.values;
-                if (results.count > 0) {
-                    notifyDataSetChanged();
-                } else {
-                    notifyDataSetInvalidated();
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                handler.removeMessages(TRIGGER_AUTO_COMPLETE);
+                handler.sendEmptyMessageDelayed(TRIGGER_AUTO_COMPLETE,
+                        AUTO_COMPLETE_DELAY);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.what == TRIGGER_AUTO_COMPLETE) {
+                    if (!TextUtils.isEmpty(locationAutoCompleteTextView.getText())) {
+                        makeApiCall(locationAutoCompleteTextView.getText().toString());
+                    }
                 }
+                return false;
             }
-        }
+        });
+    }
 
+    private void makeApiCall(final String text) {
+
+        Response.Listener rl = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                    //parsing logic, please change it as per your requirement
+                    List<String> stringList = new ArrayList<>();
+                    try {
+
+                        JSONArray array = new JSONArray(response);
+                        autocomplete_ids = new String[array.length()][2];
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject row = array.getJSONObject(i);
+                            stringList.add(row.getString("name"));
+                            autocomplete_ids[i][0] = row.getString("_id");
+                            autocomplete_ids[i][1] = row.getString("name");
+                        }
+                        if(array.length()==0){
+                            stringList.add(text+" exisitert nicht");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //IMPORTANT: set data here and notify
+                    autoSuggestPinAdapter.setData(stringList);
+                    autoSuggestPinAdapter.notifyDataSetChanged();
+
+            }
+
+        };
+        StringRequest req1 = bc.getPinByName(text, rl);
+        queue.add(req1);
 
 
     }
-
-
 
 }

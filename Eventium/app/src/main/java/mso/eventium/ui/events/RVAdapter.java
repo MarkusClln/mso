@@ -81,12 +81,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             final Calendar myCalendar = Calendar.getInstance();
             Date date = format.parse(EventModelsFiltered.get(i).getEvent_date());
             myCalendar.setTime(date);
-            String myFormat = "MM/dd/yy"; //In which you need put here
+            String myFormat = "dd/MM/yy"; //In which you need put here
             SimpleDateFormat sdf1 = new SimpleDateFormat(myFormat, Locale.GERMANY);
 
             EventViewHolder.eventDate.setText(sdf1.format(myCalendar.getTime()));
 
-            SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
             EventViewHolder.eventTime.setText(sdf2.format(myCalendar.getTime()));
 
         } catch (ParseException e) {
@@ -109,9 +109,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
 
 
-        EventViewHolder.saveEventButton.setOnClickListener(new View.OnClickListener() {
+        EventViewHolder.saveEventButton.setOnClickListener(new View.OnClickListener(){
+
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 ScaleAnimation scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
                 scaleAnimation.setDuration(500);
                 BounceInterpolator bounceInterpolator = new BounceInterpolator();
@@ -145,9 +146,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             }
         });
 
-
-
-
     }
 
     @Override
@@ -161,14 +159,55 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String Key = constraint.toString();
-                if (Key.isEmpty()) {
+                String[] filter = Key.split("\\|-\\|");
+                if (filter.length ==0) {
                     EventModelsFiltered = EventModels;
                 } else {
                     List<Event> lstFiltered = new ArrayList<>();
                     for (Event row : EventModels) {
-                        //Config here search inputs
-                        if (row.getName().toLowerCase().contains(Key.toLowerCase()) ||
-                                row.getEvent_description().toLowerCase().contains(Key.toLowerCase())) {
+
+                        boolean add = true;
+                        if (!row.getName().toLowerCase().contains(filter[0].toLowerCase()) && !row.getEvent_description().toLowerCase().contains(filter[0].toLowerCase())) {
+                            add = false;
+                        }
+                        if(!filter[1].equals("")){
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                            try {
+                                Date eventDate = format.parse(row.getEvent_date().substring(0,10));
+                                Date filterDate = format.parse(filter[1].substring(0,10));
+
+                                if(eventDate.before(filterDate)){
+                                    add = false;
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if(!filter[2].equals("Wähle Uhrzeit hier!")){
+
+                                String[] time = filter[2].split(":");
+                                int hoursFilter = Integer.parseInt(time[0]);
+                                int minutesFilter = Integer.parseInt(time[1]);
+                                int FilterTime = hoursFilter*60 + minutesFilter;
+
+                                String subTime = row.getEvent_date().substring(11,16);
+                                String[] eventTime = subTime.split(":");
+                                int hoursEvent = Integer.parseInt(eventTime[0]);
+                                int minutesEvent = Integer.parseInt(eventTime[1]);
+                                int EventTime = hoursEvent*60 + minutesEvent;
+
+                                if(EventTime<FilterTime){
+                                    add=false;
+                                }
+
+
+
+                        }
+
+
+
+                        if(add){
                             lstFiltered.add(row);
                         }
 

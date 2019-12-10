@@ -1,5 +1,6 @@
 package mso.eventium.ui.events;
 
+import android.drm.DrmManagerClient;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,8 +19,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mso.eventium.R;
 import mso.eventium.adapter.ViewPagerAdapter;
+import mso.eventium.model.Event;
 import mso.eventium.ui.fragments.FilterFragment;
 
 
@@ -27,6 +33,10 @@ public class EventFragment extends Fragment {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private EditText searchInput;
+    private View root;
+    TextView rangeSliderView;
+    TextView dateView;
+    TextView timeView;
 
 
     private EventListFragment eventListFragmentAll = EventListFragment.newInstance("all");
@@ -36,10 +46,8 @@ public class EventFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_event, container, false);
 
-
-
+        root = inflater.inflate(R.layout.fragment_event, container, false);
 
 
         tabLayout = (TabLayout) root.findViewById(R.id.tablayout);
@@ -68,11 +76,7 @@ public class EventFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                eventListFragmentAll.mAdapter.getFilter().filter(s);
-                eventListFragmentSaved.mAdapter.getFilter().filter(s);
-                eventListFragmentOwned.mAdapter.getFilter().filter(s);
-                eventListFragmentAll.search = s;
-                eventListFragmentSaved.search = s;
+               doFitler();
             }
 
             @Override
@@ -81,7 +85,74 @@ public class EventFragment extends Fragment {
             }
         });
 
+
+
+        rangeSliderView = root.findViewById(R.id.slider_value);
+        dateView = root.findViewById(R.id.date);
+        timeView = root.findViewById(R.id.timeText);
+        dateView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                doFitler();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        rangeSliderView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                doFitler();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        timeView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                doFitler();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         return root;
+    }
+
+    public void doFitler(){
+        String text = searchInput.getText().toString();
+        String date = dateView.getText().toString();
+        String range = rangeSliderView.getText().toString();
+        String time = timeView.getText().toString();
+        String s = text+"|-|"+date+"|-|"+time+"|-|"+range;
+        eventListFragmentAll.mAdapter.getFilter().filter(s);
+        eventListFragmentSaved.mAdapter.getFilter().filter(s);
+        eventListFragmentOwned.mAdapter.getFilter().filter(s);
     }
 
 
@@ -96,6 +167,5 @@ public class EventFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
     }
-
 
 }

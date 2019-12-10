@@ -1,5 +1,9 @@
 package mso.eventium.model;
 
+import android.widget.Switch;
+
+import mso.eventium.R;
+
 public class Event {
 
 
@@ -13,23 +17,37 @@ public class Event {
     private int event_icon;
     private String event_distance;
     private boolean saved;
+    private String category;
 
     public static final String[] categories = {"Bar", "Disco", "Essen"};
 
+    public static int getCategorieIcon(String category){
+        switch (category){
+            case "Bar":
+                return R.drawable.ic_flaschen;
+            case "Disco":
+                return R.drawable.ic_cocktails;
+            case "Essen":
+                return R.drawable.ic_best_choice;
+        }
+        return 0;
+    }
 
 
 
-    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, int event_icon, String pin_id, boolean saved, String event_id) {
+
+    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, String pin_id, boolean saved, String event_id, String category) {
         this.event_name = name;
         this.event_description = description;
         this.event_date = date;
         this.event_photo = event_photo;
-        this.event_icon = event_icon;
+        this.event_icon = getCategorieIcon(category);
         this.event_distance = distance;
         this.event_short_description = event_short_description;
         this.pin_id = pin_id;
         this.saved = saved;
         this.event_id = event_id;
+        this.category = category;
     }
 
     public String getName() {

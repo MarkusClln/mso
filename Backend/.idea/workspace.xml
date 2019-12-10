@@ -2,21 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/create/CreateFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/create/SelectCategorieDialogFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_create.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/adapter/AutoSuggestPinAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Node/models/eventSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/models/eventSchema.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/event.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/event.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Node/routes/pin.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/pin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/client/backendClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/client/backendClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/model/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/model/Event.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/ActivityEventDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/ActivityEventDetail.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/EventListFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/EventListFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/RVAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/events/RVAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/activity_event_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/activity_event_detail.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_events_list_element.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_events_list_element.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/create/CreateFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/create/CreateFragment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +159,8 @@
       <workItem from="1575633244457" duration="1062000" />
       <workItem from="1575799820573" duration="3388000" />
       <workItem from="1575820094752" duration="3491000" />
-      <workItem from="1575876713340" duration="6320000" />
+      <workItem from="1575876713340" duration="6327000" />
+      <workItem from="1575921474922" duration="2991000" />
     </task>
     <servers />
   </component>

@@ -200,7 +200,7 @@ public class backendClient {
 
     }
 
-    public JsonObjectRequest createEvent(final String auth_token, final String pin_id, final String name, final String desc, final String hortDesc, final Calendar calendar, Response.Listener responseListener) {
+    public JsonObjectRequest createEvent(final String auth_token, final String pin_id, final String name, final String desc, final String shortDesc, final Calendar calendar, final String category, Response.Listener responseListener) {
         final String url = "http://" + server_ip + "/event";
 
         Response.ErrorListener responseErrorListener = new Response.ErrorListener() {
@@ -217,8 +217,9 @@ public class backendClient {
                             .put("pin_id", pin_id)
                             .put("name", name)
                             .put("description", desc)
-                            .put("shortDescription", hortDesc)
-                            .put("date", calendar.getTime().toString()));
+                            .put("shortDescription", shortDesc)
+                            .put("date", calendar.getTime().toString())
+                            .put("category", category));
 
             final JsonObjectRequest jsonObjReq = new JsonObjectRequest(
                     Request.Method.POST,
