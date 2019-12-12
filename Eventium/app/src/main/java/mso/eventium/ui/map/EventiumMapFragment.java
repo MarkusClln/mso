@@ -1,5 +1,10 @@
 package mso.eventium.ui.map;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -8,16 +13,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,13 +54,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.model.MarkerModel;
 
-public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
+public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, LocationListener,GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private SupportMapFragment fragment;
     private GoogleMap googleMap;
@@ -53,6 +71,10 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
     private final Handler mHandler = new Handler();
     private Runnable mAnimation;
 
+    Location mLastLocation;
+    Marker mCurrLocationMarker;
+    GoogleApiClient mGoogleApiClient;
+    LocationRequest mLocationRequest;
 
 
     public static EventiumMapFragment newInstance(double lat, double lng) {
@@ -85,6 +107,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
+                buildGoogleApiClient();
                 // For showing a move to my location button
                 googleMap.setMyLocationEnabled(true);
 
@@ -155,29 +178,76 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
             }
         });
 
-        Places.initialize(root.getContext(), "AIzaSyDHsNp7dZiPYx4fhBm_bU_8R15zGUziJqg");
-        PlacesClient placesClient = Places.createClient(root.getContext());
+        Button btn = root.findViewById(R.id.mapSearchButton);
 
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                fm.findFragmentById(R.id.place_autocomplete);
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Toast.makeText(root.getContext(), place.getName(), Toast.LENGTH_SHORT).show();
-            }
+            public void onClick(View v) {
+                EditText locationSearch = (EditText) getActivity().findViewById(R.id.editText);
+                String location = locationSearch.getText().toString();
+                List<Address> addressList = null;
 
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Toast.makeText(root.getContext(), "An error occurred: " + status, Toast.LENGTH_SHORT).show();
+                if (location != null || !location.equals("")) {
+                    Geocoder geocoder = new Geocoder(getActivity());
+                    try {
+                        addressList = geocoder.getFromLocationName(location, 1);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Address address = addressList.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    googleMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                    //Toast.makeText(getApplicationContext(),address.getLatitude()+" "+address.getLongitude(),Toast.LENGTH_LONG).show();
+                }
             }
         });
 
+//        Places.initialize(root.getContext(), "AIzaSyDHsNp7dZiPYx4fhBm_bU_8R15zGUziJqg");
+//        PlacesClient placesClient = Places.createClient(root.getContext());
+//
+//        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+//                fm.findFragmentById(R.id.place_autocomplete);
+//        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+//
+//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//            @Override
+//            public void onPlaceSelected(Place place) {
+//                // TODO: Get info about the selected place.
+//                Toast.makeText(root.getContext(), place.getName(), Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onError(Status status) {
+//                // TODO: Handle the error.
+//                Toast.makeText(root.getContext(), "An error occurred: " + status, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
 
         return root;
+    }
+
+    public void searchLocation(View view) {
+        EditText locationSearch = (EditText) getActivity().findViewById(R.id.editText);
+        String location = locationSearch.getText().toString();
+        List<Address> addressList = null;
+
+        if (location != null || !location.equals("")) {
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                addressList = geocoder.getFromLocationName(location, 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Address address = addressList.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            googleMap.addMarker(new MarkerOptions().position(latLng).title(location));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            //Toast.makeText(getApplicationContext(),address.getLatitude()+" "+address.getLongitude(),Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -196,6 +266,60 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
         // for the default behavior to occur (which is for the camera to move such that the
         // marker is centered and for the marker's info window to open, if it has one).
         return false;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+        }
+        //Place current location marker
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Current Position");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        mCurrLocationMarker = googleMap.addMarker(markerOptions);
+
+        //move map camera
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+        //stop location updates
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+        mGoogleApiClient.connect();
+    }
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     private static class BounceAnimation implements Runnable {
