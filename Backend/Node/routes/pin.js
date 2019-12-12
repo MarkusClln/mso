@@ -39,6 +39,8 @@ router.post('/all',  function(req, res, next) {
     var lng = req.body.lng;
     var distance = req.body.distance;
 
+    console.log("lat "+lat+" lng "+lng);
+
 
     if(lat != undefined && lng != undefined && distance != undefined){
 
@@ -47,7 +49,7 @@ router.post('/all',  function(req, res, next) {
             {$geoNear: {
                 near: {
                     type: "Point",
-                    coordinates: [ parseFloat(lng) , parseFloat(lat) ]
+                    coordinates: [ parseFloat(lat) , parseFloat(lng) ]
                 },
                 distanceField: "distance",
                 maxDistance: parseFloat(distance),

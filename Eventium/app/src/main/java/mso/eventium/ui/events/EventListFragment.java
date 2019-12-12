@@ -75,6 +75,8 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         root = inflater.inflate(R.layout.fragment_event_list, container, false);
         //eventFragment = inflater.inflate(R.layout.fragment_event, container, false);
 
+
+
         this.ListType = getArguments().getString("ListType");
 
         EventModels = new ArrayList<>();
@@ -181,22 +183,34 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
     private void loadRecyclerViewData() {
+        if(currentLocation!=null) {
+            switch (ListType) {
+                case "all":
+                    allEvents();
+                    break;
+                case "saved":
+                    if(((MainActivity) getActivity()).getToken()!= null){
+                        savedEvents();
+                    }else{
+                        //Todo logge dich ein Bild
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
 
-        switch(ListType)
-        {
-            case "all":
-                allEvents();
-                break;
-            case "saved":
-                savedEvents();
-                break;
-            case "owned":
-                ownedEvents();
-                break;
-            default:
-                //error or something
+                    break;
+                case "owned":
+                    if(((MainActivity) getActivity()).getToken()!= null){
+                        ownedEvents();
+                    }else{
+                        //Todo logge dich ein Bild
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                    break;
+                default:
+                    //error or something
+            }
+        }else{
+            mSwipeRefreshLayout.setRefreshing(false);
         }
-
 
         //for requests look at
         //https://stackoverflow.com/questions/44454797/pull-to-refresh-recyclerview-android
@@ -529,6 +543,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
                             currentLocation = location;
+                            loadRecyclerViewData();
                         }
                     }
                 });

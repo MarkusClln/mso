@@ -5,16 +5,64 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/pointsBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="130dp"
+        android:layout_height="144dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:progress="0"
+        android:progressDrawable="@drawable/circle_points"
+        android:rotation="90"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/TextViewLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Level 1"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/points"
+        app:layout_constraintEnd_toEndOf="@+id/pointsBar"
+        app:layout_constraintStart_toStartOf="@+id/pointsBar"
+        app:layout_constraintTop_toTopOf="@+id/pointsBar" />
+
+    <TextView
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logge dich ein um Punkte zu sammeln"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/pointsBar"
+        app:layout_constraintStart_toStartOf="@+id/pointsBar"
+        app:layout_constraintTop_toBottomOf="@+id/pointsBar" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="@dimen/default_margin"
+
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/points" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_margin="@dimen/default_margin"
-        android:src="@drawable/ic_flaschen"
+        android:src="@drawable/ic_account_circle_blue_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/line1" />
 
     <TextView
         android:id="@+id/userNameDesc"
@@ -23,6 +71,7 @@
         android:layout_margin="@dimen/default_margin"
         android:text="Name:"
         android:textAlignment="viewStart"
+        android:textColor="@color/event_text"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -35,6 +84,7 @@
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
         android:textAlignment="viewStart"
+        android:textColor="@color/event_text"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userNameDesc"
@@ -47,6 +97,7 @@
         android:layout_margin="@dimen/default_margin"
         android:text="Email:"
         android:textAlignment="viewStart"
+        android:textColor="@color/event_text"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userNameDesc" />
@@ -57,6 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
         android:textAlignment="viewStart"
+        android:textColor="@color/event_text"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userNameDesc"

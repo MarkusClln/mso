@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +15,10 @@ import androidx.fragment.app.Fragment;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.auth0.android.result.Credentials;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +37,11 @@ import mso.eventium.model.User;
 public class UserFragment extends Fragment {
 
     private static String ARGS_TOKEN = "args_token";
+    View root;
+    int points = 0;
+    TextView TVPoints;
+    TextView TVLevel;
+    ProgressBar PBPoints;
 
     public static UserFragment newInstance(String token) {
 
@@ -52,14 +60,20 @@ public class UserFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        final View root = inflater.inflate(R.layout.fragment_user, container, false);
+        root = inflater.inflate(R.layout.fragment_user, container, false);
         Button loginButton = root.findViewById(R.id.logout);
 
         token =getArguments().getString(ARGS_TOKEN);
 
+        TVPoints = root.findViewById(R.id.points);
+        TVLevel = root.findViewById(R.id.TextViewLevel);
+        PBPoints = root.findViewById(R.id.pointsBar);
+
+
         if(token != null){
             loginButton.setText("Logout");
             ((MainActivity) getActivity()).getProfile();
+            getPoints();
         }else{
             loginButton.setText("Login");
             TextView nameTV = root.findViewById(R.id.userName);
@@ -72,6 +86,7 @@ public class UserFragment extends Fragment {
             nameTVdesc.setVisibility(View.INVISIBLE);
             emailTVdesc.setVisibility(View.INVISIBLE);
         }
+
 
 
 
@@ -200,4 +215,105 @@ public class UserFragment extends Fragment {
         ((MainActivity) getActivity()).queue.add(req12);
 
     }
+
+    private void getPoints(){
+
+        Response.Listener responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int tmp = 0;
+                try{
+                    JSONArray events = new JSONArray(response);
+                    for(int j=0; j<events.length(); j++){
+                        JSONObject event = events.getJSONObject(j);
+                        tmp += event.getJSONArray("likedUsers").length();
+                        tmp -= event.getJSONArray("dislikedUsers").length();
+                    }
+                    points = tmp;
+                    setPoints();
+                }catch (JSONException e){
+
+                }
+
+            }
+        };
+        StringRequest req1 = ((MainActivity) getActivity()).bc.getOwnEvents(token, responseListener );
+        ((MainActivity) getActivity()).queue.add(req1);
+    }
+
+    private void setPoints(){
+        int level_2 = (int)Math.exp(2); // 7
+        int level_3 = (int)Math.exp(3); // 20
+        int level_4 = (int)Math.exp(4); // 54
+        int level_5 = (int)Math.exp(5); // 148
+        int level_6 = (int)Math.exp(6); // 403
+        int level_7 = (int)Math.exp(7); // 1096
+        int level_8 = (int)Math.exp(8); // 2980
+        int level_9 = (int)Math.exp(9); // 8103
+        int level_10 = (int)Math.exp(10); //22026
+
+
+        if(points<level_2){
+            TVLevel.setText("Level 1");
+            double progress = (double) points / level_2 *100;
+            PBPoints.setProgress((int)progress);
+        }else{
+            if(points<level_3){
+                TVLevel.setText("Level 2");
+                double progress = (double) (points - level_2) / (level_3 - level_2) *100;
+                PBPoints.setProgress((int)progress);
+            }else{
+                if(points<level_4){
+                    TVLevel.setText("Level 3");
+                    double progress = (double) (points - level_3) / (level_4 - level_3) *100;
+                    PBPoints.setProgress((int)progress);
+                }else{
+                    if(points<level_5){
+                        TVLevel.setText("Level 4");
+                        double progress = (double) (points - level_4) / (level_5 - level_4) *100;
+                        PBPoints.setProgress((int)progress);
+                    }else{
+                        if(points<level_6){
+                            TVLevel.setText("Level 5");
+                            double progress = (double) (points - level_5) / (level_6  - level_5) *100;
+                            PBPoints.setProgress((int)progress);
+                        }else{
+                            if(points<level_7){
+                                TVLevel.setText("Level 6");
+                                double progress = (double) (points - level_6) / (level_7 - level_6) *100;
+                                PBPoints.setProgress((int)progress);
+                            }else{
+                                if(points<level_8){
+                                    TVLevel.setText("Level 7");
+                                    double progress = (double) (points - level_7) / (level_8 - level_7) *100;
+                                    PBPoints.setProgress((int)progress);
+                                }else{
+                                    if(points<level_9){
+                                        TVLevel.setText("Level 8");
+                                        double progress = (double) (points - level_8) / (level_9 - level_8) *100;
+                                        PBPoints.setProgress((int)progress);
+                                    }else{
+                                        if(points<level_10){
+                                            TVLevel.setText("Level 9");
+                                            double progress = (double) (points - level_9) / (level_10- level_9) *100;
+                                            PBPoints.setProgress((int)progress);
+                                        }else{
+                                            TVLevel.setText("Level 10");
+                                            PBPoints.setProgress(100);
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        TVPoints.setText(points+" Punkte");
+    }
+
+
 }
