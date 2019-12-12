@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -19,11 +20,12 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_below="@+id/event_photo"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginTop="-30dp"
         android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginBottom="@dimen/default_margin"
+        android:elevation="2dp"
         android:scaleType="fitXY" />
 
     <ImageView
@@ -41,91 +43,143 @@
         android:id="@+id/event_name_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_photo"
+        android:layout_below="@+id/event_icon"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginLeft="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_toEndOf="@+id/event_icon"
         android:layout_toRightOf="@+id/event_photo"
         android:minHeight="60dp"
         android:text="Eine Event Beschreibung"
-        android:textSize="30sp"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_name_desc"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        app:srcCompat="@drawable/ic_date_range_blue_24dp" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_time"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        app:srcCompat="@drawable/ic_location_on_black_24dp" />
 
     <TextView
         android:id="@+id/event_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_name_desc"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/default_margin"
+        android:layout_below="@+id/event_distance"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/default_margin2"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginRight="@dimen/default_margin"
         android:layout_marginBottom="@dimen/default_margin"
+        android:layout_toEndOf="@+id/imageView5"
         android:text="Schnellen es viehmarkt verstehen behaglich grundlich pa. Unrecht beinahe das solange zum endlich von ich. Fehlen jemals feinen hin vor gesagt tun kirche schien. Wo gelernt verband er wu einfand bereits stopfen ja. Grundstuck launischen zu verdrossen da dachkammer bescheiden fluchtigen. Zog zur all ruth gewi kerl gern fur. "
-        android:textColor="@color/event_text"
-        />
+        android:textColor="@color/event_text" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_distance"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        app:srcCompat="@drawable/ic_description_blue_24dp" />
+
+    <TextView
+        android:id="@+id/event_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_time"
+        android:layout_marginStart="@dimen/default_margin2"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_toEndOf="@+id/imageView4"
+        android:text="Ein Name einer Location"
+        android:textColor="@color/event_text" />
 
     <TextView
         android:id="@+id/event_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_description"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/default_margin"
+        android:layout_below="@+id/event_location"
+        android:layout_marginStart="@dimen/default_margin2"
+        android:layout_marginTop="@dimen/default_margin"
         android:layout_marginBottom="@dimen/default_margin"
+        android:layout_toEndOf="@+id/imageView4"
         android:text="Entfernung: 1km"
-        android:textColor="@color/event_text"/>
-
-    <TextView
-        android:id="@+id/event_date_pre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/event_distance"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:text="Datum: "
-        android:textColor="@color/event_text"/>
+        android:textColor="@color/event_text" />
 
     <TextView
         android:id="@+id/event_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_distance"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_toEndOf="@+id/event_date_pre"
+        android:layout_below="@+id/event_name_desc"
+        android:layout_marginStart="@dimen/default_margin2"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_toEndOf="@+id/imageView3"
         android:text="23.12.2018"
-        android:textColor="@color/event_text"/>
-
-    <TextView
-        android:id="@+id/event_time_pre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/event_date"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="@dimen/default_margin"
-        android:text="Uhrzeit: "
-        android:textColor="@color/event_text"
-        />
+        android:textColor="@color/event_text" />
 
     <TextView
         android:id="@+id/event_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/event_date"
-        android:layout_toEndOf="@+id/event_time_pre"
+        android:layout_marginStart="@dimen/default_margin2"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_toEndOf="@+id/imageView3"
         android:text="20:30"
-        android:textColor="@color/event_text"/>
+        android:textColor="@color/event_text" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/event_description"
+
+        android:layout_marginTop="@dimen/default_margin"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:layout_below="@+id/event_time"
-        android:layout_margin="@dimen/default_margin"/>
+        android:layout_below="@+id/line1"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/mapView"
+
+        android:layout_marginTop="@dimen/default_margin"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
 </RelativeLayout>
