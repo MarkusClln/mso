@@ -2,6 +2,7 @@ package mso.eventium.ui.events;
 
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,12 @@ import androidx.transition.TransitionInflater;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +40,7 @@ import java.util.List;
 import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.model.Event;
+import mso.eventium.ui.map.EventiumMapFragment;
 
 
 public class EventListFragment extends Fragment implements RVAdapter.OnNoteListener, SwipeRefreshLayout.OnRefreshListener {
@@ -46,7 +54,8 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     private List<Event> EventModels;
     public CharSequence search = "";
     public String ListType;
-
+    private FusedLocationProviderClient fusedLocationClient;
+    private Location currentLocation;
 
     public static EventListFragment newInstance(String type) {
         EventListFragment fragment = new EventListFragment();
@@ -103,6 +112,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
             }
         });
 
+        setUpCurrentLocation();
 
         return root;
 
@@ -345,7 +355,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
 
-        StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(49.466633, 8.259154,1000, rl, el);
+        StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(currentLocation.getLatitude(), currentLocation.getLongitude(),10000, rl, el);
         ((MainActivity) getActivity()).queue.add(req1);
     }
 
@@ -510,7 +520,19 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
     }
 
-
+    private void setUpCurrentLocation(){
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            currentLocation = location;
+                        }
+                    }
+                });
+    }
 
 }
 

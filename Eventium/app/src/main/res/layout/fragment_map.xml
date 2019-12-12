@@ -1,59 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <fragment
         android:id="@+id/locationMap"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="mso.eventium.ui.map.EventiumMapFragment">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <com.google.android.material.button.MaterialButton
-
-                android:id="@+id/currentLocationButton"
-
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_margin="@dimen/default_margin"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:textAlignment="center"
-                app:icon="@drawable/ic_person_pin_circle_black_24dp"
-                app:iconPadding="0dp"
-                app:iconSize="24dp"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Rounded" />
-
-            <EditText
-                android:layout_width="248dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText"
-                android:layout_weight="0.5"
-                android:inputType="textPersonName"
-                android:hint="Search Location" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:id="@+id/mapSearchButton"
-                app:icon="@drawable/ic_search_white_24dp"/>
-
-        </LinearLayout>
 
     </fragment>
 
-<!--    <fragment-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="50dp">
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="248dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_weight="0.5"
+            android:hint="Search Location"
+            android:inputType="textPersonName" />
+
+    </RelativeLayout>
+
+    <!--    <fragment-->
 <!--        android:id="@+id/locationMap"-->
 <!--        android:name="com.google.android.gms.maps.SupportMapFragment"-->
 <!--        android:layout_width="match_parent"-->

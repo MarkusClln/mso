@@ -111,7 +111,7 @@
                     android:layout_marginBottom="@dimen/default_margin"
                     android:minHeight="60dp"
                     android:text="Eine Event"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorAccent"
                     android:textSize="30sp" />
 
                 <TextView

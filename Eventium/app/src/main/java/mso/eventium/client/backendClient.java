@@ -110,7 +110,7 @@ public class backendClient {
         return postRequest;
     }
 
-    public StringRequest getAllPins(final double lng, final double lat, final double distance, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener){
+    public StringRequest getAllPins(final double lat, final double lng, final double distance, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener){
 
         final String url = "http://"+server_ip+"/pin/all";
 

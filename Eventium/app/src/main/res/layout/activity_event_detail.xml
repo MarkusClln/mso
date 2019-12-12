@@ -52,7 +52,7 @@
         android:layout_toRightOf="@+id/event_photo"
         android:minHeight="60dp"
         android:text="Eine Event Beschreibung"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:textSize="30sp" />
 
     <ImageView
@@ -73,7 +73,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
-        app:srcCompat="@drawable/ic_location_on_black_24dp" />
+        app:srcCompat="@drawable/ic_location_on_blue_24dp" />
 
     <TextView
         android:id="@+id/event_description"
