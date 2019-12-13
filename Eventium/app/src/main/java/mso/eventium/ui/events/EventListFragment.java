@@ -250,7 +250,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                 }
             };
 
-            StringRequest req1 = ((MainActivity) getActivity()).bc.getAuth(((MainActivity) getActivity()).getToken(), rl, el);
+            StringRequest req1 = ((MainActivity) getActivity()).backendClient.getAuth(((MainActivity) getActivity()).getToken(), rl, el);
             ((MainActivity) getActivity()).queue.add(req1);
         }else{
             setEvents(null);
@@ -369,7 +369,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
 
-        StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(currentLocation.getLatitude(), currentLocation.getLongitude(),10000, rl, el);
+        StringRequest req1 = ((MainActivity) getActivity()).backendClient.getAllPins(currentLocation.getLatitude(), currentLocation.getLongitude(),10000, rl, el);
         ((MainActivity) getActivity()).queue.add(req1);
     }
 
@@ -445,7 +445,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
         if(((MainActivity) getActivity()).getToken()!= null){
-            StringRequest req1 = ((MainActivity) getActivity()).bc.getFavEvents(((MainActivity) getActivity()).getToken(), rl);
+            StringRequest req1 = ((MainActivity) getActivity()).backendClient.getFavEvents(((MainActivity) getActivity()).getToken(), rl);
             ((MainActivity) getActivity()).queue.add(req1);
         }else{
             //Todo
@@ -525,7 +525,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
         if(((MainActivity) getActivity()).getToken()!= null){
-            StringRequest req1 = ((MainActivity) getActivity()).bc.getOwnEvents(((MainActivity) getActivity()).getToken(), rl);
+            StringRequest req1 = ((MainActivity) getActivity()).backendClient.getOwnEvents(((MainActivity) getActivity()).getToken(), rl);
             ((MainActivity) getActivity()).queue.add(req1);
         }else{
             //Todo

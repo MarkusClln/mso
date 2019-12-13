@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -52,27 +53,29 @@ import mso.eventium.ui.create.CreateFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private enum ActiveFragments {
-        MAP, EVENTS, USER, HOSTS, CREATE
-    }
-
     //Activity starts with this set fragment
     public ActiveFragments activeFragment = ActiveFragments.EVENTS;
-    private String ip;
-    public backendClient bc;
+
+    private String backendServerIp;
+    public backendClient backendClient;
     public RequestQueue queue;
     public boolean login;
-    private FloatingActionButton floatingActionButton;
-    private BottomAppBar bottomAppBar;
-    private MaterialButton accountButton;
-    private MaterialButton favoriteHostsButton;
-    private MaterialButton createButton;
     private Auth0 auth0;
     private String token;
     private SharedPreferences prefs;
     private AuthenticationAPIClient authenticationAPIClient;
 
+    //UI Elements
+    private FloatingActionButton floatingActionButton;
+    private BottomAppBar bottomAppBar;
+    private MaterialButton accountButton;
+    private MaterialButton favoriteHostsButton;
+    private MaterialButton createButton;
 
+
+    private enum ActiveFragments {
+        MAP, EVENTS, USER, HOSTS, CREATE
+    }
 
     private static final String[] INITIAL_PERMS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -84,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         prefs = this.getSharedPreferences("mso.eventium", Context.MODE_PRIVATE);
 
-        ip = getResources().getString(R.string.IP_Server);
-        bc = new backendClient(ip);
+        backendServerIp = getResources().getString(R.string.IP_Server);
+        backendClient = new backendClient(backendServerIp);
         queue = Volley.newRequestQueue(this);
         setupAuth0();
 
@@ -96,23 +99,43 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        setFragmentView();
+        this.OnFragmentChanged();
+        this.CreateEventMapButton();
 
-        createFloatingActionButton();
-        createBottomNavBarButtons();
-
-
-
+        this.SetupBottomNavBarButtons();
     }
 
-    private void setFragmentView() {
+    /**
+     * Sets the desired fragment
+     * @param desiredFragment
+     * @param setMapicon
+     */
+    private void SetupFragment(Fragment desiredFragment, boolean setMapicon){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment, desiredFragment);
+        fragmentTransaction.commit();
+        floatingActionButton = findViewById(R.id.eventMapButton);
+
+        if(setMapicon){
+            floatingActionButton.setImageResource(R.drawable.ic_map_white_24dp);
+        }else{
+            floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
+        }
+    }
+
+    /**
+     * Called when a fragment gets changed
+     */
+    private void OnFragmentChanged() {
+
+        //Das wird nur benutzt wenn man in der Eventansicht auf die Karte klickt
         String intentFragment = getIntent().getStringExtra("intentFragment");
 
         if (intentFragment != null) {
             switch (intentFragment) {
                 case "mapFragment":
                     activeFragment = ActiveFragments.MAP;
-
                     break;
                 case "eventsFragment":
                     activeFragment = ActiveFragments.EVENTS;
@@ -130,66 +153,34 @@ public class MainActivity extends AppCompatActivity {
             getIntent().removeExtra("intentFragment");
         }
 
+        //Prüfe welches Fragment grade als aktiv gesetzt ist
         if (activeFragment == ActiveFragments.EVENTS) {
-            EventFragment eventFragment = new EventFragment();
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment, eventFragment);
-            fragmentTransaction.commit();
-            floatingActionButton = findViewById(R.id.fab);
-            floatingActionButton.setImageResource(R.drawable.ic_map_white_24dp);
+            SetupFragment(new EventFragment(), true);
         }
         if (activeFragment == ActiveFragments.MAP) {
-
             double lat = getIntent().getDoubleExtra("location_lat", -1);
             double lng = getIntent().getDoubleExtra("location_lng", -1);
             getIntent().removeExtra("location_lat");
             getIntent().removeExtra("location_lng");
 
-
-            EventiumMapFragment mapFragment = EventiumMapFragment.newInstance(lat, lng);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment, mapFragment);
-            fragmentTransaction.commit();
-            floatingActionButton = findViewById(R.id.fab);
-            floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
-
+            SetupFragment(EventiumMapFragment.newInstance(lat, lng), false);
         }
         if (activeFragment == ActiveFragments.USER) {
-
-            UserFragment userFragment = UserFragment.newInstance(token);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment, userFragment);
-            fragmentTransaction.commit();
-            floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
-
-
+            SetupFragment(UserFragment.newInstance(token), false);
         }
         if (activeFragment == ActiveFragments.HOSTS) {
-            FavoriteHostsFragment favoriteHostsFragment = new FavoriteHostsFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment, favoriteHostsFragment);
-            fragmentTransaction.commit();
-            floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
+            SetupFragment(new FavoriteHostsFragment(), false);
         }
         if (activeFragment == ActiveFragments.CREATE) {
-            CreateFragment createFragment = new CreateFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment, createFragment);
-            fragmentTransaction.commit();
-            floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
+            SetupFragment(new CreateFragment(), false);
         }
-
-
     }
 
-    private void createFloatingActionButton() {
-        floatingActionButton = findViewById(R.id.fab);
+    /**
+     * Setup the switching button for map and event
+     */
+    private void CreateEventMapButton() {
+        floatingActionButton = findViewById(R.id.eventMapButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -199,32 +190,31 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     activeFragment = ActiveFragments.EVENTS;
                 }
-                setFragmentView();
-
-
+                OnFragmentChanged();
             }
         });
     }
 
-    private void createBottomNavBarButtons() {
+    /**
+     * Sets up the bottom navbar with onClick actions for every button
+     */
+    private void SetupBottomNavBarButtons() {
         accountButton = findViewById(R.id.fourth_menu_item);
-
         accountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 activeFragment = ActiveFragments.USER;
-                setFragmentView();
+                OnFragmentChanged();
 
             }
         });
-
 
         favoriteHostsButton = findViewById(R.id.second_menu_item);
         favoriteHostsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 activeFragment = ActiveFragments.HOSTS;
-                setFragmentView();
+                OnFragmentChanged();
             }
         });
 
@@ -233,9 +223,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 activeFragment = ActiveFragments.CREATE;
-                setFragmentView();
+                OnFragmentChanged();
             }
         });
+
         bottomAppBar = findViewById(R.id.bottomAppBar);
         setSupportActionBar(bottomAppBar);
     }
@@ -251,11 +242,9 @@ public class MainActivity extends AppCompatActivity {
         }else{
             login=true;
         }
-
     }
 
     public void login() {
-
         WebAuthProvider.login(auth0)
                 .withScheme("demo").withAudience("https://mso-api")
                 .withScope("openid profile email offline_access read:current_user update:current_user_metadata")
@@ -296,9 +285,6 @@ public class MainActivity extends AppCompatActivity {
                                 mEditor.putString("token", token).apply();
 
                                 getProfile(true);
-
-
-
                             }
                         });
                     }
@@ -321,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
                         nameTV.setText(userinfo.getNickname());
                         emailTV.setText(userinfo.getEmail());
                         if(createUser){
-                            queue.add(bc.createUser(token,userinfo.getEmail(), userinfo.getId(), userinfo.getNickname()));
+                            queue.add(backendClient.createUser(token,userinfo.getEmail(), userinfo.getId(), userinfo.getNickname()));
                         }
 
                     }
@@ -358,18 +344,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-
     }
 
     public String getToken(){
         return this.token;
     }
-
 }

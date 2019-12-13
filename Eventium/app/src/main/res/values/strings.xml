@@ -14,7 +14,7 @@
     <string name="eventShortDescHint">Kurze Info deines Events</string>
     <string name="eventDescHint">Beschreibung deines Events</string>
     <string name="eventLocation">Ort des Events</string>
-    <string name="IP_Server">172.18.71.49:9001</string>
+    <string name="IP_Server">172.17.119.129:9001</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

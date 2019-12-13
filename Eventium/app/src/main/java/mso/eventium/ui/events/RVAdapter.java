@@ -142,7 +142,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
                         }
                     };
-                    JsonObjectRequest req1 = activity.bc.pushFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
+                    JsonObjectRequest req1 = activity.backendClient.pushFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
                     activity.queue.add(req1);
 
                     if(EventModelsFiltered.get(i).isDownvoted()){
@@ -187,7 +187,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                         EventViewHolder.eventPoints.setText(Integer.toString(EventModelsFiltered.get(i).getEvent_points()));
                     }
 
-                    JsonObjectRequest req1 = activity.bc.deleteFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
+                    JsonObjectRequest req1 = activity.backendClient.deleteFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
                     activity.queue.add(req1);
                     EventModelsFiltered.get(i).setDownvoted(true);
                     EventModelsFiltered.get(i).setUpvoted(false);

@@ -314,7 +314,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
         if(!isCreateLocation){
             Double currentLat = googleMap.getCameraPosition().target.latitude;
             Double currentLng = googleMap.getCameraPosition().target.longitude;
-            StringRequest req1 = ((MainActivity) getActivity()).bc.getAllPins(currentLat, currentLng,10000, rl, el);
+            StringRequest req1 = ((MainActivity) getActivity()).backendClient.getAllPins(currentLat, currentLng,10000, rl, el);
             ((MainActivity) getActivity()).queue.add(req1);
         }
     }

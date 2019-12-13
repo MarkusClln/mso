@@ -154,7 +154,11 @@ public class ActivityEventDetail extends AppCompatActivity {
 
     }
 
-    public void backToMapActivity(LatLng arg0) {
+    /**
+     * Used for navigating to map with the location of the event marked
+     * @param arg0
+     */
+    public void GoToMapActivity(LatLng arg0) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("intentFragment", "mapFragment");
         intent.putExtra("location_lat", arg0.latitude);
@@ -210,7 +214,7 @@ public class ActivityEventDetail extends AppCompatActivity {
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(LatLng arg0) {
-                        backToMapActivity(pos);
+                        GoToMapActivity(pos);
                     }
                 });
                 googleMap.getUiSettings().setAllGesturesEnabled(false);
