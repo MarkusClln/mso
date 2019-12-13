@@ -253,6 +253,7 @@ public class UserFragment extends Fragment {
         int level_10 = (int)Math.exp(10); //22026
 
 
+
         if(points<level_2){
             TVLevel.setText("Level 1");
             double progress = (double) points / level_2 *100;

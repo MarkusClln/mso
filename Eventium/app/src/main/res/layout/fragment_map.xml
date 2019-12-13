@@ -14,6 +14,22 @@
 
     </fragment>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createLocationFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginBottom="65dp"
+        android:clickable="true"
+        android:foregroundTint="@android:color/white"
+        android:soundEffectsEnabled="false"
+        app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="#FFFFFF"
+        app:srcCompat="@drawable/ic_location_on_blue_24dp"
+        app:tint="#FFFFFF"/>
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

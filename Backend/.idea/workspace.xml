@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/drawable/circle_points.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/drawable/ic_close_blue_24dp.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Node/routes/pin.js" beforeDir="false" afterPath="$PROJECT_DIR$/Node/routes/pin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/user/UserFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/user/UserFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_user.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_user.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/EventiumMapFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/EventiumMapFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_map.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +161,8 @@
       <workItem from="1575876713340" duration="6327000" />
       <workItem from="1575921474922" duration="3283000" />
       <workItem from="1575969283775" duration="8046000" />
-      <workItem from="1576166399574" duration="2328000" />
+      <workItem from="1576166399574" duration="2334000" />
+      <workItem from="1576231877929" duration="1211000" />
     </task>
     <servers />
   </component>
