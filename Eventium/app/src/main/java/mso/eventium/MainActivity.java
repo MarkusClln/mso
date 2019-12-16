@@ -107,19 +107,20 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Sets the desired fragment
+     *
      * @param desiredFragment
      * @param setMapicon
      */
-    private void SetupFragment(Fragment desiredFragment, boolean setMapicon){
+    private void SetupFragment(Fragment desiredFragment, boolean setMapicon) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.nav_host_fragment, desiredFragment);
         fragmentTransaction.commit();
         floatingActionButton = findViewById(R.id.eventMapButton);
 
-        if(setMapicon){
+        if (setMapicon) {
             floatingActionButton.setImageResource(R.drawable.ic_map_white_24dp);
-        }else{
+        } else {
             floatingActionButton.setImageResource(R.drawable.ic_format_list_bulleted_white_24dp);
         }
     }
@@ -237,10 +238,10 @@ public class MainActivity extends AppCompatActivity {
         authenticationAPIClient = new AuthenticationAPIClient(auth0);
 
         token = prefs.getString("token", null);
-        if(token!=null){
-            login=false;
-        }else{
-            login=true;
+        if (token != null) {
+            login = false;
+        } else {
+            login = true;
         }
     }
 
@@ -301,15 +302,21 @@ public class MainActivity extends AppCompatActivity {
                 userInfo(token)
                 .start(new BaseCallback<UserProfile, AuthenticationException>() {
                     @Override
-                    public void onSuccess(UserProfile userinfo) {
-                        TextView nameTV = findViewById(R.id.userName);
-                        TextView emailTV = findViewById(R.id.email);
-                        nameTV.setText(userinfo.getNickname());
-                        emailTV.setText(userinfo.getEmail());
-                        if(createUser){
-                            queue.add(backendClient.createUser(token,userinfo.getEmail(), userinfo.getId(), userinfo.getNickname()));
+                    public void onSuccess(final UserProfile userinfo) {
+                        if (createUser) {
+                            queue.add(backendClient.createUser(token, userinfo.getEmail(), userinfo.getId(), userinfo.getNickname()));
                         }
 
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TextView nameTV = findViewById(R.id.userName);
+                                TextView emailTV = findViewById(R.id.email);
+                                nameTV.setText(userinfo.getNickname());
+                                emailTV.setText(userinfo.getEmail());
+
+                            }
+                        });
                     }
 
                     @Override
@@ -351,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    public String getToken(){
+    public String getToken() {
         return this.token;
     }
 }
