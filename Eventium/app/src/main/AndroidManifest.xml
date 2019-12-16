@@ -49,6 +49,9 @@
             android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
             android:parentActivityName=".MainActivity"/>
 
+        <activity android:name=".ui.map.createPinPopup"
+            android:theme="@style/AppTheme.Popup"/>
+
     </application>
 
 </manifest>

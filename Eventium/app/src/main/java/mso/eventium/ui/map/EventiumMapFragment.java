@@ -1,68 +1,42 @@
 package mso.eventium.ui.map;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.maps.android.MarkerManager;
 import com.google.maps.android.clustering.ClusterManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.lang.annotation.Target;
-import java.util.Arrays;
 import java.util.List;
 
 import mso.eventium.MainActivity;
@@ -74,18 +48,11 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
     private SupportMapFragment fragment;
     private GoogleMap googleMap;
     private ClusterManager<MarkerModel> mClusterManager;
-    private final Handler mHandler = new Handler();
-    private Runnable mAnimation;
     private FloatingActionButton createLocationButton;
     private boolean isCreateLocation = false;
-    MarkerModel createMarker;
-    LatLng reloadLocation;
-    Float zoom;
-
-
-
-    GoogleApiClient mGoogleApiClient;
-    View root;
+    private MarkerModel createMarker;
+    private LatLng reloadLocation;
+    private View root;
 
     private FusedLocationProviderClient fusedLocationClient;
     public static EventiumMapFragment newInstance(double lat, double lng) {
@@ -104,6 +71,55 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                              ViewGroup container, Bundle savedInstanceState) {
 
         root = inflater.inflate(R.layout.fragment_map, container, false);
+
+        setUpMap();
+        setUpSearchBar();
+        setUpFAB();
+
+        return root;
+    }
+
+    public void searchLocation() {
+        EditText locationSearch = (EditText) getActivity().findViewById(R.id.editText);
+        String location = locationSearch.getText().toString();
+        List<Address> addressList = null;
+
+        if (location != null || !location.equals("")) {
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                addressList = geocoder.getFromLocationName(location, 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        if(addressList.size()>=1){
+            Address address = addressList.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        }else{
+            Toast.makeText(getContext(),location+" not found",Toast.LENGTH_LONG).show();
+        }
+
+
+        }
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+
+        if(isCreateLocation){
+            Intent intent = new Intent(getContext(), createPinPopup.class);
+            intent.putExtra(createPinPopup.ARG_LAT,marker.getPosition().latitude);
+            intent.putExtra(createPinPopup.ARG_LNG,marker.getPosition().longitude);
+            intent.putExtra(createPinPopup.ARG_TOKEN,((MainActivity) getActivity()).getToken());
+            startActivity(intent);
+        }
+
+
+        return false;
+    }
+
+    private void setUpMap(){
         final FragmentManager fm = getChildFragmentManager();
         fragment = (SupportMapFragment) fm.findFragmentById(R.id.locationMap);
 
@@ -112,7 +128,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
             fm.beginTransaction().replace(R.id.locationMap, fragment).commit();
         }
 
-            fragment.getMapAsync(new OnMapReadyCallback() {
+        fragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final GoogleMap mMap) {
                 googleMap = mMap;
@@ -134,7 +150,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                             reloadLocation = currentLocation;
                         }
 
-                       mClusterManager.cluster();
+                        mClusterManager.cluster();
 
 
 
@@ -169,51 +185,6 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                 setUpOnMapClick();
             }
         });
-
-
-
-
-        setUpSearchBar();
-        setUpFAB();
-
-        return root;
-    }
-
-    public void searchLocation() {
-        EditText locationSearch = (EditText) getActivity().findViewById(R.id.editText);
-        String location = locationSearch.getText().toString();
-        List<Address> addressList = null;
-
-        if (location != null || !location.equals("")) {
-            Geocoder geocoder = new Geocoder(getActivity());
-            try {
-                addressList = geocoder.getFromLocationName(location, 1);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        if(addressList.size()>=1){
-            Address address = addressList.get(0);
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        }else{
-            Toast.makeText(getContext(),location+" not found",Toast.LENGTH_LONG).show();
-        }
-
-
-        }
-    }
-
-
-    @Override
-    public boolean onMarkerClick(final Marker marker) {
-
-        if(isCreateLocation){
-
-        }
-
-
-        return false;
     }
 
     private void setUpCluster() {

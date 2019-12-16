@@ -141,7 +141,7 @@ public class backendClient {
         return getRequest;
     }
 
-    public JsonObjectRequest createPin(final String auth_token, final double lng, final double lat, final String name, final String desc, Response.Listener responseListener) {
+    public JsonObjectRequest createPin(final String auth_token, final double lat, final double lng, final String name, final String desc, Response.Listener responseListener) {
         final String url = "http://" + server_ip + "/pin";
 
 
@@ -158,7 +158,7 @@ public class backendClient {
                     .put("pin", new JSONObject()
                             .put("location", new JSONObject()
                                     .put("type", "Point")
-                                    .put("coordinates", new JSONArray().put(lng).put(lat)))
+                                    .put("coordinates", new JSONArray().put(lat).put(lng)))
                             .put("name", name)
                             .put("description", desc));
 

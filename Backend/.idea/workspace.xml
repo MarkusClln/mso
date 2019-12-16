@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/drawable/ic_close_blue_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/popup_create_pin.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Eventium/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/EventiumMapFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/EventiumMapFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_map.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/createPinPopup.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/createPinPopup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/styles.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,6 +166,9 @@
       <workItem from="1575969283775" duration="8046000" />
       <workItem from="1576166399574" duration="2334000" />
       <workItem from="1576231877929" duration="1211000" />
+      <workItem from="1576322590589" duration="64000" />
+      <workItem from="1576403896354" duration="9872000" />
+      <workItem from="1576522350044" duration="1211000" />
     </task>
     <servers />
   </component>
@@ -199,6 +205,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="674" y="243" key="#docker-compose.yml:_Compose_Deployment/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1575530262518" />
+    <state x="2659" y="261" key="FileChooserDialogImpl" timestamp="1576415629859">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2659" y="261" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1576415629859" />
     <state x="2687" y="431" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1575544947457">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
