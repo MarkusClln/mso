@@ -5,14 +5,27 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class PinEntity {
 
-    private String name;
-    private String description;
     @SerializedName("_id")
     private String id;
+    private String name;
+    private String description;
+
     private double distance;
     private LatLng location;
+
+    private List<EventEntity> events;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -30,14 +43,6 @@ public class PinEntity {
         this.description = description;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public double getDistance() {
         return distance;
     }
@@ -52,5 +57,13 @@ public class PinEntity {
 
     public void setLocation(LatLng location) {
         this.location = location;
+    }
+
+    public List<EventEntity> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<EventEntity> events) {
+        this.events = events;
     }
 }

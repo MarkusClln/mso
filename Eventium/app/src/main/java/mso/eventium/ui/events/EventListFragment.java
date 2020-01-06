@@ -37,6 +37,7 @@ import java.util.List;
 import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.datastorage.BackendService;
+import mso.eventium.datastorage.entity.EventEntity;
 import mso.eventium.datastorage.entity.PinEntity;
 import mso.eventium.model.Event;
 import retrofit2.Call;
@@ -51,7 +52,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     private RecyclerView mRecyclerView;
     public RVAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private List<Event> EventModels;
+    private List<Event> eventModels;
     public ListTypeEnum listType;
     private Location currentLocation;
 
@@ -75,11 +76,11 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
         this.listType = ListTypeEnum.valueOf(getArguments().getString(LIST_TYPE_ARG_NAME));
 
-        EventModels = new ArrayList<>();
-        //EventModels.add(new Event("Event1_1", "","", "23.01.2019", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, ""));
+        eventModels = new ArrayList<>();
+        //eventModels.add(new Event("Event1_1", "","", "23.01.2019", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, ""));
         mRecyclerView = root.findViewById(R.id.rv);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new RVAdapter(getContext(), EventModels, this);
+        mAdapter = new RVAdapter(getContext(), eventModels, this);
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(root.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -128,7 +129,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image_transform));
         setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.slide_bottom));
 
-        Event EventModel = EventModels.get(position);
+        Event EventModel = eventModels.get(position);
 
 
         String transitionName = "transitionName" + position;
@@ -261,119 +262,63 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
     private void setEvents(final String token) {
-        Response.Listener rl = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-
-                try {
-
-                    JSONArray array = new JSONArray(s);
-                    EventModels = new ArrayList<>();
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject o = array.getJSONObject(i);
-
-                        JSONArray events = o.getJSONArray("events");
-
-                        for (int j = 0; j < events.length(); j++) {
-                            JSONObject event = events.getJSONObject(j);
-
-                            try {
-                                double distance = o.getDouble("distance");
-                                int distance_rounded = (int) distance;
-                                String distance_str = "";
-                                if (distance_rounded < 1000) {
-                                    distance_str = distance_rounded + " m";
-                                } else {
-                                    distance_rounded = (int) distance / 1000;
-                                    distance_str = distance_rounded + " m";
-                                }
-
-
-                                JSONArray likedEvents = event.getJSONArray("likedUsers");
-                                ArrayList<String> likedEventsAsArrayList = new ArrayList<String>();
-                                if (likedEvents != null) {
-                                    int len = likedEvents.length();
-                                    for (int likedEventCounter = 0; likedEventCounter < len; likedEventCounter++) {
-                                        likedEventsAsArrayList.add(likedEvents.get(likedEventCounter).toString());
-                                    }
-                                }
-
-                                JSONArray dislikedEvents = event.getJSONArray("dislikedUsers");
-                                ArrayList<String> dislikedEventsAsArrayList = new ArrayList<String>();
-                                if (dislikedEvents != null) {
-                                    int len = dislikedEvents.length();
-                                    for (int dislikedEventCounter = 0; dislikedEventCounter < len; dislikedEventCounter++) {
-                                        dislikedEventsAsArrayList.add(dislikedEvents.get(dislikedEventCounter).toString());
-                                    }
-                                }
-
-
-                                String event_id = event.getString("_id");
-                                boolean liked = likedEventsAsArrayList.contains(token);
-                                boolean disliked = dislikedEventsAsArrayList.contains(token);
-
-                                int points = likedEventsAsArrayList.size() - dislikedEventsAsArrayList.size();
-
-
-                                Event item = new Event(
-                                        event.getString("name"),
-                                        event.getString("description"),
-                                        event.getString("shortDescription"),
-                                        event.getString("date"),
-                                        distance_str,
-                                        R.drawable.img_drink,
-                                        event.getString("pin_id"),
-                                        liked,
-                                        disliked,
-                                        points,
-                                        event.getString("_id"),
-                                        event.getString("category")
-
-                                );
-                                EventModels.add(item);
-                            } catch (NumberFormatException nfe) {
-                                System.err.println("NumberFormatException: " + nfe.getMessage());
-                            }
-
-
-                        }
-
-                    }
-
-
-                    mAdapter = new RVAdapter(getContext(), EventModels, EventListFragment.this);
-                    mRecyclerView.setAdapter(mAdapter);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                // Stopping swipe refresh
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-
-        };
-
-        Response.ErrorListener el = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        };
-
-
-        StringRequest req1 = ((MainActivity) getActivity()).backendClient.getAllPins(currentLocation.getLatitude(), currentLocation.getLongitude(), 10000, rl, el);
-        ((MainActivity) getActivity()).queue.add(req1);
-
-
-        Call<List<PinEntity>> pins = BackendService.getInstance(getResources()).getAllPins(currentLocation.getLatitude(), currentLocation.getLongitude(), 10000); //TODO hardcoded distance
+        final Call<List<PinEntity>> pins = BackendService.getInstance(getResources()).getAllPins(currentLocation.getLatitude(), currentLocation.getLongitude(), 10000); //TODO hardcoded distance
         pins.enqueue(new Callback<List<PinEntity>>() {
             @Override
             public void onResponse(Call<List<PinEntity>> call, retrofit2.Response<List<PinEntity>> response) {
 
-                final List<PinEntity> res = response.body();
-                System.out.println("SUCC: " + res);
+                eventModels = new ArrayList<>();
+                for (PinEntity pinEntity : response.body()) {
+
+
+                    for (EventEntity eventEntity : pinEntity.getEvents()) {
+
+                        try {
+                            int distance_rounded = (int) pinEntity.getDistance();  //TODO in methode verschieben die aus EventEntity das EventViewModel macht (oder besser die TextView das es anzeigt soll was dranschreiben)
+                            String distance_str = "";
+                            if (distance_rounded < 1000) {
+                                distance_str = distance_rounded + " m";
+                            } else {
+                                distance_rounded = (int) pinEntity.getDistance() / 1000;
+                                distance_str = distance_rounded + " m";
+                            }
+
+
+                            boolean liked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().contains(token) : false;
+                            boolean disliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().contains(token) : false;
+
+                            int countOfUsersThatLiked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().size() : 0;
+                            int countOfUsersThatDisliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().size() : 0;
+                            int points = countOfUsersThatLiked - countOfUsersThatDisliked;
+
+
+                            Event item = new Event(
+                                    eventEntity.getName(),
+                                    eventEntity.getDescription(),
+                                    eventEntity.getShortDescription(),
+                                    eventEntity.getDate().toString(),
+                                    distance_str,
+                                    R.drawable.img_drink,
+                                    eventEntity.getPinId(),
+                                    liked,
+                                    disliked,
+                                    points,
+                                    eventEntity.getId(),
+                                    eventEntity.getCategory()
+
+                            );
+                            eventModels.add(item);
+                        } catch (NumberFormatException nfe) {
+                            System.err.println("NumberFormatException: " + nfe.getMessage());
+                        }
+                    }
+                }
+
+                mAdapter = new RVAdapter(getContext(), eventModels, EventListFragment.this);
+                mRecyclerView.setAdapter(mAdapter);
+
+                // Stopping swipe refresh
+                mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -395,7 +340,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
                 try {
                     JSONArray events = new JSONArray(s);
-                    EventModels = new ArrayList<>();
+                    eventModels = new ArrayList<>();
 
                     for (int j = 0; j < events.length(); j++) {
 
@@ -437,12 +382,12 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                 event.getString("category")
 
                         );
-                        EventModels.add(item);
+                        eventModels.add(item);
 
                     }
 
 
-                    mAdapter = new RVAdapter(getContext(), EventModels, EventListFragment.this);
+                    mAdapter = new RVAdapter(getContext(), eventModels, EventListFragment.this);
                     mRecyclerView.setAdapter(mAdapter);
 
                 } catch (JSONException e) {
@@ -474,7 +419,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
                 try {
                     JSONArray events = new JSONArray(s);
-                    EventModels = new ArrayList<>();
+                    eventModels = new ArrayList<>();
 
                     for (int j = 0; j < events.length(); j++) {
                         JSONObject event = events.getJSONObject(j);
@@ -515,12 +460,12 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                                 event.getString("category")
 
                         );
-                        EventModels.add(item);
+                        eventModels.add(item);
 
                     }
 
 
-                    mAdapter = new RVAdapter(getContext(), EventModels, EventListFragment.this);
+                    mAdapter = new RVAdapter(getContext(), eventModels, EventListFragment.this);
                     mRecyclerView.setAdapter(mAdapter);
 
                 } catch (JSONException e) {

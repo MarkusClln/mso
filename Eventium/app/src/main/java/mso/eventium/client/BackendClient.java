@@ -28,13 +28,13 @@ public class BackendClient {
 
     private String server_ip;
 
-    public BackendClient(String ip){
-        this.server_ip=ip;
+    public BackendClient(String ip) {
+        this.server_ip = ip;
     }
 
-    public JsonObjectRequest createUser(final String auth_token, final String email, final String auth0_id, final String name){
+    public JsonObjectRequest createUser(final String auth_token, final String email, final String auth0_id, final String name) {
 
-        final String url = "http://"+server_ip+"/user";
+        final String url = "http://" + server_ip + "/user";
 
         //but params here
         Map<String, String> params = new HashMap<String, String>();
@@ -60,29 +60,30 @@ public class BackendClient {
                 //pDialog.hide();
             }
 
-        }){@Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("Content-Type", "application/json; charset=UTF-8");
-            params.put("Authorization", "Bearer "+auth_token);
-            return params;
-        }};
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("Authorization", "Bearer " + auth_token);
+                return params;
+            }
+        };
 
         return jsonObjReq;
     }
 
-    public StringRequest getAllEvents(final double lng, final double lat, final double distance, final Response.Listener<String> responseListener){
+    public StringRequest getAllEvents(final double lng, final double lat, final double distance, final Response.Listener<String> responseListener) {
 
-        final String url = "http://"+server_ip+"/event/all";
+        final String url = "http://" + server_ip + "/event/all";
 
         //but params here
         Map<String, String> params = new HashMap<String, String>();
         params.put("lng", Double.toString(lng));
-        params.put("lat",  Double.toString(lat));
-        params.put("distance",  Double.toString(distance));
+        params.put("lat", Double.toString(lat));
+        params.put("distance", Double.toString(distance));
 
         Log.i("TESTEN", params.toString());
-
 
 
         StringRequest postRequest = new StringRequest(
@@ -101,8 +102,8 @@ public class BackendClient {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("lng", Double.toString(lng));
-                params.put("lat",  Double.toString(lat));
-                params.put("distance",  Double.toString(distance));
+                params.put("lat", Double.toString(lat));
+                params.put("distance", Double.toString(distance));
                 return params;
             }
         };
@@ -110,33 +111,16 @@ public class BackendClient {
         return postRequest;
     }
 
-    public StringRequest getAllPins(final double lat, final double lng, final double distance, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener){
+    public StringRequest getAllPins(final double lat, final double lng, final double distance, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
 
-        final String url = "http://"+server_ip+"/pin/all";
-
-        //but params here
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("lng", Double.toString(lng));
-        params.put("lat",  Double.toString(lat));
-        params.put("distance",  Double.toString(distance));
+        final String url = "http://" + server_ip + "/pin/all?lat=" + lat + "&lng=" + lng + "&distance=" + distance;
 
         StringRequest getRequest = new StringRequest(
                 Request.Method.GET,
                 url,
                 responseListener,
                 errorListener
-
-        ) {
-            // here is params will add to your url using post method
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("lng", Double.toString(lng));
-                params.put("lat",  Double.toString(lat));
-                params.put("distance",  Double.toString(distance));
-                return params;
-            }
-        };
+        );
 
         return getRequest;
     }
@@ -251,9 +235,9 @@ public class BackendClient {
 
     }
 
-    public StringRequest getPin(final String pin_id, final Response.Listener<String> responseListener){
+    public StringRequest getPin(final String pin_id, final Response.Listener<String> responseListener) {
 
-        final String url = "http://"+server_ip+"/pin/"+pin_id;
+        final String url = "http://" + server_ip + "/pin/" + pin_id;
 
         StringRequest getRequest = new StringRequest(
                 Request.Method.GET,
@@ -271,7 +255,7 @@ public class BackendClient {
     }
 
     public JsonObjectRequest pushFavEvent(final String auth_token, final String pin_id, Response.Listener responseListener) {
-        final String url = "http://" + server_ip + "/user/fav/"+pin_id;
+        final String url = "http://" + server_ip + "/user/fav/" + pin_id;
 
         Response.ErrorListener responseErrorListener = new Response.ErrorListener() {
             @Override
@@ -301,11 +285,10 @@ public class BackendClient {
         return jsonObjReq;
 
 
-
     }
 
     public JsonObjectRequest deleteFavEvent(final String auth_token, final String pin_id, Response.Listener responseListener) {
-        final String url = "http://" + server_ip + "/user/fav/"+pin_id;
+        final String url = "http://" + server_ip + "/user/fav/" + pin_id;
 
         Response.ErrorListener responseErrorListener = new Response.ErrorListener() {
             @Override
@@ -335,13 +318,11 @@ public class BackendClient {
         return jsonObjReq;
 
 
-
     }
 
-    public StringRequest getFavEvents(final String auth_token , final Response.Listener<String> responseListener){
+    public StringRequest getFavEvents(final String auth_token, final Response.Listener<String> responseListener) {
 
-        final String url = "http://"+server_ip+"/event/fav";
-
+        final String url = "http://" + server_ip + "/event/fav";
 
 
         StringRequest postRequest = new StringRequest(
@@ -367,9 +348,9 @@ public class BackendClient {
         return postRequest;
     }
 
-    public StringRequest getFavEventIDs(final String auth_token , final Response.Listener<String> responseListener, final Response.ErrorListener errorListener){
+    public StringRequest getFavEventIDs(final String auth_token, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
 
-        final String url = "http://"+server_ip+"/user/fav_ids";
+        final String url = "http://" + server_ip + "/user/fav_ids";
 
 
         StringRequest postRequest = new StringRequest(
@@ -390,10 +371,9 @@ public class BackendClient {
         return postRequest;
     }
 
-    public StringRequest getOwnEvents(final String auth_token , final Response.Listener<String> responseListener){
+    public StringRequest getOwnEvents(final String auth_token, final Response.Listener<String> responseListener) {
 
-        final String url = "http://"+server_ip+"/event/own";
-
+        final String url = "http://" + server_ip + "/event/own";
 
 
         StringRequest postRequest = new StringRequest(
@@ -419,9 +399,9 @@ public class BackendClient {
         return postRequest;
     }
 
-    public StringRequest getPinByName(final String name , final Response.Listener<String> responseListener){
+    public StringRequest getPinByName(final String name, final Response.Listener<String> responseListener) {
 
-        final String url = "http://"+server_ip+"/pin/getByName/"+name;
+        final String url = "http://" + server_ip + "/pin/getByName/" + name;
 
         StringRequest getRequest = new StringRequest(
                 Request.Method.GET,
@@ -439,9 +419,9 @@ public class BackendClient {
     }
 
 
-    public StringRequest getAuth(final String auth_token , final Response.Listener<String> responseListener, Response.ErrorListener errorListener){
+    public StringRequest getAuth(final String auth_token, final Response.Listener<String> responseListener, Response.ErrorListener errorListener) {
 
-        final String url = "http://"+server_ip+"/user/auth0";
+        final String url = "http://" + server_ip + "/user/auth0";
 
         StringRequest postRequest = new StringRequest(
                 Request.Method.POST,

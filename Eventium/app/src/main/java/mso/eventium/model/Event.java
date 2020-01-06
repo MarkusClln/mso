@@ -26,7 +26,7 @@ public class Event {
     public static final String[] categories = {"Bar", "Disco", "Essen"};
 
     public static int getCategorieIcon(String category){
-        switch (category){
+        switch (category){ //TODO ENUM, JUNGE
             case "Bar":
                 return R.drawable.ic_flaschen;
             case "Disco":
