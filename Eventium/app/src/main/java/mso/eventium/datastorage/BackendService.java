@@ -31,6 +31,7 @@ public class BackendService {
     private BackendAPI backendAPI;
     private static BackendService backendService;
 
+
     public Call<PinEntity> getPinByName(String name, String bearerToken) {
         return backendAPI.getPinByName(name, bearerToken);
     }
@@ -38,6 +39,7 @@ public class BackendService {
     public Call<List<PinEntity>> getAllPins(final double latitude, final double longitude, final double distance) {
         return backendAPI.getAllPins(latitude, longitude, distance);
     }
+
 
 
     private BackendService(String serverIp) {
