@@ -1,0 +1,5 @@
+url
+http://192.168.73.49:8081/db/mso
+
+cmds
+docker-compose up

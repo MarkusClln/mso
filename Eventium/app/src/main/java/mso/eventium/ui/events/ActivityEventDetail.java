@@ -32,7 +32,7 @@ import java.util.Locale;
 
 import mso.eventium.MainActivity;
 import mso.eventium.R;
-import mso.eventium.client.backendClient;
+import mso.eventium.client.BackendClient;
 
 
 public class ActivityEventDetail extends AppCompatActivity {
@@ -63,7 +63,7 @@ public class ActivityEventDetail extends AppCompatActivity {
     private MapView mMapView;
     private GoogleMap googleMap;
     private String ip;
-    public backendClient bc;
+    public BackendClient bc;
     public RequestQueue queue;
 
 
@@ -72,7 +72,7 @@ public class ActivityEventDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         ip = getResources().getString(R.string.IP_Server);
-        bc = new backendClient(ip);
+        bc = new BackendClient(ip);
         queue = Volley.newRequestQueue(this);
 
 

@@ -43,14 +43,14 @@ import java.util.Locale;
 import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.adapter.AutoSuggestPinAdapter;
-import mso.eventium.client.backendClient;
+import mso.eventium.client.BackendClient;
 
 
 
 public class CreateFragment extends Fragment implements SelectCategorieDialogFragment.SingleCoiceListener {
 
     private String ip;
-    public backendClient bc;
+    public BackendClient bc;
     public RequestQueue queue;
     View root;
     MaterialButton btnSelectCategorie;
@@ -86,7 +86,7 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
             //mParam1 = getArguments().getString(ARG_PARAM1);
         }
         ip = getResources().getString(R.string.IP_Server);
-        bc = new backendClient(ip);
+        bc = new BackendClient(ip);
         queue = Volley.newRequestQueue(getContext());
 
     }

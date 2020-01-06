@@ -51,43 +51,49 @@ router.post('/', check_auth, function(req, res, next) {
 
 });
 
-router.post('/all',  function(req, res, next) {
+router.get('/all',  function(req, res, next) {
 
-    var lat = req.body.lat;
-    var lng = req.body.lng;
-    var distance = req.body.distance;
-
-    console.log(lat);
-    console.log(lng);
-    console.log(distance);
-
+    var lat = req.query.lat;
+    var lng = req.query.lng;
+    var distance = req.query.distance;
 
     if(lat != undefined && lng != undefined && distance != undefined){
 
+        
+    console.log("finding event");
 
         var query_pins_ids = pinSchema.find({
             location: {
-                $nearSphere: {
-                    $maxDistance: distance,
-                    $minDistance: 0,
-                    $geometry: {
-                        type: "Point",
-                        coordinates: [lng, lat]
+                    $geoNear: {
+                        near: {
+                            type: "Point",
+                            coordinates: [parseFloat(lat), parseFloat(lng)]
+                        },
+                        distanceField: "distance",
+                        maxDistance: parseFloat(distance),
+                        spherical: true
                     }
                 }
-            }
         }).distinct("_id").lean();
+        
 
 
         query_pins_ids.exec(function (err, result) {
             if (err) return console.error(err);
-
+            
+            
+            
+            console.log("finding events for pins");
+            
+            res.json(result);
+            
+            
             var query_events = eventSchema.find({ "pin_id": result});
 
             query_events.exec(function (err, events) {
                     if (err) return console.error(err);
-                    console.log(events);
-                    res.json(events)
+                    console.log("Events: "+events);
+                   // res.json(events)
             });
         });
 

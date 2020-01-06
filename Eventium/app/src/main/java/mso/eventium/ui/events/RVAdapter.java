@@ -2,8 +2,6 @@ package mso.eventium.ui.events;
 
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONObject;
 
@@ -39,51 +36,46 @@ import mso.eventium.model.Event;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> implements Filterable {
 
-    private List<Event> EventModels;
-    private List<Event> EventModelsFiltered;
+    private List<Event> events;
+    private List<Event> filteredEvents;
     private OnNoteListener mOnNoteListener;
-    private Context mContext;
+    private Context context;
 
 
-
-
-    public RVAdapter(Context mContext, List<Event> i, OnNoteListener onNoteListener) {
-        this.mContext = mContext;
-        this.EventModels = i;
+    public RVAdapter(Context context, List<Event> events, OnNoteListener onNoteListener) {
+        this.context = context;
+        this.events = events;
         this.mOnNoteListener = onNoteListener;
-        this.EventModelsFiltered = i;
+        this.filteredEvents = events;
     }
 
     @Override
     public int getItemCount() {
-        return EventModelsFiltered.size();
+        return filteredEvents.size();
     }
 
     @Override
     public EventViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_events_list_element, viewGroup, false);
-        EventViewHolder evh = new EventViewHolder(v, mOnNoteListener);
-
-        return evh;
+        final View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_events_list_element, viewGroup, false);
+        return new EventViewHolder(v, mOnNoteListener);
     }
 
     @Override
     public void onBindViewHolder(final EventViewHolder EventViewHolder, final int i) {
 
+        EventViewHolder.eventIcon.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_transition_animation));
+        EventViewHolder.eventCardView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_scale_animation));
 
-        EventViewHolder.eventIcon.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_transition_animation));
-        EventViewHolder.eventCardView.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_scale_animation));
-
-        EventViewHolder.eventName.setText(EventModelsFiltered.get(i).getEvent_name());
-        EventViewHolder.eventDescription.setText(EventModelsFiltered.get(i).getEvent_short_description());
-        int points =EventModelsFiltered.get(i).getEvent_points();
+        EventViewHolder.eventName.setText(filteredEvents.get(i).getEvent_name());
+        EventViewHolder.eventDescription.setText(filteredEvents.get(i).getEvent_short_description());
+        int points = filteredEvents.get(i).getEvent_points();
         EventViewHolder.eventPoints.setText(Integer.toString(points));
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         try {
             final Calendar myCalendar = Calendar.getInstance();
-            Date date = format.parse(EventModelsFiltered.get(i).getEvent_date());
+            Date date = format.parse(filteredEvents.get(i).getEvent_date());
             myCalendar.setTime(date);
             String myFormat = "dd/MM/yy"; //In which you need put here
             SimpleDateFormat sdf1 = new SimpleDateFormat(myFormat, Locale.GERMANY);
@@ -97,17 +89,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             e.printStackTrace();
         }
 
-        EventViewHolder.eventDistance.setText(EventModelsFiltered.get(i).getEvent_distance());
-        EventViewHolder.eventIcon.setImageResource(EventModelsFiltered.get(i).getEvent_icon());
+        EventViewHolder.eventDistance.setText(filteredEvents.get(i).getEvent_distance());
+        EventViewHolder.eventIcon.setImageResource(filteredEvents.get(i).getEvent_icon());
 
 
-        if(EventModelsFiltered.get(i).isUpvoted()){
+        if(filteredEvents.get(i).isUpvoted()){
             EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_blue_24dp);
             EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
 
             EventViewHolder.btnUpvote.setEnabled(false);
             EventViewHolder.btnDownvote.setEnabled(true);
-        }else if(EventModelsFiltered.get(i).isDownvoted()){
+        }else if(filteredEvents.get(i).isDownvoted()){
             EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
             EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_blue_24dp);
 
@@ -130,11 +122,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventDistance.setTransitionName("transitionDistance" + i);
         EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
 
-        final MainActivity activity = (MainActivity) mContext;
+        final MainActivity activity = (MainActivity) context;
         EventViewHolder.btnUpvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!EventModelsFiltered.get(i).isUpvoted()) {
+                if (!filteredEvents.get(i).isUpvoted()) {
 
                     Response.Listener rl = new Response.Listener<JSONObject>() {
                         @Override
@@ -142,19 +134,19 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
                         }
                     };
-                    JsonObjectRequest req1 = activity.backendClient.pushFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
+                    JsonObjectRequest req1 = activity.backendClient.pushFavEvent(activity.getToken(), filteredEvents.get(i).getEvent_id(), rl);
                     activity.queue.add(req1);
 
-                    if(EventModelsFiltered.get(i).isDownvoted()){
-                        EventModelsFiltered.get(i).setEvent_points(EventModelsFiltered.get(i).getEvent_points()+2);
-                        EventViewHolder.eventPoints.setText(Integer.toString(EventModelsFiltered.get(i).getEvent_points()));
+                    if(filteredEvents.get(i).isDownvoted()){
+                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points()+2);
+                        EventViewHolder.eventPoints.setText(Integer.toString(filteredEvents.get(i).getEvent_points()));
                     }else{
-                        EventModelsFiltered.get(i).setEvent_points(EventModelsFiltered.get(i).getEvent_points()+1);
-                        EventViewHolder.eventPoints.setText(Integer.toString(EventModelsFiltered.get(i).getEvent_points()));
+                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points()+1);
+                        EventViewHolder.eventPoints.setText(Integer.toString(filteredEvents.get(i).getEvent_points()));
                     }
 
-                    EventModelsFiltered.get(i).setUpvoted(true);
-                    EventModelsFiltered.get(i).setDownvoted(false);
+                    filteredEvents.get(i).setUpvoted(true);
+                    filteredEvents.get(i).setDownvoted(false);
 
                     EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_blue_24dp);
                     EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
@@ -170,7 +162,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.btnDownvote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!EventModelsFiltered.get(i).isDownvoted()) {
+                if (!filteredEvents.get(i).isDownvoted()) {
 
                     Response.Listener rl = new Response.Listener<JSONObject>() {
                         @Override
@@ -179,18 +171,18 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                         }
                     };
 
-                    if(EventModelsFiltered.get(i).isUpvoted()){
-                        EventModelsFiltered.get(i).setEvent_points(EventModelsFiltered.get(i).getEvent_points()-2);
-                        EventViewHolder.eventPoints.setText(Integer.toString(EventModelsFiltered.get(i).getEvent_points()));
+                    if(filteredEvents.get(i).isUpvoted()){
+                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points()-2);
+                        EventViewHolder.eventPoints.setText(Integer.toString(filteredEvents.get(i).getEvent_points()));
                     }else{
-                        EventModelsFiltered.get(i).setEvent_points(EventModelsFiltered.get(i).getEvent_points()-1);
-                        EventViewHolder.eventPoints.setText(Integer.toString(EventModelsFiltered.get(i).getEvent_points()));
+                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points()-1);
+                        EventViewHolder.eventPoints.setText(Integer.toString(filteredEvents.get(i).getEvent_points()));
                     }
 
-                    JsonObjectRequest req1 = activity.backendClient.deleteFavEvent(activity.getToken(), EventModelsFiltered.get(i).getEvent_id(), rl);
+                    JsonObjectRequest req1 = activity.backendClient.deleteFavEvent(activity.getToken(), filteredEvents.get(i).getEvent_id(), rl);
                     activity.queue.add(req1);
-                    EventModelsFiltered.get(i).setDownvoted(true);
-                    EventModelsFiltered.get(i).setUpvoted(false);
+                    filteredEvents.get(i).setDownvoted(true);
+                    filteredEvents.get(i).setUpvoted(false);
 
 
 
@@ -219,10 +211,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                 String Key = constraint.toString();
                 String[] filter = Key.split("\\|-\\|");
                 if (filter.length ==0) {
-                    EventModelsFiltered = EventModels;
+                    filteredEvents = events;
                 } else {
                     List<Event> lstFiltered = new ArrayList<>();
-                    for (Event row : EventModels) {
+                    for (Event row : events) {
 
                         boolean add = true;
                         if (!row.getName().toLowerCase().contains(filter[0].toLowerCase()) && !row.getEvent_description().toLowerCase().contains(filter[0].toLowerCase())) {
@@ -270,17 +262,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                         }
 
                     }
-                    EventModelsFiltered = lstFiltered;
+                    filteredEvents = lstFiltered;
                 }
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = EventModelsFiltered;
+                filterResults.values = filteredEvents;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                EventModelsFiltered = (List<Event>) results.values;
+                filteredEvents = (List<Event>) results.values;
                 notifyDataSetChanged();
             }
         };
@@ -288,22 +280,22 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
 
     public static class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView eventName;
-        TextView eventDescription;
-        TextView eventDate;
-        TextView eventTime;
-        TextView eventDistance;
-        ImageView eventIcon;
-        CardView eventCardView;
-        ConstraintLayout eventConstraintLayout;
-        ToggleButton saveEventButton;
-        ImageView btnUpvote;
-        ImageView btnDownvote;
-        TextView eventPoints;
+        private TextView eventName;
+        private TextView eventDescription;
+        private TextView eventDate;
+        private TextView eventTime;
+        private TextView eventDistance;
+        private ImageView eventIcon;
+        private CardView eventCardView;
+        private ConstraintLayout eventConstraintLayout;
+        private ToggleButton saveEventButton;
+        private ImageView btnUpvote;
+        private ImageView btnDownvote;
+        private  TextView eventPoints;
 
-        OnNoteListener onNoteListener;
+        private OnNoteListener onNoteListener;
 
-        EventViewHolder(View itemView, OnNoteListener onNoteListener) {
+        public EventViewHolder(View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             eventName = itemView.findViewById(R.id.event_name_desc);
             eventDescription = itemView.findViewById(R.id.event_description);
@@ -332,6 +324,4 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     public interface OnNoteListener {
         void onNoteClick(int position);
     }
-
-
 }

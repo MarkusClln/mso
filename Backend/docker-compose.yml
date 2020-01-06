@@ -5,7 +5,7 @@ services:
   mongodb:
     image: mongo
     ports:
-      - "27017-27019:27017-27019"
+      - 27017:27017
     networks:
       - back_network
     restart: always
@@ -65,7 +65,7 @@ services:
     networks:
       - back_network
     ports:
-      - '9001:9001'
+      - 9001:9001
     depends_on:
       - node1
 

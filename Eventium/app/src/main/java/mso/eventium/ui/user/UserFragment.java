@@ -16,13 +16,11 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.auth0.android.result.Credentials;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -30,7 +28,6 @@ import java.util.List;
 import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.model.Event;
-import mso.eventium.model.User;
 
 //import com.auth0.android.Auth0;
 
@@ -95,7 +92,7 @@ public class UserFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (((MainActivity) getActivity()).login) {
+                if (((MainActivity) getActivity()).isLoggedIn()) {
                     ((MainActivity) getActivity()).login();
                     TextView nameTV = root.findViewById(R.id.userName);
                     TextView emailTV = root.findViewById(R.id.email);

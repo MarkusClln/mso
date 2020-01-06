@@ -24,11 +24,11 @@ import java.util.Map;
 
 import mso.eventium.model.Event;
 
-public class backendClient {
+public class BackendClient {
 
     private String server_ip;
 
-    public backendClient(String ip){
+    public BackendClient(String ip){
         this.server_ip=ip;
     }
 
@@ -121,7 +121,7 @@ public class backendClient {
         params.put("distance",  Double.toString(distance));
 
         StringRequest getRequest = new StringRequest(
-                Request.Method.POST,
+                Request.Method.GET,
                 url,
                 responseListener,
                 errorListener

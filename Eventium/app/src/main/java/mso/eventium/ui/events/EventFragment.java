@@ -1,6 +1,5 @@
 package mso.eventium.ui.events;
 
-import android.drm.DrmManagerClient;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,19 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mso.eventium.R;
 import mso.eventium.adapter.ViewPagerAdapter;
-import mso.eventium.model.Event;
-import mso.eventium.ui.fragments.FilterFragment;
 
 
 public class EventFragment extends Fragment {
@@ -34,14 +26,14 @@ public class EventFragment extends Fragment {
     private ViewPagerAdapter adapter;
     private EditText searchInput;
     private View root;
-    TextView rangeSliderView;
-    TextView dateView;
-    TextView timeView;
+    private TextView rangeSliderView;
+    private TextView dateView;
+    private TextView timeView;
 
 
-    private EventListFragment eventListFragmentAll = EventListFragment.newInstance("all");
-    private EventListFragment eventListFragmentSaved = EventListFragment.newInstance("saved");
-    private EventListFragment eventListFragmentOwned = EventListFragment.newInstance("owned");
+    private EventListFragment eventListFragmentAll = EventListFragment.newInstance(EventListFragment.ListTypeEnum.ALL);
+    private EventListFragment eventListFragmentSaved = EventListFragment.newInstance(EventListFragment.ListTypeEnum.SAVED);
+    private EventListFragment eventListFragmentOwned = EventListFragment.newInstance(EventListFragment.ListTypeEnum.OWNED);
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -50,9 +42,9 @@ public class EventFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_event, container, false);
 
 
-        tabLayout = (TabLayout) root.findViewById(R.id.tablayout);
-        viewPager = (ViewPager) root.findViewById(R.id.viewpager);
-        searchInput =(EditText) root.findViewById(R.id.searchBox);
+        tabLayout = root.findViewById(R.id.tablayout);
+        viewPager = root.findViewById(R.id.viewpager);
+        searchInput = root.findViewById(R.id.searchBox);
 
         FragmentManager fm = getFragmentManager();
         adapter = new ViewPagerAdapter(fm);
@@ -76,7 +68,7 @@ public class EventFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-               doFitler();
+                doFitler();
             }
 
             @Override
@@ -84,7 +76,6 @@ public class EventFragment extends Fragment {
 
             }
         });
-
 
 
         rangeSliderView = root.findViewById(R.id.slider_value);
@@ -131,6 +122,10 @@ public class EventFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                System.out.println("onTextChanged " + s);
+                System.out.println("searchInput.getText().toString(); " + searchInput.getText().toString());
+
+
                 doFitler();
             }
 
@@ -144,12 +139,12 @@ public class EventFragment extends Fragment {
         return root;
     }
 
-    public void doFitler(){
+    public void doFitler() {
         String text = searchInput.getText().toString();
         String date = dateView.getText().toString();
         String range = rangeSliderView.getText().toString();
         String time = timeView.getText().toString();
-        String s = text+"|-|"+date+"|-|"+time+"|-|"+range;
+        String s = text + "|-|" + date + "|-|" + time + "|-|" + range;
         eventListFragmentAll.mAdapter.getFilter().filter(s);
         eventListFragmentSaved.mAdapter.getFilter().filter(s);
         eventListFragmentOwned.mAdapter.getFilter().filter(s);
@@ -158,8 +153,6 @@ public class EventFragment extends Fragment {
 
     @Override
     public void onResume() {
-
-
         super.onResume();
     }
 

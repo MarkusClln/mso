@@ -66,13 +66,13 @@ public class HostDetailActivity extends AppCompatActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         adapter = new ViewPagerAdapter(fm);
-         EventListFragment eventListFragmentAll = EventListFragment.newInstance("df1");
-         EventListFragment eventListFragmentSaved = EventListFragment.newInstance("df2");
 
-        List<String> test = new ArrayList<String>();
 
-        adapter.AddFragment(eventListFragmentAll, "Aktuelle");
-        adapter.AddFragment(eventListFragmentSaved, "Vergangene");
+//         EventListFragment eventListFragmentAll = EventListFragment.newInstance("df1");
+//         EventListFragment eventListFragmentSaved = EventListFragment.newInstance("df2");
+//
+//        adapter.AddFragment(eventListFragmentAll, "Aktuelle");
+//        adapter.AddFragment(eventListFragmentSaved, "Vergangene");
 
 
         //FragmentStateAdapter adapter = new ViewPagerAdapter2(getActivity());

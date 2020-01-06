@@ -1,4 +1,5 @@
 package mso.eventium.ui.fragments;
+
 ;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -52,16 +53,12 @@ public class FilterFragment extends Fragment {
     final Calendar myCalendar = Calendar.getInstance();
 
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_filter, container, false);
 
-
-
         final ToggleButton filterButton = root.findViewById(R.id.filter_button);
-
 
         final ConstraintLayout constraintLayout = root.findViewById(R.id.constraint_layout);
 
@@ -69,22 +66,19 @@ public class FilterFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                ConstraintLayout layout = root.findViewById(R.id.constraint_layout);
+                Resources res = getResources();
 
-                if(isVisible){
-                    Resources res = getResources();
+                if (isVisible) {
                     Drawable drawable = ResourcesCompat.getDrawable(res, R.drawable.ic_filter, null);
                     filterButton.setBackgroundDrawable(drawable);
                     collapse(constraintLayout);
-                    isVisible =false;
+                    isVisible = false;
 
-
-                }else{
-                    Resources res = getResources();
+                } else {
                     Drawable drawable = ResourcesCompat.getDrawable(res, R.drawable.ic_filter_filled, null);
                     filterButton.setBackgroundDrawable(drawable);
                     expand(constraintLayout, 300, 500);
-                    isVisible =true;
+                    isVisible = true;
                 }
             }
         });
@@ -96,17 +90,16 @@ public class FilterFragment extends Fragment {
     }
 
 
-    public static void collapse(final View v) {
+    public void collapse(final View v) {
         final int initialHeight = v.getMeasuredHeight();
 
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
+                if (interpolatedTime == 1) {
                     v.setVisibility(View.GONE);
-                }else{
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                     v.requestLayout();
                 }
             }
@@ -117,13 +110,13 @@ public class FilterFragment extends Fragment {
             }
         };
 
-        a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 
-    public static void expand(final View v, int duration, int targetHeight) {
+    public void expand(final View v, int duration, int targetHeight) {
 
-        int prevHeight  = v.getHeight();
+        int prevHeight = v.getHeight();
 
         v.setVisibility(View.VISIBLE);
         ValueAnimator valueAnimator = ValueAnimator.ofInt(prevHeight, targetHeight);
@@ -140,9 +133,9 @@ public class FilterFragment extends Fragment {
     }
 
 
-    public void setUpCalenderPicker(View v){
-        final TextView textView= (TextView) v.findViewById(R.id.dateText);
-        final TextView fullDateView= (TextView) v.findViewById(R.id.date);
+    public void setUpCalenderPicker(View v) {
+        final TextView textView = (TextView) v.findViewById(R.id.dateText);
+        final TextView fullDateView = (TextView) v.findViewById(R.id.date);
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -161,7 +154,6 @@ public class FilterFragment extends Fragment {
                 String text = format.format(date);
                 fullDateView.setText(text);
             }
-
         };
 
         textView.setOnClickListener(new View.OnClickListener() {
@@ -174,9 +166,9 @@ public class FilterFragment extends Fragment {
 
     }
 
-    public void setUpTimePicker(View v){
+    public void setUpTimePicker(View v) {
 
-        final TextView textView= (TextView) v.findViewById(R.id.timeText);
+        final TextView textView = v.findViewById(R.id.timeText);
         final TimePickerDialog.OnTimeSetListener date = new TimePickerDialog.OnTimeSetListener() {
 
             @Override
@@ -196,14 +188,14 @@ public class FilterFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                new TimePickerDialog(getContext(),AlertDialog.THEME_HOLO_LIGHT, date, myCalendar.get(Calendar.HOUR),myCalendar.get(Calendar.MINUTE),true).show();
+                new TimePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, date, myCalendar.get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE), true).show();
             }
         });
     }
 
-    public void setUpRangeSlider(View v){
-        final Slider slider= (Slider) v.findViewById(R.id.rangeSlider);
-        final TextView textView= (TextView) v.findViewById(R.id.slider_value);
+    public void setUpRangeSlider(View v) {
+        final Slider slider = v.findViewById(R.id.rangeSlider);
+        final TextView textView = v.findViewById(R.id.slider_value);
         slider.setValueFrom(0);
         slider.setValueTo(100);
 
@@ -211,15 +203,12 @@ public class FilterFragment extends Fragment {
         slider.setOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(Slider slider, float value) {
-                if((int)value ==0){
+                if ((int) value == 0) {
                     textView.setText("default");
-                }else{
-                    textView.setText((int)value+" km");
+                } else {
+                    textView.setText((int) value + " km");
                 }
-
             }
         });
-
     }
-
 }

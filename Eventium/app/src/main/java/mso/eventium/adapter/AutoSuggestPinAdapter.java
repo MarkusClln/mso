@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AutoSuggestPinAdapter extends ArrayAdapter<String> implements Filterable {
+
     private List<String> mlistData;
 
     public AutoSuggestPinAdapter(@NonNull Context context, int resource) {

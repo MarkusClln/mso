@@ -11,12 +11,11 @@ import android.widget.EditText;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.button.MaterialButton;
 
 import mso.eventium.R;
-import mso.eventium.client.backendClient;
+import mso.eventium.client.BackendClient;
 
 public class createPinPopup extends Activity {
 
@@ -33,7 +32,7 @@ public class createPinPopup extends Activity {
     private MaterialButton mButton;
 
     private String backendServerIp;
-    public backendClient backendClient;
+    public BackendClient backendClient;
     public RequestQueue queue;
 
     @Override
@@ -67,7 +66,7 @@ public class createPinPopup extends Activity {
 
     private void setUpQueue(){
         backendServerIp = getResources().getString(R.string.IP_Server);
-        backendClient = new backendClient(backendServerIp);
+        backendClient = new BackendClient(backendServerIp);
         queue = Volley.newRequestQueue(this);
     }
 

@@ -34,7 +34,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import mso.eventium.client.backendClient;
+import mso.eventium.client.BackendClient;
 import mso.eventium.ui.events.EventFragment;
 import mso.eventium.ui.host.FavoriteHostsFragment;
 import mso.eventium.ui.map.EventiumMapFragment;
@@ -56,10 +56,9 @@ public class MainActivity extends AppCompatActivity {
     //Activity starts with this set fragment
     public ActiveFragments activeFragment = ActiveFragments.EVENTS;
 
-    private String backendServerIp;
-    public backendClient backendClient;
+    public BackendClient backendClient;
     public RequestQueue queue;
-    public boolean login;
+    private boolean loggedIn;
     private Auth0 auth0;
     private String token;
     private SharedPreferences prefs;
@@ -87,8 +86,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         prefs = this.getSharedPreferences("mso.eventium", Context.MODE_PRIVATE);
 
-        backendServerIp = getResources().getString(R.string.IP_Server);
-        backendClient = new backendClient(backendServerIp);
+        backendClient = new BackendClient(getResources().getString(R.string.IP_Server));
         queue = Volley.newRequestQueue(this);
         setupAuth0();
 
@@ -239,9 +237,9 @@ public class MainActivity extends AppCompatActivity {
 
         token = prefs.getString("token", null);
         if (token != null) {
-            login = false;
+            loggedIn = false;
         } else {
-            login = true;
+            loggedIn = true;
         }
     }
 
@@ -281,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                                 System.out.println(credentials.getIdToken());
                                 Button loginButton = findViewById(R.id.logout);
                                 loginButton.setText("Logout");
-                                login = false;
+                                loggedIn = false;
                                 SharedPreferences.Editor mEditor = prefs.edit();
                                 mEditor.putString("token", token).apply();
 
@@ -298,8 +296,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getProfile(boolean createUser2) {
         final boolean createUser = createUser2;
-        authenticationAPIClient.
-                userInfo(token)
+        authenticationAPIClient.userInfo(token)
                 .start(new BaseCallback<UserProfile, AuthenticationException>() {
                     @Override
                     public void onSuccess(final UserProfile userinfo) {
@@ -334,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void payload) {
                         token = null;
-                        login = true;
+                        loggedIn = true;
                         SharedPreferences.Editor mEditor = prefs.edit();
                         mEditor.remove("token").apply();
 
@@ -360,5 +357,9 @@ public class MainActivity extends AppCompatActivity {
 
     public String getToken() {
         return this.token;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
 }

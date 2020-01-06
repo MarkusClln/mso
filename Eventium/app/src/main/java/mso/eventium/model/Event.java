@@ -6,7 +6,6 @@ import mso.eventium.R;
 
 public class Event {
 
-
     private String event_name;
     private String event_description;
     private String pin_id;

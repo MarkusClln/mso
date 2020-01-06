@@ -33,11 +33,11 @@ router.post('/', ckeck_auth, function(req, res, next) {
     });
 });
 
-router.post('/all',  function(req, res, next) {
+router.get('/all',  function(req, res, next) {
 
-    var lat = req.body.lat;
-    var lng = req.body.lng;
-    var distance = req.body.distance;
+    var lat = req.query.lat;
+    var lng = req.query.lng;
+    var distance = req.query.distance;
 
     console.log("lat "+lat+" lng "+lng);
 
