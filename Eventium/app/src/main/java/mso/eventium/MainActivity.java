@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ import com.auth0.android.result.UserProfile;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.logging.Logger;
 
 import mso.eventium.client.BackendClient;
 import mso.eventium.ui.events.EventFragment;
@@ -241,6 +244,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             loggedIn = true;
         }
+
+        Log.i("AUTH", "Logged in: " + loggedIn);
     }
 
     public void login() {

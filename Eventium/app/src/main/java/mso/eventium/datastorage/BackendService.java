@@ -1,5 +1,6 @@
 package mso.eventium.datastorage;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -12,23 +13,30 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 
 import mso.eventium.R;
+import mso.eventium.datastorage.entity.EventEntity;
 import mso.eventium.datastorage.entity.PinEntity;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Path;
 
 /**
  * get Data from backend
  * use as singleton
- *
- *       //TODO caching
+ * <p>
+ * //TODO caching
  */
 public class BackendService {
 
     private BackendAPI backendAPI;
+    private static HashMap<String, EventEntity> eventCache = new HashMap<>();
+
     private static BackendService backendService;
 
 
@@ -40,9 +48,12 @@ public class BackendService {
         return backendAPI.getAllPins(latitude, longitude, distance);
     }
 
+    public Call<EventEntity> getEventById(String id) {
+        return backendAPI.getEventById(id);
+    }
 
 
-    private BackendService(String serverIp) {
+    private BackendService(final Context context) {
         //custom converter
         final JsonDeserializer<LatLng> latLngJsonDeserializer = new JsonDeserializer<LatLng>() {
             @Override
@@ -56,18 +67,26 @@ public class BackendService {
             }
         };
 
+        int cacheSize = 10 * 1024 * 1024; // 10 MB
+        Cache cache = new Cache(context.getCacheDir(), cacheSize);
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .cache(cache)
+                .build();
+
         final Gson gson = new GsonBuilder().registerTypeAdapter(LatLng.class, latLngJsonDeserializer).create();
         final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://" + serverIp)
+                .baseUrl("http://" + context.getResources().getString(R.string.IP_Server))
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         backendAPI = retrofit.create(BackendAPI.class);
     }
 
-    public static BackendService getInstance(Resources resources) {
+    public static BackendService getInstance(Context context) {
         if (backendService == null) {
-            backendService = new BackendService(resources.getString(R.string.IP_Server));
+            backendService = new BackendService(context);
         }
         return backendService;
     }

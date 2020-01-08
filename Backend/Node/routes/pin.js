@@ -82,13 +82,7 @@ router.get('/all',  function(req, res, next) {
 
 });
 
-router.get('/:id', function(req, res, next) {
-    var id = req.params.id;
-    pinSchema.findById(id,function (err, result) {
-        if (err) return console.error(err);
-        res.json(result)
-    });
-});
+
 
 router.get('/getByUserId/:id', function(req, res, next) {
     var id = req.params.id;
@@ -109,6 +103,14 @@ router.get('/getByName/:name', function(req, res, next) {
             res.json(pins);
 
         });
+});
+
+router.get('/:id', function(req, res, next) {
+    var id = req.params.id;
+    pinSchema.findById(id,function (err, result) {
+        if (err) return console.error(err);
+        res.json(result)
+    });
 });
 
 module.exports = router;

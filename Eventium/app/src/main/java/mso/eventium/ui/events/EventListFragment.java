@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.transition.TransitionInflater;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -40,6 +39,7 @@ import mso.eventium.datastorage.BackendService;
 import mso.eventium.datastorage.entity.EventEntity;
 import mso.eventium.datastorage.entity.PinEntity;
 import mso.eventium.model.Event;
+import mso.eventium.ui.events.detail.EventDetailActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -47,6 +47,8 @@ import retrofit2.Callback;
 public class EventListFragment extends Fragment implements RVAdapter.OnNoteListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String LIST_TYPE_ARG_NAME = "listType";
+    public static final String TRANSITION_FOR_NAME = "transitionName";
+    public static final String TRANSITION_FOR_ICON = "transitionIcon";
 
     private View root;
     private RecyclerView mRecyclerView;
@@ -114,8 +116,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         setUpCurrentLocation();
 
         return root;
-
-
     }
 
 
@@ -126,48 +126,22 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
     private void transitionActivity(int position) {
-        setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image_transform));
-        setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.slide_bottom));
+//        setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image_transform)); //does nothing?
+//        setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.slide_bottom)); //also does nothing
 
-        Event EventModel = eventModels.get(position);
+        final TextView mViewName = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_name);
+        final ImageView mViewIcon = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_icon);
 
+        Pair<View, String> p1 = Pair.create(mViewName, TRANSITION_FOR_NAME);
+        Pair<View, String> p2 = Pair.create(mViewIcon, TRANSITION_FOR_ICON);
 
-        String transitionName = "transitionName" + position;
-        String transitionIcon = "transitionIcon" + position;
-        String transitionDescription = "transitionDescription" + position;
-
-
-        TextView mViewName = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_name_desc);
-        TextView mViewDescription = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_description);
-        ImageView mViewIcon = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_icon);
-
-
-        mViewName.setTransitionName(transitionName);
-        mViewDescription.setTransitionName(transitionDescription);
-        mViewIcon.setTransitionName(transitionIcon);
-
-
-        Intent intent = new Intent(getContext(), ActivityEventDetail.class);
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_NAME, EventModel.getEvent_name());
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_DESCRIPTION, EventModel.getEvent_description());
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_ICON, EventModel.getEvent_icon());
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_PHOTO, EventModel.getEvent_photo());
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_DATE, EventModel.getEvent_date());
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_DISTANCE, EventModel.getEvent_distance());
-        intent.putExtra(ActivityEventDetail.ARG_EVENT_PIN_ID, EventModel.getPin_id());
-        intent.putExtra(ActivityEventDetail.ARG_TRANSITION_EVENT_NAME, transitionName);
-        intent.putExtra(ActivityEventDetail.ARG_TRANSITION_EVENT_ICON, transitionIcon);
-
-
-        Pair<View, String> p1 = Pair.create((View) mViewName, transitionName);
-        Pair<View, String> p2 = Pair.create((View) mViewIcon, transitionIcon);
-
-
-        ActivityOptionsCompat options = ActivityOptionsCompat.
+        final ActivityOptionsCompat options = ActivityOptionsCompat.
                 makeSceneTransitionAnimation(this.getActivity(), p1, p2);
+
+        final Intent intent = new Intent(getContext(), EventDetailActivity.class);
+        intent.putExtra(EventDetailActivity.ARG_EVENT_ID, eventModels.get(position).getEvent_id());
+
         startActivity(intent, options.toBundle());
-
-
     }
 
     @Override
@@ -185,6 +159,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
     private void loadRecyclerViewData() {
+        System.out.println(currentLocation);
         if (currentLocation != null) {
             switch (listType) {
                 case ALL:
@@ -262,7 +237,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
     private void setEvents(final String token) {
-        final Call<List<PinEntity>> pins = BackendService.getInstance(getResources()).getAllPins(currentLocation.getLatitude(), currentLocation.getLongitude(), 10000); //TODO hardcoded distance
+        final Call<List<PinEntity>> pins = BackendService.getInstance(getContext()).getAllPins(currentLocation.getLatitude(), currentLocation.getLongitude(), 10000); //TODO hardcoded distance
         pins.enqueue(new Callback<List<PinEntity>>() {
             @Override
             public void onResponse(Call<List<PinEntity>> call, retrofit2.Response<List<PinEntity>> response) {

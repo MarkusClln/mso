@@ -93,19 +93,19 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventIcon.setImageResource(filteredEvents.get(i).getEvent_icon());
 
 
-        if(filteredEvents.get(i).isUpvoted()){
+        if (filteredEvents.get(i).isUpvoted()) {
             EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_blue_24dp);
             EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
 
             EventViewHolder.btnUpvote.setEnabled(false);
             EventViewHolder.btnDownvote.setEnabled(true);
-        }else if(filteredEvents.get(i).isDownvoted()){
+        } else if (filteredEvents.get(i).isDownvoted()) {
             EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
             EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_blue_24dp);
 
             EventViewHolder.btnUpvote.setEnabled(true);
             EventViewHolder.btnDownvote.setEnabled(false);
-        }else{
+        } else {
             EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
             EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
 
@@ -137,11 +137,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                     JsonObjectRequest req1 = activity.backendClient.pushFavEvent(activity.getToken(), filteredEvents.get(i).getEvent_id(), rl);
                     activity.queue.add(req1);
 
-                    if(filteredEvents.get(i).isDownvoted()){
-                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points()+2);
+                    if (filteredEvents.get(i).isDownvoted()) {
+                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points() + 2);
                         EventViewHolder.eventPoints.setText(Integer.toString(filteredEvents.get(i).getEvent_points()));
-                    }else{
-                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points()+1);
+                    } else {
+                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points() + 1);
                         EventViewHolder.eventPoints.setText(Integer.toString(filteredEvents.get(i).getEvent_points()));
                     }
 
@@ -171,11 +171,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                         }
                     };
 
-                    if(filteredEvents.get(i).isUpvoted()){
-                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points()-2);
+                    if (filteredEvents.get(i).isUpvoted()) {
+                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points() - 2);
                         EventViewHolder.eventPoints.setText(Integer.toString(filteredEvents.get(i).getEvent_points()));
-                    }else{
-                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points()-1);
+                    } else {
+                        filteredEvents.get(i).setEvent_points(filteredEvents.get(i).getEvent_points() - 1);
                         EventViewHolder.eventPoints.setText(Integer.toString(filteredEvents.get(i).getEvent_points()));
                     }
 
@@ -183,7 +183,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                     activity.queue.add(req1);
                     filteredEvents.get(i).setDownvoted(true);
                     filteredEvents.get(i).setUpvoted(false);
-
 
 
                     EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
@@ -210,7 +209,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             protected FilterResults performFiltering(CharSequence constraint) {
                 String Key = constraint.toString();
                 String[] filter = Key.split("\\|-\\|");
-                if (filter.length ==0) {
+                if (filter.length == 0) {
                     filteredEvents = events;
                 } else {
                     List<Event> lstFiltered = new ArrayList<>();
@@ -220,13 +219,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                         if (!row.getName().toLowerCase().contains(filter[0].toLowerCase()) && !row.getEvent_description().toLowerCase().contains(filter[0].toLowerCase())) {
                             add = false;
                         }
-                        if(!filter[1].equals("")){
+                        if (!filter[1].equals("")) {
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                             try {
-                                Date eventDate = format.parse(row.getEvent_date().substring(0,10));
-                                Date filterDate = format.parse(filter[1].substring(0,10));
+                                Date eventDate = format.parse(row.getEvent_date().substring(0, 10));
+                                Date filterDate = format.parse(filter[1].substring(0, 10));
 
-                                if(eventDate.before(filterDate)){
+                                if (eventDate.before(filterDate)) {
                                     add = false;
                                 }
                             } catch (ParseException e) {
@@ -234,30 +233,28 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                             }
                         }
 
-                        if(!filter[2].equals("Wähle Uhrzeit hier!")){
+                        if (!filter[2].equals("Wähle Uhrzeit hier!")) {
 
-                                String[] time = filter[2].split(":");
-                                int hoursFilter = Integer.parseInt(time[0]);
-                                int minutesFilter = Integer.parseInt(time[1]);
-                                int FilterTime = hoursFilter*60 + minutesFilter;
+                            String[] time = filter[2].split(":");
+                            int hoursFilter = Integer.parseInt(time[0]);
+                            int minutesFilter = Integer.parseInt(time[1]);
+                            int FilterTime = hoursFilter * 60 + minutesFilter;
 
-                                String subTime = row.getEvent_date().substring(11,16);
-                                String[] eventTime = subTime.split(":");
-                                int hoursEvent = Integer.parseInt(eventTime[0]);
-                                int minutesEvent = Integer.parseInt(eventTime[1]);
-                                int EventTime = hoursEvent*60 + minutesEvent;
+                            String subTime = row.getEvent_date().substring(11, 16);
+                            String[] eventTime = subTime.split(":");
+                            int hoursEvent = Integer.parseInt(eventTime[0]);
+                            int minutesEvent = Integer.parseInt(eventTime[1]);
+                            int EventTime = hoursEvent * 60 + minutesEvent;
 
-                                if(EventTime<FilterTime){
-                                    add=false;
-                                }
-
+                            if (EventTime < FilterTime) {
+                                add = false;
+                            }
 
 
                         }
 
 
-
-                        if(add){
+                        if (add) {
                             lstFiltered.add(row);
                         }
 
@@ -291,13 +288,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         private ToggleButton saveEventButton;
         private ImageView btnUpvote;
         private ImageView btnDownvote;
-        private  TextView eventPoints;
+        private TextView eventPoints;
 
         private OnNoteListener onNoteListener;
 
         public EventViewHolder(View itemView, OnNoteListener onNoteListener) {
             super(itemView);
-            eventName = itemView.findViewById(R.id.event_name_desc);
+            eventName = itemView.findViewById(R.id.event_name);
             eventDescription = itemView.findViewById(R.id.event_description);
             eventDate = itemView.findViewById(R.id.event_date);
             eventTime = itemView.findViewById(R.id.event_time);
