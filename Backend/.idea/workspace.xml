@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/popup_create_pin.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/messages/MessagesFragment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_messages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/EventiumMapFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/EventiumMapFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/createPinPopup.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/map/createPinPopup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Eventium/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +24,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="UPDATE_TYPE" value="MERGE" />
   </component>
   <component name="JsFlowSettings">
     <service-enabled>true</service-enabled>
@@ -169,6 +169,10 @@
       <workItem from="1576322590589" duration="64000" />
       <workItem from="1576403896354" duration="9872000" />
       <workItem from="1576522350044" duration="1211000" />
+      <workItem from="1577197686620" duration="1363000" />
+      <workItem from="1577299080220" duration="626000" />
+      <workItem from="1578552990447" duration="1263000" />
+      <workItem from="1578555263880" duration="3321000" />
     </task>
     <servers />
   </component>
@@ -209,9 +213,10 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2659" y="261" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1576415629859" />
-    <state x="2687" y="431" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1575544947457">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="614" y="381" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578556273390">
+      <screen x="0" y="0" width="1536" height="920" />
     </state>
+    <state x="614" y="381" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.920@0.0.1536.920" timestamp="1578556273390" />
     <state x="2687" y="431" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1575544947457" />
   </component>
 </project>

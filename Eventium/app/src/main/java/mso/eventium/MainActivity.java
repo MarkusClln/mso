@@ -41,6 +41,7 @@ import mso.eventium.client.BackendClient;
 import mso.eventium.ui.events.EventFragment;
 import mso.eventium.ui.host.FavoriteHostsFragment;
 import mso.eventium.ui.map.EventiumMapFragment;
+import mso.eventium.ui.messages.MessagesFragment;
 import mso.eventium.ui.user.UserFragment;
 import mso.eventium.ui.create.CreateFragment;
 
@@ -73,10 +74,11 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton accountButton;
     private MaterialButton favoriteHostsButton;
     private MaterialButton createButton;
+    private MaterialButton messagesButton;
 
 
     private enum ActiveFragments {
-        MAP, EVENTS, USER, HOSTS, CREATE
+        MAP, EVENTS, USER, HOSTS, CREATE, MESSAGES
     }
 
     private static final String[] INITIAL_PERMS = {
@@ -176,6 +178,9 @@ public class MainActivity extends AppCompatActivity {
         if (activeFragment == ActiveFragments.CREATE) {
             SetupFragment(new CreateFragment(), false);
         }
+        if (activeFragment == ActiveFragments.MESSAGES) {
+            SetupFragment(new MessagesFragment(), false);
+        }
     }
 
     /**
@@ -225,6 +230,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 activeFragment = ActiveFragments.CREATE;
+                OnFragmentChanged();
+            }
+        });
+
+        messagesButton = findViewById(R.id.first_menu_item);
+        messagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activeFragment = ActiveFragments.MESSAGES;
                 OnFragmentChanged();
             }
         });

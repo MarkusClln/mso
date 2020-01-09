@@ -52,7 +52,7 @@ public class EventFragment extends Fragment {
 
         adapter.AddFragment(eventListFragmentAll, "ALLE");
         adapter.AddFragment(eventListFragmentSaved, "GESPEICHERT");
-        adapter.AddFragment(eventListFragmentOwned, "EIGENE");
+        adapter.AddFragment(eventListFragmentOwned, "ERSTELLTE");
 
         //FragmentStateAdapter adapter = new ViewPagerAdapter2(getActivity());
         viewPager.setAdapter(adapter);
