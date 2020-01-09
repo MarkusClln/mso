@@ -13,7 +13,7 @@
         android:layout_marginTop="@dimen/default_margin"
         android:progress="0"
         android:progressDrawable="@drawable/circle_points"
-        android:rotation="90"
+        android:rotation="270"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

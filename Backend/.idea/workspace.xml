@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d92a9a84-6840-4ee5-ae09-a9f35fc429e2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/ui/messages/MessagesFragment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/layout/fragment_messages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/java/mso/eventium/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Eventium/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../Eventium/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +166,7 @@
       <workItem from="1577197686620" duration="1363000" />
       <workItem from="1577299080220" duration="626000" />
       <workItem from="1578552990447" duration="1263000" />
-      <workItem from="1578555263880" duration="3321000" />
+      <workItem from="1578555263880" duration="3908000" />
     </task>
     <servers />
   </component>
