@@ -249,12 +249,12 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                     for (EventEntity eventEntity : pinEntity.getEvents()) {
 
                         try {
-                            int distance_rounded = (int) pinEntity.getDistance();  //TODO in methode verschieben die aus EventEntity das EventViewModel macht (oder besser die TextView das es anzeigt soll was dranschreiben)
+                            int distance_rounded = (int) Math.round(pinEntity.getDistance());  //TODO in methode verschieben die aus EventEntity das EventViewModel macht (oder besser die TextView das es anzeigt soll was dranschreiben)
                             String distance_str = "";
                             if (distance_rounded < 1000) {
                                 distance_str = distance_rounded + " m";
                             } else {
-                                distance_rounded = (int) pinEntity.getDistance() / 1000;
+                                distance_rounded = (int) Math.round(pinEntity.getDistance() / 1000);
                                 distance_str = distance_rounded + " m";
                             }
 

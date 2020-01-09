@@ -1,7 +1,6 @@
 package mso.eventium.datastorage;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -13,35 +12,31 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
 
 import mso.eventium.R;
 import mso.eventium.datastorage.entity.EventEntity;
 import mso.eventium.datastorage.entity.PinEntity;
+import mso.eventium.datastorage.util.BackendAPI;
+import mso.eventium.datastorage.util.LatLngSerializer;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Path;
 
 /**
  * get Data from backend
  * use as singleton
- * <p>
- * //TODO caching
  */
 public class BackendService {
 
-    private BackendAPI backendAPI;
-    private static HashMap<String, EventEntity> eventCache = new HashMap<>();
-
     private static BackendService backendService;
 
+    private BackendAPI backendAPI;
 
     public Call<PinEntity> getPinByName(String name, String bearerToken) {
-        return backendAPI.getPinByName(name, bearerToken);
+        return backendAPI.getPinByName(name, "Bearer " + bearerToken);
     }
 
     public Call<List<PinEntity>> getAllPins(final double latitude, final double longitude, final double distance) {
@@ -52,29 +47,20 @@ public class BackendService {
         return backendAPI.getEventById(id);
     }
 
+    public Call<PinEntity> createPin(PinEntity pin, String bearerToken) {
+        return backendAPI.createPin(pin, "Bearer " + bearerToken);
+    }
+
 
     private BackendService(final Context context) {
-        //custom converter
-        final JsonDeserializer<LatLng> latLngJsonDeserializer = new JsonDeserializer<LatLng>() {
-            @Override
-            public LatLng deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                final JsonObject jsonObject = json.getAsJsonObject();
-
-                return new LatLng(
-                        jsonObject.getAsJsonArray("coordinates").get(0).getAsDouble(),
-                        jsonObject.getAsJsonArray("coordinates").get(1).getAsDouble()
-                );
-            }
-        };
-
         int cacheSize = 10 * 1024 * 1024; // 10 MB
-        Cache cache = new Cache(context.getCacheDir(), cacheSize);
+        final Cache cache = new Cache(context.getCacheDir(), cacheSize);
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .cache(cache)
                 .build();
 
-        final Gson gson = new GsonBuilder().registerTypeAdapter(LatLng.class, latLngJsonDeserializer).create();
+        final Gson gson = new GsonBuilder().registerTypeAdapter(LatLng.class, new LatLngSerializer()).create();
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://" + context.getResources().getString(R.string.IP_Server))
                 .client(okHttpClient)

@@ -1,13 +1,15 @@
-package mso.eventium.datastorage;
+package mso.eventium.datastorage.util;
 
 import java.util.List;
 
 import mso.eventium.datastorage.entity.EventEntity;
 import mso.eventium.datastorage.entity.PinEntity;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,4 +26,8 @@ public interface BackendAPI {
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @GET("event/{id}")
     Call<EventEntity> getEventById(@Path("id") String id);
+
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @POST("pin")
+    Call<PinEntity> createPin(@Body PinEntity pin, @Header("Authorization") String auth);
 }

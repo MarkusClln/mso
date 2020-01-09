@@ -15,6 +15,7 @@
     <style name="BottomMenuColor" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="android:textColorSecondary">@android:color/white</item>
     </style>
+
     <style name="ShapeAppearanceOverlay.Rounded" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
@@ -33,6 +34,10 @@
     <style name="AppTheme.Popup">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">@color/color_states_materialbutton</item>
     </style>
 
 </resources>

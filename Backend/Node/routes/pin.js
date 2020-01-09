@@ -17,12 +17,13 @@ const ckeck_auth = require("../middleware/check-auth");
 router.post('/', ckeck_auth, function(req, res, next) {
 
     const body = req.body;
-    console.log(req.user);
+    console.log("USER: "+JSON.stringify(req.user));
+    console.log("PIN: "+JSON.stringify(body));
     const pin = new pinSchema({
         _id: new mongoose.Types.ObjectId(),
-        location: body.pin.location,
-        name: body.pin.name,
-        description: body.pin.description,
+        location: body.location,
+        name: body.name,
+        description: body.description,
         user_id: req.user.sub
 
     });

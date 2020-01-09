@@ -38,8 +38,6 @@ public class Event {
     }
 
 
-
-
     public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, String pin_id, boolean upvoted, boolean downvoted, int event_points, String event_id, String category) {
         this.event_name = name;
         this.event_description = description;

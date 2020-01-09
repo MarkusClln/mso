@@ -1,6 +1,5 @@
 package mso.eventium.ui.map;
 
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -16,9 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,29 +28,27 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.maps.android.clustering.ClusterManager;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.List;
 
 import mso.eventium.MainActivity;
 import mso.eventium.R;
+import mso.eventium.datastorage.BackendService;
+import mso.eventium.datastorage.entity.PinEntity;
 import mso.eventium.model.MarkerModel;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
-    private SupportMapFragment fragment;
     private GoogleMap googleMap;
     private ClusterManager<MarkerModel> mClusterManager;
-    private FloatingActionButton createLocationButton;
-    private boolean isCreateLocation = false;
+    private boolean createLocation = false;
     private MarkerModel createMarker;
     private LatLng reloadLocation;
-    private View root;
 
     private FusedLocationProviderClient fusedLocationClient;
+
     public static EventiumMapFragment newInstance(double lat, double lng) {
         final EventiumMapFragment eventiumMapFragment = new EventiumMapFragment();
 
@@ -70,11 +64,11 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        root = inflater.inflate(R.layout.fragment_map, container, false);
+        final View root = inflater.inflate(R.layout.fragment_map, container, false);
 
         setUpMap();
-        setUpSearchBar();
-        setUpFAB();
+        setUpSearchBar(root);
+        setUpFAB(root);
 
         return root;
     }
@@ -92,36 +86,39 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        if(addressList.size()>=1){
-            Address address = addressList.get(0);
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        }else{
-            Toast.makeText(getContext(),location+" not found",Toast.LENGTH_LONG).show();
-        }
-
-
+            if (addressList.size() >= 1) {
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            } else {
+                Toast.makeText(getContext(), location + " not found", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
-        if(isCreateLocation){
-            Intent intent = new Intent(getContext(), createPinPopup.class);
-            intent.putExtra(createPinPopup.ARG_LAT,marker.getPosition().latitude);
-            intent.putExtra(createPinPopup.ARG_LNG,marker.getPosition().longitude);
-            intent.putExtra(createPinPopup.ARG_TOKEN,((MainActivity) getActivity()).getToken());
-            startActivity(intent);
-        }
+        if (createLocation) {
+//            final Intent intent = new Intent(getContext(), PinCreateDialog.class);
+//            intent.putExtra(PinCreateDialog.ARG_LAT, marker.getPosition().latitude);
+//            intent.putExtra(PinCreateDialog.ARG_LNG, marker.getPosition().longitude);
+//            intent.putExtra(PinCreateDialog.ARG_TOKEN, ((MainActivity) getActivity()).getToken());
+//            startActivity(intent);
 
+            //set up dialog
+            final PinEntity pin = new PinEntity();
+            pin.setLocation(marker.getPosition());
+            final PinCreateDialog dialog = new PinCreateDialog(pin, ((MainActivity) getActivity()).getToken());
+            dialog.show(getFragmentManager(), null);
+        }
 
         return false;
     }
 
-    private void setUpMap(){
+    private void setUpMap() {
         final FragmentManager fm = getChildFragmentManager();
-        fragment = (SupportMapFragment) fm.findFragmentById(R.id.locationMap);
+        SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.locationMap);
 
         if (fragment == null) {
             fragment = SupportMapFragment.newInstance();
@@ -138,20 +135,19 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
                 setUpCluster();
 
-                reloadLocation = new LatLng(googleMap.getCameraPosition().target.latitude,googleMap.getCameraPosition().target.longitude);
+                reloadLocation = new LatLng(googleMap.getCameraPosition().target.latitude, googleMap.getCameraPosition().target.longitude);
                 googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
                     @Override
                     public void onCameraIdle() {
-                        LatLng currentLocation = new LatLng(googleMap.getCameraPosition().target.latitude,googleMap.getCameraPosition().target.longitude);
+                        final LatLng currentLocation = new LatLng(googleMap.getCameraPosition().target.latitude, googleMap.getCameraPosition().target.longitude);
                         double distance = distFrom(currentLocation.latitude, currentLocation.longitude, reloadLocation.latitude, reloadLocation.longitude);
 
-                        if(distance>=1000){
+                        if (distance >= 1000) { //only get pins if we moved out of range
                             createLocationsFromBackend();
                             reloadLocation = currentLocation;
                         }
 
                         mClusterManager.cluster();
-
 
 
                     }
@@ -189,36 +185,30 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
     private void setUpCluster() {
 
-        mClusterManager = new ClusterManager<MarkerModel>(this.getContext(), googleMap){
+        mClusterManager = new ClusterManager<MarkerModel>(this.getContext(), googleMap) {
 
         };
 
         googleMap.setOnCameraIdleListener(mClusterManager);
-       // googleMap.setOnMarkerClickListener(mClusterManager);
+        // googleMap.setOnMarkerClickListener(mClusterManager);
 
     }
 
-    private void addItems(double lat, double lng, String title, String snippet) {
-
-        MarkerModel offsetItem = new MarkerModel(lat, lng, title, snippet);
-        mClusterManager.addItem(offsetItem);
-        mClusterManager.cluster();
-    }
-
-    private void setUpFAB(){
-        createLocationButton = root.findViewById(R.id.createLocationFAB);
+    private void setUpFAB(View root) {
+        final FloatingActionButton createLocationButton = root.findViewById(R.id.createLocationFAB);
         createLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isCreateLocation){
-                    isCreateLocation = false;
+                if (createLocation) {
+                    createLocation = false;
                     createLocationButton.setImageResource(R.drawable.ic_location_on_blue_24dp);
-                    createLocationsFromBackend();
-                }else{
-                    isCreateLocation = true;
+                } else {
+                    createLocation = true;
                     createLocationButton.setImageResource(R.drawable.ic_close_blue_24dp);
                     mClusterManager.clearItems();
                     mClusterManager.cluster();
+
+                    Toast.makeText(getContext(), "Klicke auf die Karte um den Standort für eine Veranstaltung festzulegen. Hast du den Standort festgelegt klicke auf den Pin", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -226,18 +216,18 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
     }
 
-    private void setUpOnMapClick(){
+    private void setUpOnMapClick() {
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
             public void onMapClick(LatLng latLng) {
-                if(isCreateLocation){
+                if (createLocation) {
                     // Creating a marker
-                    if(createMarker!= null){
+                    if (createMarker != null) {
                         mClusterManager.removeItem(createMarker);
                     }
-                    createMarker = new MarkerModel(latLng.latitude, latLng.longitude, "", "");
+                    createMarker = new MarkerModel(latLng, "", "");
                     mClusterManager.addItem(createMarker);
                     mClusterManager.cluster();
 
@@ -247,50 +237,33 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
         });
     }
 
-    private void createLocationsFromBackend(){
-        Response.Listener rl = new Response.Listener<String>() {
+    private void createLocationsFromBackend() {
+        Double currentLat = googleMap.getCameraPosition().target.latitude;
+        Double currentLng = googleMap.getCameraPosition().target.longitude;
+
+        final Call<List<PinEntity>> pins = BackendService.getInstance(getContext()).getAllPins(currentLat, currentLng, 10000);
+        pins.enqueue(new Callback<List<PinEntity>>() {
             @Override
-            public void onResponse(String s) {
+            public void onResponse(Call<List<PinEntity>> call, retrofit2.Response<List<PinEntity>> response) {
                 googleMap.clear();
                 mClusterManager.clearItems();
 
-                try {
-                    JSONArray array = new JSONArray(s);
+                for (PinEntity pin : response.body()) {
 
-                    for(int i=0; i<array.length(); i++)
-                    {
-                        JSONObject o = array.getJSONObject(i);
-
-                        JSONArray coordinates =o.getJSONObject("location").getJSONArray("coordinates");
-                        int events =o.getJSONArray("events").length();
-                        addItems(coordinates.getDouble(0), coordinates.getDouble(1),o.getString("name"), events+" Events");
-
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    final MarkerModel offsetItem = new MarkerModel(pin.getLocation(), pin.getName(), pin.getEvents().size() + " Events");
+                    mClusterManager.addItem(offsetItem);
                 }
+                mClusterManager.cluster();
 
             }
 
-        };
-
-        Response.ErrorListener el =new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-
+            public void onFailure(Call<List<PinEntity>> call, Throwable t) {
             }
-        };
-        if(!isCreateLocation){
-            Double currentLat = googleMap.getCameraPosition().target.latitude;
-            Double currentLng = googleMap.getCameraPosition().target.longitude;
-            StringRequest req1 = ((MainActivity) getActivity()).backendClient.getAllPins(currentLat, currentLng,10000, rl, el);
-            ((MainActivity) getActivity()).queue.add(req1);
-        }
+        });
     }
 
-    private void setUpSearchBar(){
+    private void setUpSearchBar(View root) {
         EditText locationSearch = root.findViewById(R.id.editText);
 
         locationSearch.setOnKeyListener(new View.OnKeyListener() {
@@ -311,12 +284,12 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
     public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
         double earthRadius = 6371000; //meters
-        double dLat = Math.toRadians(lat2-lat1);
-        double dLng = Math.toRadians(lng2-lng1);
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLng/2) * Math.sin(dLng/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double dist = (float) (earthRadius * c);
 
         return dist;

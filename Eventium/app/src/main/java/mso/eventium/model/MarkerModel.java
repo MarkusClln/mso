@@ -6,31 +6,29 @@ import com.google.maps.android.clustering.ClusterItem;
 
 public class MarkerModel implements ClusterItem {
 
-    private final LatLng mPosition;
-    private final String mTitle;
-    private final String mSnippet;
+    private final LatLng position;
+    private final String title;
+    private final String snippet; //name on cluster
 
-
-
-    public MarkerModel(double lat, double lng, String title, String snippet) {
-        mPosition = new LatLng(lat, lng);
-        mTitle = title;
-        mSnippet = snippet;
+    public MarkerModel(LatLng position, String title, String snippet) {
+        this.position = position;
+        this.title = title;
+        this.snippet = snippet;
     }
 
     @Override
     public LatLng getPosition() {
-        return mPosition;
+        return position;
     }
 
     @Override
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     @Override
     public String getSnippet() {
-        return mSnippet;
+        return snippet;
     }
 
 }

@@ -14,7 +14,7 @@ public class PinEntity {
     private String name;
     private String description;
 
-    private double distance;
+    private Double distance;
     private LatLng location;
 
     private List<EventEntity> events;
@@ -43,11 +43,11 @@ public class PinEntity {
         this.description = description;
     }
 
-    public double getDistance() {
+    public Double getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(Double distance) {
         this.distance = distance;
     }
 
