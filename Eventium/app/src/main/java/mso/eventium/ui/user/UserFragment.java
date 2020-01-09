@@ -154,15 +154,15 @@ public class UserFragment extends Fragment {
             }
         };
 
-        JsonObjectRequest req1 = ((MainActivity) getActivity()).backendClient.createPin(token,49.466633, 8.259154, "Eine Location1", "Ding Dong1", responseListener );
+        JsonObjectRequest req1 = ((MainActivity) getActivity()).backendClient.createPin(token,49.463970, 8.517586, "SAP Arena Mannheim", "Modernes Stadion mit Glas & Alu für Eishockeyspiele & andere Sportveranstaltungen sowie große Konzerte.", responseListener );
         ((MainActivity) getActivity()).queue.add(req1);
-        JsonObjectRequest req2 = ((MainActivity) getActivity()).backendClient.createPin(token,49.466643, 8.259144, "Eine Location2", "Ding Dong2", responseListener );
+        JsonObjectRequest req2 = ((MainActivity) getActivity()).backendClient.createPin(token,49.497550, 8.472584, "Capitol Mannheim", "Konzerthalle, Comedy-Club & Veranstaltungszentrum in einem ehemaligen Kino im Art-déco-Stil.", responseListener );
         ((MainActivity) getActivity()).queue.add(req2);
-        JsonObjectRequest req3 = ((MainActivity) getActivity()).backendClient.createPin(token,49.466653, 8.259134, "Eine Location3", "Ding Dong3", responseListener );
+        JsonObjectRequest req3 = ((MainActivity) getActivity()).backendClient.createPin(token,49.483346, 8.461786, "Barockschloss Mannheim", "Großes Barockschloss mit restaurierten Ausstellungsräumen, 5 Flügeln & 400 m² großem Hof.", responseListener );
         ((MainActivity) getActivity()).queue.add(req3);
-        JsonObjectRequest req4 = ((MainActivity) getActivity()).backendClient.createPin(token,49.466663, 8.259124, "Eine Location4", "Ding Dong4", responseListener );
+        JsonObjectRequest req4 = ((MainActivity) getActivity()).backendClient.createPin(token,49.466663, 8.259124, "MS Connexion Complex", "Tanzpartys für Freunde von Techno, Drum'n'Bass und Gothic bei Neonlicht in den Räumen einer umgebauten Fabrik.", responseListener );
         ((MainActivity) getActivity()).queue.add(req4);
-        JsonObjectRequest req5 = ((MainActivity) getActivity()).backendClient.createPin(token,49.466673, 8.259114, "Eine Location5", "Ding Dong5", responseListener );
+        JsonObjectRequest req5 = ((MainActivity) getActivity()).backendClient.createPin(token,49.485700, 8.476469, "Dorint Kongresshotel Mannheim", "Konferenzhotel mit direkter Verbindung zum Congress Center Rosengarten", responseListener );
         ((MainActivity) getActivity()).queue.add(req5);
 
 
@@ -179,37 +179,93 @@ public class UserFragment extends Fragment {
             }
         };
         Calendar myCalendar = Calendar.getInstance();
-        myCalendar.set(Calendar.YEAR, 2019);
-        myCalendar.set(Calendar.MONTH, Calendar.AUGUST);
-        myCalendar.set(Calendar.DAY_OF_MONTH, 1);
+        myCalendar.set(Calendar.YEAR, 2020);
+        myCalendar.set(Calendar.MONTH, Calendar.FEBRUARY);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 7);
         myCalendar.set(Calendar.HOUR, 11);
-        myCalendar.set(Calendar.MINUTE, 16);
+        myCalendar.set(Calendar.MINUTE, 00);
 
 
-        JsonObjectRequest req1 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0),"Ein Event 1", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[0], responseListener);
+        // Holiday on ICE 1
+        JsonObjectRequest req1 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0),"Holiday on Ice", "Die erfolgreichste Eisrevue der Welt gastiert auch 2020 mit neuer Show in der SAP Arena. In jeder Show erfindet sich Holiday on Ice neu und bleibt sich dabei doch stets treu.", "New Show", myCalendar, Event.categories[3], responseListener);
         ((MainActivity) getActivity()).queue.add(req1);
-        JsonObjectRequest req2 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0),"Ein Event 2", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[1], responseListener);
+
+        // Holiday on ICE 2
+        myCalendar.set(Calendar.HOUR, 15);
+        myCalendar.set(Calendar.MINUTE, 30);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 14);
+
+        JsonObjectRequest req2 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0),"Holiday on Ice", "Die erfolgreichste Eisrevue der Welt gastiert auch 2020 mit neuer Show in der SAP Arena. In jeder Show erfindet sich Holiday on Ice neu und bleibt sich dabei doch stets treu.", "New Show", myCalendar, Event.categories[3], responseListener);
         ((MainActivity) getActivity()).queue.add(req2);
-        JsonObjectRequest req3 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0),"Ein Event 3", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[2], responseListener);
+
+        // Holiday on ICE 3
+        myCalendar.set(Calendar.HOUR, 19);
+        myCalendar.set(Calendar.MINUTE, 00);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 14);
+        JsonObjectRequest req3 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0),"Holiday on Ice", "Die erfolgreichste Eisrevue der Welt gastiert auch 2020 mit neuer Show in der SAP Arena. In jeder Show erfindet sich Holiday on Ice neu und bleibt sich dabei doch stets treu.", "New Show", myCalendar, Event.categories[3], responseListener);
         ((MainActivity) getActivity()).queue.add(req3);
-        JsonObjectRequest req4 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(1),"Ein Event 4", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[0], responseListener);
+
+
+        //Capitol 1
+        myCalendar.set(Calendar.HOUR, 20);
+        myCalendar.set(Calendar.MINUTE, 00);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 10);
+        JsonObjectRequest req4 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(1),"Sascha im Quadrat", "Sascha im Quadrat, das sind der große und der kleine Sascha und Christof Brill. Geballtes Testosteron auf einer Bühne. Und eine Musikauswahl, die seinesgleichen sucht. Gespielt wird ALLES, was Spaß macht.\n" +
+                "\n" +
+                "Der Stargast im Februar ist Michaela Tischler.\n" +
+                "„Gesang ist etwas sehr persönliches“", "Die beliebte Reihe im Casino. Stargast: Michaela Tischler", myCalendar, Event.categories[0], responseListener);
         ((MainActivity) getActivity()).queue.add(req4);
-        JsonObjectRequest req5 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(1),"Ein Event 5", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[1], responseListener);
+
+        //Capitol 2
+        myCalendar.set(Calendar.HOUR, 20);
+        myCalendar.set(Calendar.MINUTE, 00);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 13);
+        JsonObjectRequest req5 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(1),"Evita", "Die mitreißende Geschichte der Eva Duarte, die vom argentinischen Volk liebevoll Evita genannt wurde. Andrew Lloyd Webber und Tim Rice widmeten der auch heute noch faszinierenden und zugleich höchst umstrittenen „First Lady“ Argentiniens eines ihrer spektakulärsten Musicals. Es erzählt den Aufstieg eines einfachen Provinz-Mädchens zur Schauspielerin und in die High Society von Buenos Aires, wo sie schließlich den hohen Militär Juan Perón kennenlernt.", "Eine große Geschichte. Eine große Frau. Ein großes Musical.", myCalendar, Event.categories[1], responseListener);
         ((MainActivity) getActivity()).queue.add(req5);
-        JsonObjectRequest req6 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(2),"Ein Event 6", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[2], responseListener);
+
+        //Schloss
+        myCalendar.set(Calendar.HOUR, 18);
+        myCalendar.set(Calendar.MINUTE, 00);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 8);
+        JsonObjectRequest req6 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(2),"5. Mannheimer Schlosskonzert", "Franz Xaver Richter: Adagio und Fuge g-Moll\n" +
+                "Michael Haydn: Violoncellokonzert B-Dur\n" +
+                "Peter von Winter: Concertino für Violoncello, Klarinette und Orchester\n" +
+                "Carl Stamitz: Sinfonia concertante D-Dur für Violine principale und Orchester op. 2, Nr. 2\n" +
+                "Julia Hagen, Violoncello\n" +
+                "Paul Meyer, Dirigent", "Fürstliche Soiree", myCalendar, Event.categories[2], responseListener);
         ((MainActivity) getActivity()).queue.add(req6);
-        JsonObjectRequest req7 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(2),"Ein Event 7", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[0], responseListener);
+
+        //Connex 1
+        myCalendar.set(Calendar.HOUR, 23);
+        myCalendar.set(Calendar.MINUTE, 00);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 14);
+        JsonObjectRequest req7 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(3),"TWIZE", "TWIZE bietet euch immer auf 2 Floors. TECHNO & DRUM N BASS mit DJ´s der Szene.\n" +
+                "\n" +
+                "LINE UP\n" +
+                "\n" +
+                "FOLGT !", "TWIZE - Techno & Drum N Bass", myCalendar, Event.categories[0], responseListener);
         ((MainActivity) getActivity()).queue.add(req7);
-        JsonObjectRequest req8 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(3),"Ein Event 8", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[1], responseListener);
+
+        //Connex 2
+        myCalendar.set(Calendar.HOUR, 23);
+        myCalendar.set(Calendar.MINUTE, 00);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 29);
+        JsonObjectRequest req8 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(3),"All Night Long", "Und weiter geht es mit der ALL NIGHT LONG Reihe, bei der euch\n" +
+                "SEIMEN DEXTER + AUDIOAPPEAR von DEXIT Techno Events jeweils ein 3,5 Stunden Set auf die Lauscher klatschen werden. Dieses ALL NIGHT LONG wird einen Abriss vom feinsten geben..\n" +
+                "\n" +
+                "\n" +
+                "JÄGERMEISTER 1 EURO ALL NIGHT LONG\n" +
+                "\n" +
+                "Einlass ab 18 Jahren. Ausweispflicht - kein Muttizettel !", "Seimen Dexter + Audioappear", myCalendar, Event.categories[1], responseListener);
         ((MainActivity) getActivity()).queue.add(req8);
-        JsonObjectRequest req9 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(3),"Ein Event 9", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[2], responseListener);
+
+
+        //Dorint
+        myCalendar.set(Calendar.HOUR, 19);
+        myCalendar.set(Calendar.MINUTE, 30);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 26);
+        JsonObjectRequest req9 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(4),"Heringsessen", "Alles hat ein Ende, auch eine feuerianische Fasnachtskampagne. Aber auch der letzte Tag wird noch einmal standesgemäß begangen, zwar im trauernden Schwarz, aber nichtsdestotrotz lustig vergnügt. Bei hervorragendem Hering lassen wir unsere Kampagne noch einmal Revue passieren. Im Kartenpreis enthalten Hering satt von der Deutsche See sowie reichhaltige Beilagen.", "Herringsessen im Dorint", myCalendar, Event.categories[2], responseListener);
         ((MainActivity) getActivity()).queue.add(req9);
-        JsonObjectRequest req10 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(4),"Ein Event 11", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[0], responseListener);
-        ((MainActivity) getActivity()).queue.add(req10);
-        JsonObjectRequest req11 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(4),"Ein Event 12", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[1], responseListener);
-        ((MainActivity) getActivity()).queue.add(req11);
-        JsonObjectRequest req12 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(4),"Ein Event 13", "Ding Dong Lang", "Ding Dong", myCalendar, Event.categories[2], responseListener);
-        ((MainActivity) getActivity()).queue.add(req12);
 
     }
 

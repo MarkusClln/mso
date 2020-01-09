@@ -23,7 +23,7 @@ public class Event {
     private boolean downvoted;
     private String category;
 
-    public static final String[] categories = {"Bar", "Disco", "Essen"};
+    public static final String[] categories = {"Bar", "Disco", "Essen", "Kultur"};
 
     public static int getCategorieIcon(String category){
         switch (category){ //TODO ENUM, JUNGE
@@ -33,6 +33,8 @@ public class Event {
                 return R.drawable.ic_cocktails;
             case "Essen":
                 return R.drawable.ic_best_choice;
+            case "Kultur":
+                return R.drawable.ic_person_white_24dp;
         }
         return 0;
     }
