@@ -1,5 +1,7 @@
 package mso.eventium.datastorage.entity;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,6 +18,9 @@ public class EventEntity {
 
     @SerializedName("pin_id")
     private String pinId;
+
+    private PinEntity pin; //only filled when getting an event not getting a pin
+
     @SerializedName("user_id")
     private String userId;
 
@@ -63,6 +68,15 @@ public class EventEntity {
 
     public void setPinId(String pinId) {
         this.pinId = pinId;
+    }
+
+    public @Nullable
+    PinEntity getPin() {
+        return pin;
+    }
+
+    public void setPin(PinEntity pin) {
+        this.pin = pin;
     }
 
     public String getUserId() {

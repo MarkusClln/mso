@@ -5,6 +5,7 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class PinEntity {
@@ -17,7 +18,7 @@ public class PinEntity {
     private Double distance;
     private LatLng location;
 
-    private List<EventEntity> events;
+    private List<EventEntity> events = new LinkedList<>();
 
     public String getId() {
         return id;

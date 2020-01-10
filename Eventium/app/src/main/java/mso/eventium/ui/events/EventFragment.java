@@ -25,21 +25,20 @@ public class EventFragment extends Fragment {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private EditText searchInput;
-    private View root;
     private TextView rangeSliderView;
     private TextView dateView;
     private TextView timeView;
 
 
     private EventListFragment eventListFragmentAll = EventListFragment.newInstance(EventListFragment.ListTypeEnum.ALL);
-    private EventListFragment eventListFragmentSaved = EventListFragment.newInstance(EventListFragment.ListTypeEnum.SAVED);
+    private EventListFragment eventListFragmentFavorited = EventListFragment.newInstance(EventListFragment.ListTypeEnum.FAVORITED);
     private EventListFragment eventListFragmentOwned = EventListFragment.newInstance(EventListFragment.ListTypeEnum.OWNED);
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        root = inflater.inflate(R.layout.fragment_event, container, false);
+        final View root = inflater.inflate(R.layout.fragment_event, container, false);
 
 
         tabLayout = root.findViewById(R.id.tablayout);
@@ -51,8 +50,8 @@ public class EventFragment extends Fragment {
 
 
         adapter.AddFragment(eventListFragmentAll, "ALLE");
-        adapter.AddFragment(eventListFragmentSaved, "GESPEICHERT");
-        adapter.AddFragment(eventListFragmentOwned, "ERSTELLTE");
+        adapter.AddFragment(eventListFragmentFavorited, "FAVORISIERTE");
+        adapter.AddFragment(eventListFragmentOwned, "EIGENE");
 
         //FragmentStateAdapter adapter = new ViewPagerAdapter2(getActivity());
         viewPager.setAdapter(adapter);
@@ -146,7 +145,7 @@ public class EventFragment extends Fragment {
         String time = timeView.getText().toString();
         String s = text + "|-|" + date + "|-|" + time + "|-|" + range;
         eventListFragmentAll.mAdapter.getFilter().filter(s);
-        eventListFragmentSaved.mAdapter.getFilter().filter(s);
+        eventListFragmentFavorited.mAdapter.getFilter().filter(s);
         eventListFragmentOwned.mAdapter.getFilter().filter(s);
     }
 

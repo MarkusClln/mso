@@ -68,16 +68,6 @@ public class EventDetailFragment extends Fragment {
         mPhotoView.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.fade_event_detail_photo));
 
 
-        EventViewModel eventModel = ViewModelProviders.of(getActivity()).get(EventViewModel.class);
-
-        eventModel.getEvent().observe(this, event -> {
-            mNameView.setText(event.getName());
-            mDescriptionView.setText(event.getDescription());
-            myCalendar.setTime(event.getDate());
-            mDistanceView.setText(event.getPinId());
-        });
-
-
         final MapView mapView = root.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.onResume(); // needed to get the map to display immediately
@@ -88,7 +78,17 @@ public class EventDetailFragment extends Fragment {
             e.printStackTrace();
         }
 
-        setupMap(mapView, new LatLng(49, 8)); //TODO get pin
+        final EventViewModel eventModel = ViewModelProviders.of(getActivity()).get(EventViewModel.class);
+
+        eventModel.getEvent().observe(this, event -> {
+            mNameView.setText(event.getName());
+            mDescriptionView.setText(event.getDescription());
+            myCalendar.setTime(event.getDate());
+            mDistanceView.setText("TODO: Calc distance");
+
+            setupMap(mapView, event.getPin().getLocation());
+        });
+
 
         return root;
     }

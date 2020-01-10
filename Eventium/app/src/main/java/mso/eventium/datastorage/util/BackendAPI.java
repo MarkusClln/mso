@@ -16,8 +16,12 @@ import retrofit2.http.Query;
 public interface BackendAPI {
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @POST("pin")
+    Call<PinEntity> createPin(@Body PinEntity pin, @Header("Authorization") String auth);
+
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
     @GET("pin/getByName/{name}")
-    Call<PinEntity> getPinByName(@Path("name") String pinName, @Header("Authorization") String auth);
+    Call<List<PinEntity>> getPinsByName(@Path("name") String pinName);
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @GET("pin/all")
@@ -28,6 +32,14 @@ public interface BackendAPI {
     Call<EventEntity> getEventById(@Path("id") String id);
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
-    @POST("pin")
-    Call<PinEntity> createPin(@Body PinEntity pin, @Header("Authorization") String auth);
+    @GET("event/own")
+    Call<List<EventEntity>> getCreatedEvents(@Header("Authorization") String auth);
+
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @GET("event/fav")
+    Call<List<EventEntity>> getFavoritedEvents(@Header("Authorization") String auth);
+
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @GET("event/all")
+    Call<List<EventEntity>> getAllEvents(@Query("lat") double latitude, @Query("lng") double longitude, @Query("distance") double distance);
 }

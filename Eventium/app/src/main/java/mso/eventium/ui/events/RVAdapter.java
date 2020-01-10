@@ -33,6 +33,9 @@ import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.model.Event;
 
+import static mso.eventium.ui.events.EventListFragment.TRANSITION_FOR_ICON;
+import static mso.eventium.ui.events.EventListFragment.TRANSITION_FOR_NAME;
+
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> implements Filterable {
 
@@ -115,12 +118,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
 
         //EventViewHolder.saveEventButton.setChecked(true);
 
-        EventViewHolder.eventName.setTransitionName("transitionName" + i);
+        EventViewHolder.eventName.setTransitionName(TRANSITION_FOR_NAME + i);
         EventViewHolder.eventDescription.setTransitionName("transitionDescription" + i);
         EventViewHolder.eventDate.setTransitionName("transitionDate" + i);
         EventViewHolder.eventTime.setTransitionName("transitionTime" + i);
         EventViewHolder.eventDistance.setTransitionName("transitionDistance" + i);
-        EventViewHolder.eventIcon.setTransitionName("transitionIcon" + i);
+        EventViewHolder.eventIcon.setTransitionName(TRANSITION_FOR_ICON + i);
 
         final MainActivity activity = (MainActivity) context;
         EventViewHolder.btnUpvote.setOnClickListener(new View.OnClickListener() {

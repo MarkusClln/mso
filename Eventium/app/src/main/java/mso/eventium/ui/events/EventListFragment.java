@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -50,12 +49,12 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     public static final String TRANSITION_FOR_NAME = "transitionName";
     public static final String TRANSITION_FOR_ICON = "transitionIcon";
 
-    private View root;
-    private RecyclerView mRecyclerView;
     public RVAdapter mAdapter;
+
+    private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<Event> eventModels;
-    public ListTypeEnum listType;
+    private ListTypeEnum listType;
     private Location currentLocation;
 
     public static EventListFragment newInstance(ListTypeEnum type) {
@@ -71,12 +70,10 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
-        root = inflater.inflate(R.layout.fragment_event_list, container, false);
-        //eventFragment = inflater.inflate(R.layout.fragment_event, container, false);
-
+        final View root = inflater.inflate(R.layout.fragment_event_list, container, false);
 
         this.listType = ListTypeEnum.valueOf(getArguments().getString(LIST_TYPE_ARG_NAME));
+        System.out.println("Create EventListFrag for list " + listType);
 
         eventModels = new ArrayList<>();
         //eventModels.add(new Event("Event1_1", "","", "23.01.2019", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, ""));
@@ -96,22 +93,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                 android.R.color.holo_green_dark,
                 android.R.color.holo_orange_dark,
                 android.R.color.holo_blue_dark);
-
-        /**
-         * Showing Swipe Refresh animation on activity create
-         * As animation won't start on onCreate, post runnable is used
-         */
-        mSwipeRefreshLayout.post(new Runnable() {
-
-            @Override
-            public void run() {
-
-                mSwipeRefreshLayout.setRefreshing(true);
-
-                // Fetching data from server
-                loadRecyclerViewData();
-            }
-        });
 
         setUpCurrentLocation();
 
@@ -144,10 +125,21 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         startActivity(intent, options.toBundle());
     }
 
+
+    @Override
+    public void onStart() {
+        System.out.println("STARTED " + listType);
+        // Fetching data from server
+        loadRecyclerViewData();
+
+        super.onStart();
+    }
+
     @Override
     public void onResume() {
 
-        System.out.println("RESUME " + listType);
+        System.out.println("RESUME " + listType + " with elements: " + eventModels.size());
+
         super.onResume();
     }
 
@@ -159,34 +151,33 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
     private void loadRecyclerViewData() {
-        System.out.println(currentLocation);
+        System.out.println("Current location: " + currentLocation);
+
+        final String token = ((MainActivity) getActivity()).getToken();
+
         if (currentLocation != null) {
             switch (listType) {
                 case ALL:
                     allEvents();
                     break;
-                case SAVED:
-                    if (((MainActivity) getActivity()).getToken() != null) {
-                        savedEvents();
+                case FAVORITED:
+                    if (token != null) {
+                        favoritedEvents(token);
                     } else {
                         //Todo logge dich ein Bild
-                        mSwipeRefreshLayout.setRefreshing(false);
                     }
 
                     break;
                 case OWNED:
-                    if (((MainActivity) getActivity()).getToken() != null) {
-                        ownedEvents();
+                    if (token != null) {
+                        ownedEvents(token);
                     } else {
                         //Todo logge dich ein Bild
-                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                     break;
                 default:
                     //error or something
             }
-        } else {
-            mSwipeRefreshLayout.setRefreshing(false);
         }
 
         //for requests look at
@@ -195,97 +186,71 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
     }
 
-
     private void allEvents() {
-        mSwipeRefreshLayout.setRefreshing(true);
-
-        if (((MainActivity) getActivity()).getToken() != null) {
-
-            Response.Listener rl = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String s) {
-
-                    try {
-                        JSONObject auth0 = new JSONObject(s);
-                        setEvents(auth0.getString("auth0"));
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-
-            Response.ErrorListener el = new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getContext(), "Oops. Timeout error!", Toast.LENGTH_LONG).show();
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    if (mAdapter.getItemCount() == 0) {
-                        mRecyclerView.setBackgroundResource(R.drawable.no_connection);
-                    }
-                }
-            };
-
-            StringRequest req1 = ((MainActivity) getActivity()).backendClient.getAuth(((MainActivity) getActivity()).getToken(), rl, el);
-            ((MainActivity) getActivity()).queue.add(req1);
-        } else {
-            setEvents(null);
-        }
-
-
+        final Call<List<EventEntity>> pins = BackendService.getInstance(getContext()).getAllEvents(currentLocation.getLatitude(), currentLocation.getLongitude(), 10000); //TODO hardcoded distance
+        pins.enqueue(getHandlePinCallback(null));
     }
 
-    private void setEvents(final String token) {
-        final Call<List<PinEntity>> pins = BackendService.getInstance(getContext()).getAllPins(currentLocation.getLatitude(), currentLocation.getLongitude(), 10000); //TODO hardcoded distance
-        pins.enqueue(new Callback<List<PinEntity>>() {
+    private void favoritedEvents(String token) {
+        final Call<List<EventEntity>> pins = BackendService.getInstance(getContext()).getFavoritedEvents(token);
+        pins.enqueue(getHandlePinCallback(token));
+    }
+
+
+    private void ownedEvents(String token) {
+        final Call<List<EventEntity>> pins = BackendService.getInstance(getContext()).getCreatedEvents(token);
+        pins.enqueue(getHandlePinCallback(token));
+    }
+
+
+    private Callback<List<EventEntity>> getHandlePinCallback(String token) {
+        mSwipeRefreshLayout.setRefreshing(true);
+        return new Callback<List<EventEntity>>() {
             @Override
-            public void onResponse(Call<List<PinEntity>> call, retrofit2.Response<List<PinEntity>> response) {
+            public void onResponse(Call<List<EventEntity>> call, retrofit2.Response<List<EventEntity>> response) {
 
                 eventModels = new ArrayList<>();
-                for (PinEntity pinEntity : response.body()) {
 
 
-                    for (EventEntity eventEntity : pinEntity.getEvents()) {
+                for (EventEntity eventEntity : response.body()) {
 
-                        try {
-                            int distance_rounded = (int) Math.round(pinEntity.getDistance());  //TODO in methode verschieben die aus EventEntity das EventViewModel macht (oder besser die TextView das es anzeigt soll was dranschreiben)
-                            String distance_str = "";
-                            if (distance_rounded < 1000) {
-                                distance_str = distance_rounded + " m";
-                            } else {
-                                distance_rounded = (int) Math.round(pinEntity.getDistance() / 1000);
-                                distance_str = distance_rounded + " m";
-                            }
-
-
-                            boolean liked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().contains(token) : false;
-                            boolean disliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().contains(token) : false;
-
-                            int countOfUsersThatLiked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().size() : 0;
-                            int countOfUsersThatDisliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().size() : 0;
-                            int points = countOfUsersThatLiked - countOfUsersThatDisliked;
+                    try {
+//                        int distance_rounded = (int) Math.round(eventEntity.getPin().getDistance());  //TODO in methode verschieben die aus EventEntity das EventViewModel macht (oder besser die TextView das es anzeigt soll was dranschreiben)
+                        String distance_str = "TODO distance berechnen";
+//                        if (distance_rounded < 1000) {
+//                            distance_str = distance_rounded + " m";
+//                        } else {
+//                            distance_rounded = (int) Math.round(eventEntity.getPin().getDistance() / 1000);
+//                            distance_str = distance_rounded + " m";
+//                        }
 
 
-                            Event item = new Event(
-                                    eventEntity.getName(),
-                                    eventEntity.getDescription(),
-                                    eventEntity.getShortDescription(),
-                                    eventEntity.getDate().toString(),
-                                    distance_str,
-                                    R.drawable.img_drink,
-                                    eventEntity.getPinId(),
-                                    liked,
-                                    disliked,
-                                    points,
-                                    eventEntity.getId(),
-                                    eventEntity.getCategory()
+                        boolean liked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().contains(token) : false;
+                        boolean disliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().contains(token) : false;
 
-                            );
-                            eventModels.add(item);
-                        } catch (NumberFormatException nfe) {
-                            System.err.println("NumberFormatException: " + nfe.getMessage());
-                        }
+                        int countOfUsersThatLiked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().size() : 0;
+                        int countOfUsersThatDisliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().size() : 0;
+                        int points = countOfUsersThatLiked - countOfUsersThatDisliked;
+
+
+                        Event item = new Event(
+                                eventEntity.getName(),
+                                eventEntity.getDescription(),
+                                eventEntity.getShortDescription(),
+                                eventEntity.getDate().toString(),
+                                distance_str,
+                                R.drawable.img_drink,
+                                eventEntity.getPinId(),
+                                liked,
+                                disliked,
+                                points,
+                                eventEntity.getId(),
+                                eventEntity.getCategory()
+
+                        );
+                        eventModels.add(item);
+                    } catch (NumberFormatException nfe) {
+                        System.err.println("NumberFormatException: " + nfe.getMessage());
                     }
                 }
 
@@ -297,171 +262,14 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
             }
 
             @Override
-            public void onFailure(Call<List<PinEntity>> call, Throwable t) {
+            public void onFailure(Call<List<EventEntity>> call, Throwable t) {
                 Toast.makeText(getContext(), "Oops. Timeout error!", Toast.LENGTH_LONG).show();
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (mAdapter.getItemCount() == 0) {
                     mRecyclerView.setBackgroundResource(R.drawable.no_connection);
                 }
             }
-        });
-    }
-
-    private void savedEvents() {
-        mSwipeRefreshLayout.setRefreshing(true);
-        Response.Listener rl = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-
-                try {
-                    JSONArray events = new JSONArray(s);
-                    eventModels = new ArrayList<>();
-
-                    for (int j = 0; j < events.length(); j++) {
-
-                        JSONObject event = events.getJSONObject(j);
-
-                        JSONArray likedEvents = event.getJSONArray("likedUsers");
-                        ArrayList<String> likedEventsAsArrayList = new ArrayList<String>();
-                        if (likedEvents != null) {
-                            int len = likedEvents.length();
-                            for (int likedEventCounter = 0; likedEventCounter < len; likedEventCounter++) {
-                                likedEventsAsArrayList.add(likedEvents.get(likedEventCounter).toString());
-                            }
-                        }
-
-                        JSONArray dislikedEvents = event.getJSONArray("dislikedUsers");
-                        ArrayList<String> dislikedEventsAsArrayList = new ArrayList<String>();
-                        if (dislikedEvents != null) {
-                            int len = dislikedEvents.length();
-                            for (int dislikedEventCounter = 0; dislikedEventCounter < len; dislikedEventCounter++) {
-                                dislikedEventsAsArrayList.add(dislikedEvents.get(dislikedEventCounter).toString());
-                            }
-                        }
-
-
-                        int points = likedEventsAsArrayList.size() - dislikedEventsAsArrayList.size();
-
-                        Event item = new Event(
-                                event.getString("name"),
-                                event.getString("description"),
-                                event.getString("shortDescription"),
-                                event.getString("date"),
-                                "Fix this",
-                                R.drawable.img_drink,
-                                event.getString("pin_id"),
-                                true,
-                                false,
-                                points,
-                                event.getString("_id"),
-                                event.getString("category")
-
-                        );
-                        eventModels.add(item);
-
-                    }
-
-
-                    mAdapter = new RVAdapter(getContext(), eventModels, EventListFragment.this);
-                    mRecyclerView.setAdapter(mAdapter);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                // Stopping swipe refresh
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-
         };
-
-
-        if (((MainActivity) getActivity()).getToken() != null) {
-            StringRequest req1 = ((MainActivity) getActivity()).backendClient.getFavEvents(((MainActivity) getActivity()).getToken(), rl);
-            ((MainActivity) getActivity()).queue.add(req1);
-        } else {
-            //Todo
-            //not logged in
-        }
-
-    }
-
-    private void ownedEvents() {
-        mSwipeRefreshLayout.setRefreshing(true);
-        Response.Listener rl = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-
-                try {
-                    JSONArray events = new JSONArray(s);
-                    eventModels = new ArrayList<>();
-
-                    for (int j = 0; j < events.length(); j++) {
-                        JSONObject event = events.getJSONObject(j);
-
-                        JSONArray likedEvents = event.getJSONArray("likedUsers");
-                        ArrayList<String> likedEventsAsArrayList = new ArrayList<String>();
-                        if (likedEvents != null) {
-                            int len = likedEvents.length();
-                            for (int likedEventCounter = 0; likedEventCounter < len; likedEventCounter++) {
-                                likedEventsAsArrayList.add(likedEvents.get(likedEventCounter).toString());
-                            }
-                        }
-
-                        JSONArray dislikedEvents = event.getJSONArray("dislikedUsers");
-                        ArrayList<String> dislikedEventsAsArrayList = new ArrayList<String>();
-                        if (dislikedEvents != null) {
-                            int len = dislikedEvents.length();
-                            for (int dislikedEventCounter = 0; dislikedEventCounter < len; dislikedEventCounter++) {
-                                dislikedEventsAsArrayList.add(dislikedEvents.get(dislikedEventCounter).toString());
-                            }
-                        }
-
-
-                        int points = likedEventsAsArrayList.size() - dislikedEventsAsArrayList.size();
-
-                        Event item = new Event(
-                                event.getString("name"),
-                                event.getString("description"),
-                                event.getString("shortDescription"),
-                                event.getString("date"),
-                                "Fix this",
-                                R.drawable.img_drink,
-                                event.getString("pin_id"),
-                                false,
-                                false,
-                                points,
-                                event.getString("_id"),
-                                event.getString("category")
-
-                        );
-                        eventModels.add(item);
-
-                    }
-
-
-                    mAdapter = new RVAdapter(getContext(), eventModels, EventListFragment.this);
-                    mRecyclerView.setAdapter(mAdapter);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                // Stopping swipe refresh
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-
-        };
-
-
-        if (((MainActivity) getActivity()).getToken() != null) {
-            StringRequest req1 = ((MainActivity) getActivity()).backendClient.getOwnEvents(((MainActivity) getActivity()).getToken(), rl);
-            ((MainActivity) getActivity()).queue.add(req1);
-        } else {
-            //Todo
-            //not logged in
-        }
-
     }
 
     private void setUpCurrentLocation() {
@@ -480,8 +288,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
     public enum ListTypeEnum {
-        ALL, SAVED, OWNED;
+        ALL, FAVORITED, OWNED;
     }
-
 }
 

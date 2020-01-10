@@ -35,8 +35,6 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.logging.Logger;
-
 import mso.eventium.client.BackendClient;
 import mso.eventium.ui.events.EventFragment;
 import mso.eventium.ui.host.FavoriteHostsFragment;
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
     public BackendClient backendClient;
     public RequestQueue queue;
-    private boolean loggedIn;
     private Auth0 auth0;
     private String token;
     private SharedPreferences prefs;
@@ -102,10 +99,10 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        this.OnFragmentChanged();
-        this.CreateEventMapButton();
+        this.onFragmentChanged();
+        this.createEventMapButton();
 
-        this.SetupBottomNavBarButtons();
+        this.setupBottomNavBarButtons();
     }
 
     /**
@@ -114,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
      * @param desiredFragment
      * @param setMapicon
      */
-    private void SetupFragment(Fragment desiredFragment, boolean setMapicon) {
+    private void setupFragment(Fragment desiredFragment, boolean setMapicon) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.nav_host_fragment, desiredFragment);
@@ -131,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Called when a fragment gets changed
      */
-    private void OnFragmentChanged() {
+    private void onFragmentChanged() {
 
         //Das wird nur benutzt wenn man in der Eventansicht auf die Karte klickt
         String intentFragment = getIntent().getStringExtra("intentFragment");
@@ -159,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Prüfe welches Fragment grade als aktiv gesetzt ist
         if (activeFragment == ActiveFragments.EVENTS) {
-            SetupFragment(new EventFragment(), true);
+            setupFragment(new EventFragment(), true);
         }
         if (activeFragment == ActiveFragments.MAP) {
             double lat = getIntent().getDoubleExtra("location_lat", -1);
@@ -167,26 +164,26 @@ public class MainActivity extends AppCompatActivity {
             getIntent().removeExtra("location_lat");
             getIntent().removeExtra("location_lng");
 
-            SetupFragment(EventiumMapFragment.newInstance(lat, lng), false);
+            setupFragment(EventiumMapFragment.newInstance(lat, lng), false);
         }
         if (activeFragment == ActiveFragments.USER) {
-            SetupFragment(UserFragment.newInstance(token), false);
+            setupFragment(UserFragment.newInstance(token), false);
         }
         if (activeFragment == ActiveFragments.HOSTS) {
-            SetupFragment(new FavoriteHostsFragment(), false);
+            setupFragment(new FavoriteHostsFragment(), false);
         }
         if (activeFragment == ActiveFragments.CREATE) {
-            SetupFragment(new CreateFragment(), false);
+            setupFragment(new CreateFragment(), false);
         }
         if (activeFragment == ActiveFragments.MESSAGES) {
-            SetupFragment(new MessagesFragment(), false);
+            setupFragment(new MessagesFragment(), false);
         }
     }
 
     /**
      * Setup the switching button for map and event
      */
-    private void CreateEventMapButton() {
+    private void createEventMapButton() {
         floatingActionButton = findViewById(R.id.eventMapButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     activeFragment = ActiveFragments.EVENTS;
                 }
-                OnFragmentChanged();
+                onFragmentChanged();
             }
         });
     }
@@ -205,13 +202,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Sets up the bottom navbar with onClick actions for every button
      */
-    private void SetupBottomNavBarButtons() {
+    private void setupBottomNavBarButtons() {
         accountButton = findViewById(R.id.fourth_menu_item);
         accountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 activeFragment = ActiveFragments.USER;
-                OnFragmentChanged();
+                onFragmentChanged();
 
             }
         });
@@ -221,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 activeFragment = ActiveFragments.HOSTS;
-                OnFragmentChanged();
+                onFragmentChanged();
             }
         });
 
@@ -230,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 activeFragment = ActiveFragments.CREATE;
-                OnFragmentChanged();
+                onFragmentChanged();
             }
         });
 
@@ -239,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 activeFragment = ActiveFragments.MESSAGES;
-                OnFragmentChanged();
+                onFragmentChanged();
             }
         });
 
@@ -253,13 +250,7 @@ public class MainActivity extends AppCompatActivity {
         authenticationAPIClient = new AuthenticationAPIClient(auth0);
 
         token = prefs.getString("token", null);
-        if (token != null) {
-            loggedIn = false;
-        } else {
-            loggedIn = true;
-        }
-
-        Log.i("AUTH", "Logged in: " + loggedIn);
+        Log.i("AUTH", "Logged in: " + isLoggedIn() + " with token: " + token);
     }
 
     public void login() {
@@ -298,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
                                 System.out.println(credentials.getIdToken());
                                 Button loginButton = findViewById(R.id.logout);
                                 loginButton.setText("Logout");
-                                loggedIn = false;
                                 SharedPreferences.Editor mEditor = prefs.edit();
                                 mEditor.putString("token", token).apply();
 
@@ -350,7 +340,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void payload) {
                         token = null;
-                        loggedIn = true;
                         SharedPreferences.Editor mEditor = prefs.edit();
                         mEditor.remove("token").apply();
 
@@ -379,6 +368,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean isLoggedIn() {
-        return loggedIn;
+        return token == null;
     }
 }

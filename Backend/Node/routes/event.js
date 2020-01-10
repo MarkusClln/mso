@@ -15,7 +15,7 @@ const check_auth = require("../middleware/check-auth");
 
 /* GET home page. */
 
-router.post('/', check_auth, function(req, res, next) {
+router.post('/', check_auth, function (req, res, next) {
 
     const body = req.body;
 
@@ -35,14 +35,14 @@ router.post('/', check_auth, function(req, res, next) {
         category: body.event.category
     });
 
-    event.save(function(err, result) {
+    event.save(function (err, result) {
         if (err) res.send(err);
         userSchema.find({
             auth0_id: req.user.sub
         }).exec().then(user => {
             if (user.length >= 1) {
                 user[0].ownEvents.push(result._id);
-                user[0].save(function(err, user) {
+                user[0].save(function (err, user) {
                     res.json(result);
                 });
 
@@ -54,7 +54,7 @@ router.post('/', check_auth, function(req, res, next) {
 });
 
 
-router.get('/all', function(req, res, next) {
+router.get('/all', function (req, res, next) {
 
     var lat = req.query.lat;
     var lng = req.query.lng;
@@ -67,41 +67,72 @@ router.get('/all', function(req, res, next) {
 
     if (lat != undefined && lng != undefined && distance != undefined) {
 
-
-        var query_pins_ids = pinSchema.find({
-            location: {
-                $nearSphere: {
-                    $maxDistance: distance,
-                    $minDistance: 0,
-                    $geometry: {
-                        type: "Point",
-                        coordinates: [lng, lat]
+        pinSchema.aggregate( //same fkt as in get all pins
+            [{
+                    $geoNear: {
+                        near: {
+                            type: "Point",
+                            coordinates: [parseFloat(lat), parseFloat(lng)]
+                        },
+                        distanceField: "distance",
+                        maxDistance: parseFloat(distance),
+                        spherical: true
+                    }
+                },
+                {
+                    "$project": {
+                        "_id": {
+                            "$toString": "$_id"
+                        }
                     }
                 }
-            }
-        }).distinct("_id").lean();
+            ]).exec((error, idObjects) => {
+            if (error) console.log(error);
 
-
-        query_pins_ids.exec(function(err, result) {
-            if (err) return console.error(err);
-
-            var query_events = eventSchema.find({
-                "pin_id": result
+            var onlyIds = idObjects.map(function (el) { //idObjects are objects but we only want the ids as array
+                return el._id
             });
 
-            query_events.exec(function(err, events) {
-                if (err) return console.error(err);
-                console.log(events);
-                res.json(events)
+
+
+            eventSchema.aggregate( //find the events that have the id
+                [{
+                        $match: {
+                            pin_id: {
+                                $in: onlyIds
+                            }
+                        }
+                    }, {
+                        $addFields: {
+                            convertedPinId: { //for lookup to work
+                                $toObjectId: "$pin_id"
+                            }
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: pinSchema.collection.name,
+                            localField: "convertedPinId",
+                            foreignField: "_id",
+                            as: "pin"
+                        }
+                    }, {
+                        $unwind: { //pin array to only pin
+                            path: "$pin",
+                            preserveNullAndEmptyArrays: true
+                        }
+                    }
+                ]).exec((error, results) => {
+                if (error) console.log(error);
+                res.json(results);
             });
+
         });
 
-
     }
-
 });
 
-router.post('/fav', check_auth, (req, res) => {
+router.get('/fav', check_auth, (req, res) => {
 
     console.log(req.user.sub);
     userSchema.find({
@@ -116,14 +147,14 @@ router.post('/fav', check_auth, (req, res) => {
                 '_id': {
                     $in: arr
                 }
-            }, function(err, result) {
+            }, function (err, result) {
                 res.json(result)
             });
         }
     });
 });
 
-router.post('/own', check_auth, (req, res) => {
+router.get('/own', check_auth, (req, res) => {
 
     console.log(req.user.sub);
     userSchema.find({
@@ -138,7 +169,7 @@ router.post('/own', check_auth, (req, res) => {
                 '_id': {
                     $in: arr
                 }
-            }, function(err, result) {
+            }, function (err, result) {
                 res.json(result)
             });
         }
@@ -148,13 +179,44 @@ router.post('/own', check_auth, (req, res) => {
 });
 
 
-router.get('/:id', function(req, res, next) {
+router.get('/:id', function (req, res, next) {
     var id = req.params.id;
-    eventSchema.findById(id, function(err, event) {
-        if (err)
-            res.send(err);
-        res.json(event);
+
+    eventSchema.aggregate( //find the events that have the id
+        [{
+                $match: {
+                    _id: mongoose.Types.ObjectId(id)
+                }
+            }, {
+                $addFields: {
+                    convertedPinId: { //for lookup to work
+                        $toObjectId: "$pin_id"
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: pinSchema.collection.name,
+                    localField: "convertedPinId",
+                    foreignField: "_id",
+                    as: "pin"
+                }
+            }, {
+                $unwind: { //pin array to only pin
+                    path: "$pin",
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]).exec((error, results) => {
+        if (error) console.log(error);
+
+        if (results.length > 0) {
+            res.json(results[0]);
+        } else {
+            res.json({});
+        }
     });
+
 });
 
 

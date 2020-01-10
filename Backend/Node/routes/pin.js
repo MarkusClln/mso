@@ -14,11 +14,11 @@ const ckeck_auth = require("../middleware/check-auth");
 
 
 
-router.post('/', ckeck_auth, function(req, res, next) {
+router.post('/', ckeck_auth, function (req, res, next) {
 
     const body = req.body;
-    console.log("USER: "+JSON.stringify(req.user));
-    console.log("PIN: "+JSON.stringify(body));
+    console.log("USER: " + JSON.stringify(req.user));
+    console.log("PIN: " + JSON.stringify(body));
     const pin = new pinSchema({
         _id: new mongoose.Types.ObjectId(),
         location: body.location,
@@ -34,28 +34,29 @@ router.post('/', ckeck_auth, function(req, res, next) {
     });
 });
 
-router.get('/all',  function(req, res, next) {
+router.get('/all', function (req, res, next) {
 
     var lat = req.query.lat;
     var lng = req.query.lng;
     var distance = req.query.distance;
 
-    console.log("lat "+lat+" lng "+lng);
+    console.log("lat " + lat + " lng " + lng);
 
 
-    if(lat != undefined && lng != undefined && distance != undefined){
+    if (lat != undefined && lng != undefined && distance != undefined) {
 
-        mongoose.model("Pins").aggregate(
+        pinSchema.aggregate(
             [
-            {$geoNear: {
-                near: {
-                    type: "Point",
-                    coordinates: [ parseFloat(lat) , parseFloat(lng) ]
-                },
-                distanceField: "distance",
-                maxDistance: parseFloat(distance),
-                spherical: true
-            }
+                {
+                    $geoNear: {
+                        near: {
+                            type: "Point",
+                            coordinates: [parseFloat(lat), parseFloat(lng)]
+                        },
+                        distanceField: "distance",
+                        maxDistance: parseFloat(distance),
+                        spherical: true
+                    }
             },
                 {
                     "$project": {
@@ -68,12 +69,14 @@ router.get('/all',  function(req, res, next) {
                         "distance": true
                     }
                 },
-            {$lookup:{
-                    from: eventSchema.collection.name,
-                    localField: "_id",
-                    foreignField:"pin_id",
-                    as: "events"
-                }}
+                {
+                    $lookup: {
+                        from: eventSchema.collection.name,
+                        localField: "_id",
+                        foreignField: "pin_id",
+                        as: "events"
+                    }
+                }
         ]).exec((error, results) => {
             if (error) console.log(error);
             res.json(results);
@@ -85,20 +88,27 @@ router.get('/all',  function(req, res, next) {
 
 
 
-router.get('/getByUserId/:id', function(req, res, next) {
+router.get('/getByUserId/:id', function (req, res, next) {
     var id = req.params.id;
-    var query = pinSchema.find({ 'user_id': id });
+    var query = pinSchema.find({
+        'user_id': id
+    });
     query.exec(function (err, result) {
         if (err) return console.error(err);
         res.json(result);
     });
 });
 
-router.get('/getByName/:name', function(req, res, next) {
+router.get('/getByName/:name', function (req, res, next) {
 
     //var pin = mongoose.model('Pins', pinSchema);
     // find each person with a name contains 'Ghost'
-    pinSchema.find({ "name" : { $regex: req.params.name, $options: 'i' } },
+    pinSchema.find({
+            "name": {
+                $regex: req.params.name,
+                $options: 'i'
+            }
+        },
         function (err, pins) {
             if (err) return console.error(err);
             res.json(pins);
@@ -106,9 +116,9 @@ router.get('/getByName/:name', function(req, res, next) {
         });
 });
 
-router.get('/:id', function(req, res, next) {
+router.get('/:id', function (req, res, next) {
     var id = req.params.id;
-    pinSchema.findById(id,function (err, result) {
+    pinSchema.findById(id, function (err, result) {
         if (err) return console.error(err);
         res.json(result)
     });

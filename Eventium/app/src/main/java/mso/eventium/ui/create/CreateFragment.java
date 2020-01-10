@@ -44,7 +44,11 @@ import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.adapter.AutoSuggestPinAdapter;
 import mso.eventium.client.BackendClient;
-
+import mso.eventium.datastorage.BackendService;
+import mso.eventium.datastorage.entity.PinEntity;
+import mso.eventium.model.MarkerModel;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 
 public class CreateFragment extends Fragment implements SelectCategorieDialogFragment.SingleCoiceListener {
@@ -61,7 +65,7 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
     EditText shortDescView;
     EditText descView;
     AutoCompleteTextView locationAutoCompleteTextView;
-    String [][] autocomplete_ids = new String[0][0];
+    String[][] autocomplete_ids = new String[0][0];
     private AutoSuggestPinAdapter autoSuggestPinAdapter;
     private Handler handler;
 
@@ -107,14 +111,14 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
         return root;
     }
 
-    private void setupCategoriesButton(){
+    private void setupCategoriesButton() {
         btnSelectCategorie = root.findViewById(R.id.selectCategorieButton);
         btnSelectCategorie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment selectCategorieDialog = new SelectCategorieDialogFragment(CreateFragment.this);
                 selectCategorieDialog.setCancelable(false);
-                selectCategorieDialog.show(getFragmentManager(),"SelectCategorieFragment");
+                selectCategorieDialog.show(getFragmentManager(), "SelectCategorieFragment");
             }
         });
     }
@@ -129,7 +133,7 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
         btnSelectCategorie.setText("Wähle aus!");
     }
 
-    public void setUpCalenderPicker(){
+    public void setUpCalenderPicker() {
         dateView = root.findViewById(R.id.dateText);
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -157,7 +161,7 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
 
     }
 
-    public void setUpTimePicker(){
+    public void setUpTimePicker() {
 
         timeView = root.findViewById(R.id.timeText);
         final TimePickerDialog.OnTimeSetListener date = new TimePickerDialog.OnTimeSetListener() {
@@ -178,45 +182,45 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
 
             @Override
             public void onClick(View v) {
-                new TimePickerDialog(getContext(),AlertDialog.THEME_HOLO_LIGHT, date, myCalendar.get(Calendar.HOUR),myCalendar.get(Calendar.MINUTE),true).show();
+                new TimePickerDialog(getContext(), AlertDialog.THEME_HOLO_LIGHT, date, myCalendar.get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE), true).show();
             }
         });
     }
 
-    private void setUpEditText(){
+    private void setUpEditText() {
         nameView = root.findViewById(R.id.event_name);
         shortDescView = root.findViewById(R.id.event_shortDesc);
         descView = root.findViewById(R.id.event_desc);
     }
 
-    public void setUpCreateButton(){
+    public void setUpCreateButton() {
         btnCreateEvent = root.findViewById(R.id.buttonCreateEvent);
         btnCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String pin_name = locationAutoCompleteTextView.getText().toString();
-                String pin_id="";
-                for(int i=0; i<autocomplete_ids.length; i++){
-                    if(autocomplete_ids[i][1].equals(pin_name)){
+                String pin_id = "";
+                for (int i = 0; i < autocomplete_ids.length; i++) {
+                    if (autocomplete_ids[i][1].equals(pin_name)) {
                         pin_id = autocomplete_ids[i][0];
                     }
                 }
 
                 String eventName = nameView.getText().toString();
-                String eventShortDesc =shortDescView.getText().toString();
-                String eventDesc =descView.getText().toString();
+                String eventShortDesc = shortDescView.getText().toString();
+                String eventDesc = descView.getText().toString();
                 String eventDate = myCalendar.getTime().toString();
                 String eventCategorie = btnSelectCategorie.getText().toString();
 
-                String output = "eventName="+eventName+"\n"+
-                        "eventShortDesc="+eventShortDesc+"\n"+
-                        "eventDesc="+eventDesc+"\n"+
-                        "eventDate="+eventDate+"\n"+
-                        "eventCategorie="+eventCategorie+"\n"+
-                        "pinID="+pin_id;
-                Toast.makeText(getContext(),output, Toast.LENGTH_LONG).show();
-                if(eventName!="" && eventShortDesc!="" &&eventDesc!="" && !eventCategorie.equals("Wähle aus!") &&pin_id!=""){
+                String output = "eventName=" + eventName + "\n" +
+                        "eventShortDesc=" + eventShortDesc + "\n" +
+                        "eventDesc=" + eventDesc + "\n" +
+                        "eventDate=" + eventDate + "\n" +
+                        "eventCategorie=" + eventCategorie + "\n" +
+                        "pinID=" + pin_id;
+                Toast.makeText(getContext(), output, Toast.LENGTH_LONG).show();
+                if (eventName != "" && eventShortDesc != "" && eventDesc != "" && !eventCategorie.equals("Wähle aus!") && pin_id != "") {
                     Response.Listener responseListener = new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -225,7 +229,7 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
                         }
                     };
 
-                    JsonObjectRequest req1 = bc.createEvent(((MainActivity) getActivity()).getToken(), pin_id,eventName, eventDesc, eventShortDesc, myCalendar, eventCategorie, responseListener);
+                    JsonObjectRequest req1 = bc.createEvent(((MainActivity) getActivity()).getToken(), pin_id, eventName, eventDesc, eventShortDesc, myCalendar, eventCategorie, responseListener);
                     queue.add(req1);
                 }
 
@@ -236,7 +240,7 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
     private static final int TRIGGER_AUTO_COMPLETE = 100;
     private static final long AUTO_COMPLETE_DELAY = 300;
 
-    public void setUpLocationEdit(){
+    public void setUpLocationEdit() {
 
         locationAutoCompleteTextView = root.findViewById(R.id.event_location);
         autoSuggestPinAdapter = new AutoSuggestPinAdapter(this.getContext(), android.R.layout.simple_dropdown_item_1line);
@@ -255,6 +259,7 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
             public void beforeTextChanged(CharSequence s, int start, int
                     count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
@@ -262,6 +267,7 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
                 handler.sendEmptyMessageDelayed(TRIGGER_AUTO_COMPLETE,
                         AUTO_COMPLETE_DELAY);
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -280,37 +286,43 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
     }
 
     private void makeApiCall(final String text) {
-
-        Response.Listener rl = new Response.Listener<String>() {
+        final Call<List<PinEntity>> pin = BackendService.getInstance(getContext()).getPinsByName(text);
+        pin.enqueue(new Callback<List<PinEntity>>() {
             @Override
-            public void onResponse(String response) {
-                    //parsing logic, please change it as per your requirement
-                    List<String> stringList = new ArrayList<>();
-                    try {
+            public void onResponse(Call<List<PinEntity>> call, retrofit2.Response<List<PinEntity>> response) {
+                final List<PinEntity> pins = response.body();
 
-                        JSONArray array = new JSONArray(response);
-                        autocomplete_ids = new String[array.length()][2];
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONObject row = array.getJSONObject(i);
-                            stringList.add(row.getString("name"));
-                            autocomplete_ids[i][0] = row.getString("_id");
-                            autocomplete_ids[i][1] = row.getString("name");
-                        }
-                        if(array.length()==0){
-                            stringList.add(text+" exisitert nicht");
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                //TODO pins statt json nutzen
+
+
+                //parsing logic, please change it as per your requirement
+                List<String> stringList = new ArrayList<>();
+                try {
+
+                    JSONArray array = new JSONArray(response);
+                    autocomplete_ids = new String[array.length()][2];
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject row = array.getJSONObject(i);
+                        stringList.add(row.getString("name"));
+                        autocomplete_ids[i][0] = row.getString("_id");
+                        autocomplete_ids[i][1] = row.getString("name");
                     }
-                    //IMPORTANT: set data here and notify
-                    autoSuggestPinAdapter.setData(stringList);
-                    autoSuggestPinAdapter.notifyDataSetChanged();
+                    if (array.length() == 0) {
+                        stringList.add(text + " exisitert nicht");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //IMPORTANT: set data here and notify
+                autoSuggestPinAdapter.setData(stringList);
+                autoSuggestPinAdapter.notifyDataSetChanged();
 
             }
 
-        };
-        StringRequest req1 = bc.getPinByName(text, rl);
-        queue.add(req1);
+            @Override
+            public void onFailure(Call<List<PinEntity>> call, Throwable t) {
+            }
+        });
 
 
     }

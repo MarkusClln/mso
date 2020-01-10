@@ -74,7 +74,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
     }
 
     public void searchLocation() {
-        EditText locationSearch = (EditText) getActivity().findViewById(R.id.editText);
+        EditText locationSearch = getActivity().findViewById(R.id.editText);
         String location = locationSearch.getText().toString();
         List<Address> addressList = null;
 
