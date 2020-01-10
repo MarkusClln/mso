@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/event_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/blue_100">
+        <TextView
+            android:id="@+id/bonusHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="200px"
+            android:text="EVENTIUM BONUSPUNKTE"
+            android:gravity="center"
+
+            />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="200px"
+            android:text="Deine Punktzahl: 10000"
+            android:gravity="center|left"
+            />
+    </LinearLayout>
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabTextColor="@color/colorPrimary"
+        android:id="@+id/bonustablayout"
+        android:animateLayoutChanges="true"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bonusviewpager"
+        android:animateLayoutChanges="true"/>
+
+</LinearLayout>
