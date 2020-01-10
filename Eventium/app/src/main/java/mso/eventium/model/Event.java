@@ -2,6 +2,8 @@ package mso.eventium.model;
 
 import android.widget.Switch;
 
+import java.util.Date;
+
 import mso.eventium.R;
 
 public class Event {
@@ -11,7 +13,7 @@ public class Event {
     private String pin_id;
     private String event_id;
     private String event_short_description;
-    private String event_date;
+    private Date event_date;
     private int event_photo;
     private int event_icon;
     private String event_distance;
@@ -21,7 +23,7 @@ public class Event {
     private boolean downvoted;
 
 
-    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, String pin_id, boolean upvoted, boolean downvoted, int event_points, String event_id, CategoryEnum category) {
+    public Event(String name, String description, String event_short_description, Date date, String distance, int event_photo, String pin_id, boolean upvoted, boolean downvoted, int event_points, String event_id, CategoryEnum category) {
         this.event_name = name;
         this.event_description = description;
         this.event_date = date;
@@ -48,7 +50,7 @@ public class Event {
         return event_description;
     }
 
-    public String getEvent_date() {
+    public Date getEvent_date() {
         return event_date;
     }
 

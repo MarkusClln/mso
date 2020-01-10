@@ -75,26 +75,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         int points = filteredEvents.get(i).getEvent_points();
         EventViewHolder.eventPoints.setText(Integer.toString(points));
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        EventViewHolder.eventDate.setText(dateFormat.format(filteredEvents.get(i).getEvent_date()));
 
-        try {
-            String dateStr = filteredEvents.get(i).getEvent_date();
-            DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
-            Date date = formatter.parse(dateStr);
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            String formatedDate = cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR);
-
-            EventViewHolder.eventDate.setText(formatedDate);
-
-            int hour = cal.get(Calendar.HOUR);
-            int minute = cal.get(Calendar.MINUTE);
-
-            EventViewHolder.eventTime.setText(String.format("%02d:%02d", hour, minute));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        EventViewHolder.eventTime.setText(timeFormat.format(filteredEvents.get(i).getEvent_date()));
 
         EventViewHolder.eventDistance.setText(filteredEvents.get(i).getEvent_distance());
         EventViewHolder.eventIcon.setImageResource(filteredEvents.get(i).getEvent_icon());
@@ -229,7 +214,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                         if (!filter[1].equals("")) {
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                             try {
-                                Date eventDate = format.parse(row.getEvent_date().substring(0, 10));
+                                Date eventDate = row.getEvent_date();
                                 Date filterDate = format.parse(filter[1].substring(0, 10));
 
                                 if (eventDate.before(filterDate)) {
@@ -245,19 +230,17 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                             String[] time = filter[2].split(":");
                             int hoursFilter = Integer.parseInt(time[0]);
                             int minutesFilter = Integer.parseInt(time[1]);
-                            int FilterTime = hoursFilter * 60 + minutesFilter;
+                            int filterTime = hoursFilter * 60 + minutesFilter;
 
-                            String subTime = row.getEvent_date().substring(11, 16);
-                            String[] eventTime = subTime.split(":");
-                            int hoursEvent = Integer.parseInt(eventTime[0]);
-                            int minutesEvent = Integer.parseInt(eventTime[1]);
-                            int EventTime = hoursEvent * 60 + minutesEvent;
+                            final Calendar cal =  Calendar.getInstance();
+                            cal.setTime(row.getEvent_date());
+                            int hoursEvent = cal.get(Calendar.HOUR_OF_DAY);
+                            int minutesEvent = cal.get(Calendar.MINUTE);
+                            int eventTimeInt = hoursEvent * 60 + minutesEvent;
 
-                            if (EventTime < FilterTime) {
+                            if (eventTimeInt < filterTime) {
                                 add = false;
                             }
-
-
                         }
 
 

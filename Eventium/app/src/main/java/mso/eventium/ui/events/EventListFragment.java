@@ -234,12 +234,11 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                         int countOfUsersThatDisliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().size() : 0;
                         int points = countOfUsersThatLiked - countOfUsersThatDisliked;
 
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                         Event item = new Event(
                                 eventEntity.getName(),
                                 eventEntity.getDescription(),
                                 eventEntity.getShortDescription(),
-                                format.format(eventEntity.getDate()),
+                                eventEntity.getDate(),
                                 distance_str,
                                 R.drawable.img_drink,
                                 eventEntity.getPinId(),
