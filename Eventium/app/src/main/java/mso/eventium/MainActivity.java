@@ -368,6 +368,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean isLoggedIn() {
-        return token == null;
+        return token != null;
     }
 }
