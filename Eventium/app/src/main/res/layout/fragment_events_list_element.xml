@@ -137,9 +137,9 @@
                     android:id="@+id/event_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/event_name"
+                    android:layout_below="@+id/event_time"
                     android:layout_marginLeft="@dimen/default_margin2"
-                    android:layout_toEndOf="@+id/event_time"
+                    android:layout_toEndOf="@+id/event_location"
                     android:text="1km entfernt"
                     android:textColor="@color/event_text" />
 
@@ -148,9 +148,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/event_date"
-                    android:layout_margin="@dimen/default_margin"
+                    android:layout_marginTop="37dp"
+                    android:layout_marginBottom="@dimen/default_margin"
                     android:text="Schnellen es viehmarkt verstehen behaglich grundlich pa. Unrecht beinahe das solange zum endlich von ich. Fehlen jemals feinen hin vor gesagt tun kirche schien. Wo gelernt verband er wu einfand bereits stopfen ja. Grundstuck launischen zu verdrossen da dachkammer bescheiden fluchtigen. Zog zur all ruth gewi kerl gern fur. "
-                    android:textColor="@color/event_text"/>
+                    android:textColor="@color/event_text" />
+
+                <TextView
+                    android:id="@+id/event_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginLeft="@dimen/default_margin2"
+                    android:text="Location"
+                    android:layout_below="@+id/event_date"
+                    android:textColor="@color/event_text" />
 
             </RelativeLayout>
 

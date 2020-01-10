@@ -81,7 +81,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         //eventModels.add(new Event("Event1_1", "","", "23.01.2019", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, ""));
         mRecyclerView = root.findViewById(R.id.rv);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new RVAdapter(getContext(), eventModels, this);
+        mAdapter = new RVAdapter(getContext(), eventModels, currentLocation, this);
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(root.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -255,7 +255,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                     }
                 }
 
-                mAdapter = new RVAdapter(getContext(), eventModels, EventListFragment.this);
+                mAdapter = new RVAdapter(getContext(), eventModels, currentLocation,EventListFragment.this);
                 mRecyclerView.setAdapter(mAdapter);
 
                 // Stopping swipe refresh

@@ -1,6 +1,7 @@
 package mso.eventium.ui.events.detail;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -20,9 +23,13 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import mso.eventium.MainActivity;
@@ -32,10 +39,11 @@ import mso.eventium.ui.events.EventListFragment;
 public class EventDetailFragment extends Fragment {
 
     private GoogleMap googleMap;
-
+private Location currentLocation;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        setUpCurrentLocation();
         final View root = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
 
@@ -47,14 +55,21 @@ public class EventDetailFragment extends Fragment {
         ImageView mIconView = root.findViewById(R.id.event_icon);
         ImageView mPhotoView = root.findViewById(R.id.event_photo);
 
+        TextView mLocation = root.findViewById(R.id.event_location);
 
-        final Calendar myCalendar = Calendar.getInstance();
+//
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+//        final Calendar myCalendar = Calendar.getInstance();
+//
+//
+//        String myFormat = "MM/dd/yy"; //In which you need put here
+//        SimpleDateFormat sdf1 = new SimpleDateFormat(myFormat, Locale.GERMANY);
+//        mDateView.setText(sdf1.format(myCalendar.getTime()));
+//        SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm");
+//        mTimeView.setText(sdf2.format(myCalendar.getTime()));
 
-        String myFormat = "MM/dd/yy"; //In which you need put here
-        SimpleDateFormat sdf1 = new SimpleDateFormat(myFormat, Locale.GERMANY);
-        mDateView.setText(sdf1.format(myCalendar.getTime()));
-        SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm");
-        mTimeView.setText(sdf2.format(myCalendar.getTime()));
+        mIconView.setImageResource(R.drawable.ic_flaschen);
+        mPhotoView.setImageResource(R.drawable.img_drink);
 
         mNameView.setTransitionName(EventListFragment.TRANSITION_FOR_NAME);
         mIconView.setTransitionName(EventListFragment.TRANSITION_FOR_ICON);
@@ -77,10 +92,38 @@ public class EventDetailFragment extends Fragment {
         eventModel.getEvent().observe(this, event -> {
             mNameView.setText(event.getName());
             mDescriptionView.setText(event.getDescription());
-            myCalendar.setTime(event.getDate());
 
-            if (event.getCategory() != null)
-                mIconView.setImageResource(event.getCategory().getIcon());
+            try {
+                String dateStr = event.getDate().toString();
+                DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+                Date date = formatter.parse(dateStr);
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                String formatedDate = cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR);
+
+                mDateView.setText(formatedDate);
+
+                int hour = cal.get(Calendar.HOUR);
+                int minute = cal.get(Calendar.MINUTE);
+
+                mTimeView.setText(String.format("%02d:%02d", hour, minute));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            LatLng loc = event.getPin().getLocation();
+            LatLng latlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            double dist = distance(latlng.latitude, latlng.longitude, loc.latitude, loc.longitude);
+
+            if(dist > 1){
+                mDistanceView.setText(String.format("%.3f", dist) + " km");
+            }
+            else{
+                mDistanceView.setText(String.format("%.0f", dist * 1000) + " m");
+            }
+
+            mLocation.setText(event.getPin().getName());
 
             setupMap(mapView, event.getPin().getLocation());
 
@@ -91,6 +134,42 @@ public class EventDetailFragment extends Fragment {
 
 
         return root;
+    }
+
+    private void setUpCurrentLocation() {
+        final FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            currentLocation = location;
+
+                        }
+                    }
+                });
+    }
+
+    private double distance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
     }
 
     /**

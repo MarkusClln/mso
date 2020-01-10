@@ -95,7 +95,7 @@ router.get('/all', function (req, res, next) {
 
     console.log(lat);
     console.log(lng);
-    console.log(distance);
+    console.log("Distance: " + distance);
 
 
     if (lat != undefined && lng != undefined && distance != undefined) {

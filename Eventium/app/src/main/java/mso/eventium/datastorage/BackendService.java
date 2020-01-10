@@ -48,6 +48,10 @@ public class BackendService {
         return backendAPI.getPinsByName(name);
     }
 
+    public Call<PinEntity> getPinById(String id) {
+        return backendAPI.getPinById(id);
+    }
+
     public Call<List<PinEntity>> getAllPins(final double latitude, final double longitude, final double distance) {
         return backendAPI.getAllPins(latitude, longitude, distance);
     }

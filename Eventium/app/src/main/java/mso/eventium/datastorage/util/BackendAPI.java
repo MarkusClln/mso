@@ -28,6 +28,10 @@ public interface BackendAPI {
     Call<List<PinEntity>> getAllPins(@Query("lat") double latitude, @Query("lng") double longitude, @Query("distance") double distance);
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @GET("pin/{id}")
+    Call<PinEntity> getPinById(@Path("id") String id);
+
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
     @POST("event/new") //TODO im backend die alte methode löschen wenn nicht mehr verwendet
     Call<EventEntity> createEvent(@Body EventEntity event, @Header("Authorization") String auth);
 
