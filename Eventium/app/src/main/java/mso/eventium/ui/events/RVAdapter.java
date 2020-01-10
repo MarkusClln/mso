@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,17 +78,20 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         try {
-            final Calendar myCalendar = Calendar.getInstance();
-            Date date = format.parse(filteredEvents.get(i).getEvent_date());
-            myCalendar.setTime(date);
-            String myFormat = "dd/MM/yy"; //In which you need put here
-            SimpleDateFormat sdf1 = new SimpleDateFormat(myFormat, Locale.GERMANY);
+            String dateStr = filteredEvents.get(i).getEvent_date();
+            DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+            Date date = formatter.parse(dateStr);
 
-            EventViewHolder.eventDate.setText(sdf1.format(myCalendar.getTime()));
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            String formatedDate = cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR);
 
-            SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
-            EventViewHolder.eventTime.setText(sdf2.format(myCalendar.getTime()));
+            EventViewHolder.eventDate.setText(formatedDate);
 
+            int hour = cal.get(Calendar.HOUR);
+            int minute = cal.get(Calendar.MINUTE);
+
+            EventViewHolder.eventTime.setText(String.format("%02d:%02d", hour, minute));
         } catch (ParseException e) {
             e.printStackTrace();
         }

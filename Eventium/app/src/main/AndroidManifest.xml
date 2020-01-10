@@ -43,12 +43,6 @@
             android:theme="@style/DetailView"
             android:parentActivityName=".MainActivity"/>
 
-        <activity
-            android:name=".ui.host.HostDetailActivity"
-            android:label="Host-Detail"
-            android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
-            android:parentActivityName=".MainActivity"/>
-
     </application>
 
 </manifest>

@@ -37,7 +37,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import mso.eventium.client.BackendClient;
 import mso.eventium.ui.events.EventFragment;
-import mso.eventium.ui.host.FavoriteHostsFragment;
+import mso.eventium.ui.bonussystem.BonussystemFragment;
 import mso.eventium.ui.map.EventiumMapFragment;
 import mso.eventium.ui.messages.MessagesFragment;
 import mso.eventium.ui.user.UserFragment;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private enum ActiveFragments {
-        MAP, EVENTS, USER, HOSTS, CREATE, MESSAGES
+        MAP, EVENTS, USER, BONUS, CREATE, MESSAGES
     }
 
     private static final String[] INITIAL_PERMS = {
@@ -144,8 +144,8 @@ public class MainActivity extends AppCompatActivity {
                 case "userFragment":
                     activeFragment = ActiveFragments.USER;
                     break;
-                case "hostsFragment":
-                    activeFragment = ActiveFragments.HOSTS;
+                case "bonusFragment":
+                    activeFragment = ActiveFragments.BONUS;
                     break;
                 case "CreateFragment":
                     activeFragment = ActiveFragments.CREATE;
@@ -169,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
         if (activeFragment == ActiveFragments.USER) {
             setupFragment(UserFragment.newInstance(token), false);
         }
-        if (activeFragment == ActiveFragments.HOSTS) {
-            setupFragment(new FavoriteHostsFragment(), false);
+        if (activeFragment == ActiveFragments.BONUS) {
+            setupFragment(new BonussystemFragment(), false);
         }
         if (activeFragment == ActiveFragments.CREATE) {
             setupFragment(new CreateFragment(), false);
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         favoriteHostsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activeFragment = ActiveFragments.HOSTS;
+                activeFragment = ActiveFragments.BONUS;
                 onFragmentChanged();
             }
         });
