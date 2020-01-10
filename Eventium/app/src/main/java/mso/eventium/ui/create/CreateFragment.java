@@ -45,17 +45,17 @@ import mso.eventium.R;
 import mso.eventium.adapter.AutoSuggestPinAdapter;
 import mso.eventium.client.BackendClient;
 import mso.eventium.datastorage.BackendService;
+import mso.eventium.datastorage.entity.EventEntity;
 import mso.eventium.datastorage.entity.PinEntity;
+import mso.eventium.model.CategoryEnum;
 import mso.eventium.model.MarkerModel;
+import mso.eventium.ui.map.PinCreateDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 
 
-public class CreateFragment extends Fragment implements SelectCategorieDialogFragment.SingleCoiceListener {
+public class CreateFragment extends Fragment implements SelectCategoryDialogFragment.SingleCoiceListener {
 
-    private String ip;
-    public BackendClient bc;
-    public RequestQueue queue;
     View root;
     MaterialButton btnSelectCategorie;
     MaterialButton btnCreateEvent;
@@ -67,7 +67,6 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
     AutoCompleteTextView locationAutoCompleteTextView;
     String[][] autocomplete_ids = new String[0][0];
     private AutoSuggestPinAdapter autoSuggestPinAdapter;
-    private Handler handler;
 
     final Calendar myCalendar = Calendar.getInstance();
 
@@ -89,10 +88,6 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
         if (getArguments() != null) {
             //mParam1 = getArguments().getString(ARG_PARAM1);
         }
-        ip = getResources().getString(R.string.IP_Server);
-        bc = new BackendClient(ip);
-        queue = Volley.newRequestQueue(getContext());
-
     }
 
     @Override
@@ -116,7 +111,7 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
         btnSelectCategorie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment selectCategorieDialog = new SelectCategorieDialogFragment(CreateFragment.this);
+                DialogFragment selectCategorieDialog = new SelectCategoryDialogFragment(CreateFragment.this);
                 selectCategorieDialog.setCancelable(false);
                 selectCategorieDialog.show(getFragmentManager(), "SelectCategorieFragment");
             }
@@ -221,18 +216,34 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
                         "pinID=" + pin_id;
                 Toast.makeText(getContext(), output, Toast.LENGTH_LONG).show();
                 if (eventName != "" && eventShortDesc != "" && eventDesc != "" && !eventCategorie.equals("Wähle aus!") && pin_id != "") {
-                    Response.Listener responseListener = new Response.Listener<JSONObject>() {
+
+                    final EventEntity newEvent = new EventEntity();
+                    newEvent.setName(eventName);
+                    newEvent.setShortDescription(eventShortDesc);
+                    newEvent.setDescription(eventDesc);
+                    newEvent.setCategory(CategoryEnum.valueOf(eventCategorie));
+                    newEvent.setDate(myCalendar.getTime());
+                    newEvent.setPinId(pin_id);
+
+                    final BackendService backendService = BackendService.getInstance(getContext());
+                    final Call<EventEntity> eventCall = backendService.createEvent(newEvent, ((MainActivity) getActivity()).getToken());
+                    eventCall.enqueue(new Callback<EventEntity>() {
+
                         @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d("JSONPost", response.toString());
-                            //pDialog.hide();
+                        public void onResponse(Call<EventEntity> call, retrofit2.Response<EventEntity> response) {
+                            Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_LONG).show();
+                            Log.d("PIN CREATE", "created pin:" + response.body().toString());
                         }
-                    };
 
-                    JsonObjectRequest req1 = bc.createEvent(((MainActivity) getActivity()).getToken(), pin_id, eventName, eventDesc, eventShortDesc, myCalendar, eventCategorie, responseListener);
-                    queue.add(req1);
+                        @Override
+                        public void onFailure(Call<EventEntity> call, Throwable t) {
+                            Log.e("EVENT CREATE", "ERROR", t);
+
+                        }
+                    });
+                } else {
+                    Toast.makeText(getContext(), "Pflichtfelder bitte ausfüllen.", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
     }
@@ -254,6 +265,18 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
                     }
                 });
 
+        Handler handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.what == TRIGGER_AUTO_COMPLETE) {
+                    if (!TextUtils.isEmpty(locationAutoCompleteTextView.getText())) {
+                        makeApiCall(locationAutoCompleteTextView.getText().toString());
+                    }
+                }
+                return false;
+            }
+        });
+
         locationAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int
@@ -272,17 +295,6 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
             public void afterTextChanged(Editable s) {
             }
         });
-        handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                if (msg.what == TRIGGER_AUTO_COMPLETE) {
-                    if (!TextUtils.isEmpty(locationAutoCompleteTextView.getText())) {
-                        makeApiCall(locationAutoCompleteTextView.getText().toString());
-                    }
-                }
-                return false;
-            }
-        });
     }
 
     private void makeApiCall(final String text) {
@@ -291,28 +303,20 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
             @Override
             public void onResponse(Call<List<PinEntity>> call, retrofit2.Response<List<PinEntity>> response) {
                 final List<PinEntity> pins = response.body();
+                final List<String> stringList = new ArrayList<>();
 
-                //TODO pins statt json nutzen
-
-
-                //parsing logic, please change it as per your requirement
-                List<String> stringList = new ArrayList<>();
-                try {
-
-                    JSONArray array = new JSONArray(response);
-                    autocomplete_ids = new String[array.length()][2];
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject row = array.getJSONObject(i);
-                        stringList.add(row.getString("name"));
-                        autocomplete_ids[i][0] = row.getString("_id");
-                        autocomplete_ids[i][1] = row.getString("name");
-                    }
-                    if (array.length() == 0) {
-                        stringList.add(text + " exisitert nicht");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                autocomplete_ids = new String[pins.size()][2];
+                for (int i = 0; i < pins.size(); i++) {
+                    final PinEntity pin = pins.get(i);
+                    autocomplete_ids[i][0] = pin.getId();
+                    autocomplete_ids[i][1] = pin.getName();
+                    stringList.add(pin.getName());
                 }
+
+                if (pins.size() == 0) {
+                    stringList.add(text + " exisitert nicht");
+                }
+
                 //IMPORTANT: set data here and notify
                 autoSuggestPinAdapter.setData(stringList);
                 autoSuggestPinAdapter.notifyDataSetChanged();
@@ -323,8 +327,5 @@ public class CreateFragment extends Fragment implements SelectCategorieDialogFra
             public void onFailure(Call<List<PinEntity>> call, Throwable t) {
             }
         });
-
-
     }
-
 }

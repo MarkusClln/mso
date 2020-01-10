@@ -52,6 +52,10 @@ public class BackendService {
         return backendAPI.getAllPins(latitude, longitude, distance);
     }
 
+    public Call<EventEntity> createEvent(EventEntity event, String bearerToken) {
+        return backendAPI.createEvent(event, "Bearer " + bearerToken);
+    }
+
     public Call<EventEntity> getEventById(String id) {
         return backendAPI.getEventById(id);
     }

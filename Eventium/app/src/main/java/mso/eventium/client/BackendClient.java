@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mso.eventium.model.CategoryEnum;
 import mso.eventium.model.Event;
 
 public class BackendClient {
@@ -73,7 +74,7 @@ public class BackendClient {
         return jsonObjReq;
     }
 
-    public JsonObjectRequest createEvent(final String auth_token, final String pin_id, final String name, final String desc, final String shortDesc, final Calendar calendar, final String category, Response.Listener responseListener) {
+    public JsonObjectRequest createEvent(final String auth_token, final String pin_id, final String name, final String desc, final String shortDesc, final Calendar calendar, final CategoryEnum category, Response.Listener responseListener) {
         final String url = "http://" + server_ip + "/event";
 
         Response.ErrorListener responseErrorListener = new Response.ErrorListener() {

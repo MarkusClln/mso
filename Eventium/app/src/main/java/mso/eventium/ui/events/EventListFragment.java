@@ -4,6 +4,7 @@ package mso.eventium.ui.events;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -187,19 +189,19 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
     private void allEvents() {
-        final Call<List<EventEntity>> pins = BackendService.getInstance(getContext()).getAllEvents(currentLocation.getLatitude(), currentLocation.getLongitude(), 10000); //TODO hardcoded distance
-        pins.enqueue(getHandlePinCallback(null));
+        final Call<List<EventEntity>> events = BackendService.getInstance(getContext()).getAllEvents(currentLocation.getLatitude(), currentLocation.getLongitude(), 10000); //TODO hardcoded distance
+        events.enqueue(getHandlePinCallback(null));
     }
 
     private void favoritedEvents(String token) {
-        final Call<List<EventEntity>> pins = BackendService.getInstance(getContext()).getFavoritedEvents(token);
-        pins.enqueue(getHandlePinCallback(token));
+        final Call<List<EventEntity>> events = BackendService.getInstance(getContext()).getFavoritedEvents(token);
+        events.enqueue(getHandlePinCallback(token));
     }
 
 
     private void ownedEvents(String token) {
-        final Call<List<EventEntity>> pins = BackendService.getInstance(getContext()).getCreatedEvents(token);
-        pins.enqueue(getHandlePinCallback(token));
+        final Call<List<EventEntity>> events = BackendService.getInstance(getContext()).getCreatedEvents(token);
+        events.enqueue(getHandlePinCallback(token));
     }
 
 
@@ -232,12 +234,12 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                         int countOfUsersThatDisliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().size() : 0;
                         int points = countOfUsersThatLiked - countOfUsersThatDisliked;
 
-
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                         Event item = new Event(
                                 eventEntity.getName(),
                                 eventEntity.getDescription(),
                                 eventEntity.getShortDescription(),
-                                eventEntity.getDate().toString(),
+                                format.format(eventEntity.getDate()),
                                 distance_str,
                                 R.drawable.img_drink,
                                 eventEntity.getPinId(),
@@ -268,6 +270,8 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                 if (mAdapter.getItemCount() == 0) {
                     mRecyclerView.setBackgroundResource(R.drawable.no_connection);
                 }
+                Log.e("BACKEND", "ERROR", t);
+                Log.e("BACKEND", "CALL " + call.request().toString());
             }
         };
     }

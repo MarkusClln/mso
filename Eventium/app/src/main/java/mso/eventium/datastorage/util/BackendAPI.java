@@ -28,6 +28,10 @@ public interface BackendAPI {
     Call<List<PinEntity>> getAllPins(@Query("lat") double latitude, @Query("lng") double longitude, @Query("distance") double distance);
 
     @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @POST("event/new") //TODO im backend die alte methode löschen wenn nicht mehr verwendet
+    Call<EventEntity> createEvent(@Body EventEntity event, @Header("Authorization") String auth);
+
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
     @GET("event/{id}")
     Call<EventEntity> getEventById(@Path("id") String id);
 
@@ -42,4 +46,5 @@ public interface BackendAPI {
     @Headers({"Content-Type: application/json;charset=UTF-8"})
     @GET("event/all")
     Call<List<EventEntity>> getAllEvents(@Query("lat") double latitude, @Query("lng") double longitude, @Query("distance") double distance);
+
 }

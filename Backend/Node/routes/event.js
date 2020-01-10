@@ -53,6 +53,39 @@ router.post('/', check_auth, function (req, res, next) {
 
 });
 
+router.post('/new', check_auth, function (req, res, next) {
+
+    const body = req.body;
+
+    const event = new eventSchema({
+        _id: new mongoose.Types.ObjectId(),
+        pin_id: body.pin_id,
+        user_id: req.user.sub,
+        name: body.name,
+        description: body.description,
+        shortDescription: body.shortDescription,
+        date: new Date(body.date),
+        category: body.category
+    });
+
+    event.save(function (err, result) {
+        if (err) res.send(err);
+        userSchema.find({
+            auth0_id: req.user.sub
+        }).exec().then(user => {
+            if (user.length >= 1) {
+                user[0].ownEvents.push(result._id);
+                user[0].save(function (err, user) {
+                    res.json(result);
+                });
+
+            }
+        });
+
+    });
+
+});
+
 
 router.get('/all', function (req, res, next) {
 

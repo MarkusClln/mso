@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.List;
 
+import mso.eventium.model.CategoryEnum;
+
 public class EventEntity {
 
     @SerializedName("_id")
@@ -24,7 +26,7 @@ public class EventEntity {
     @SerializedName("user_id")
     private String userId;
 
-    private String category;
+    private CategoryEnum category;
     private Date date;
 
     private List<String> usersThatLiked;
@@ -87,11 +89,11 @@ public class EventEntity {
         this.userId = userId;
     }
 
-    public String getCategory() {
+    public CategoryEnum getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(CategoryEnum category) {
         this.category = category;
     }
 
@@ -117,5 +119,22 @@ public class EventEntity {
 
     public void setUsersThatDisliked(List<String> usersThatDisliked) {
         this.usersThatDisliked = usersThatDisliked;
+    }
+
+    @Override
+    public String toString() {
+        return "EventEntity{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", shortDescription='" + shortDescription + '\'' +
+                ", pinId='" + pinId + '\'' +
+                ", pin=" + pin +
+                ", userId='" + userId + '\'' +
+                ", category=" + category +
+                ", date=" + date +
+                ", usersThatLiked=" + usersThatLiked +
+                ", usersThatDisliked=" + usersThatDisliked +
+                '}';
     }
 }

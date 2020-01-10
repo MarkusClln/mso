@@ -32,6 +32,7 @@ import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.datastorage.BackendService;
 import mso.eventium.datastorage.entity.PinEntity;
+import mso.eventium.model.CategoryEnum;
 import mso.eventium.model.Event;
 import mso.eventium.ui.map.PinCreateDialog;
 import retrofit2.Call;
@@ -199,7 +200,7 @@ public class UserFragment extends Fragment {
 
 
         // Holiday on ICE 1
-        JsonObjectRequest req1 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0), "Holiday on Ice", "Die erfolgreichste Eisrevue der Welt gastiert auch 2020 mit neuer Show in der SAP Arena. In jeder Show erfindet sich Holiday on Ice neu und bleibt sich dabei doch stets treu.", "New Show", myCalendar, Event.categories[3], responseListener);
+        JsonObjectRequest req1 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0), "Holiday on Ice", "Die erfolgreichste Eisrevue der Welt gastiert auch 2020 mit neuer Show in der SAP Arena. In jeder Show erfindet sich Holiday on Ice neu und bleibt sich dabei doch stets treu.", "New Show", myCalendar, CategoryEnum.values()[3], responseListener);
         ((MainActivity) getActivity()).queue.add(req1);
 
         // Holiday on ICE 2
@@ -207,14 +208,14 @@ public class UserFragment extends Fragment {
         myCalendar.set(Calendar.MINUTE, 30);
         myCalendar.set(Calendar.DAY_OF_MONTH, 14);
 
-        JsonObjectRequest req2 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0), "Holiday on Ice", "Die erfolgreichste Eisrevue der Welt gastiert auch 2020 mit neuer Show in der SAP Arena. In jeder Show erfindet sich Holiday on Ice neu und bleibt sich dabei doch stets treu.", "New Show", myCalendar, Event.categories[3], responseListener);
+        JsonObjectRequest req2 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0), "Holiday on Ice", "Die erfolgreichste Eisrevue der Welt gastiert auch 2020 mit neuer Show in der SAP Arena. In jeder Show erfindet sich Holiday on Ice neu und bleibt sich dabei doch stets treu.", "New Show", myCalendar, CategoryEnum.values()[3], responseListener);
         ((MainActivity) getActivity()).queue.add(req2);
 
         // Holiday on ICE 3
         myCalendar.set(Calendar.HOUR, 19);
         myCalendar.set(Calendar.MINUTE, 00);
         myCalendar.set(Calendar.DAY_OF_MONTH, 14);
-        JsonObjectRequest req3 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0), "Holiday on Ice", "Die erfolgreichste Eisrevue der Welt gastiert auch 2020 mit neuer Show in der SAP Arena. In jeder Show erfindet sich Holiday on Ice neu und bleibt sich dabei doch stets treu.", "New Show", myCalendar, Event.categories[3], responseListener);
+        JsonObjectRequest req3 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(0), "Holiday on Ice", "Die erfolgreichste Eisrevue der Welt gastiert auch 2020 mit neuer Show in der SAP Arena. In jeder Show erfindet sich Holiday on Ice neu und bleibt sich dabei doch stets treu.", "New Show", myCalendar, CategoryEnum.values()[3], responseListener);
         ((MainActivity) getActivity()).queue.add(req3);
 
 
@@ -225,14 +226,14 @@ public class UserFragment extends Fragment {
         JsonObjectRequest req4 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(1), "Sascha im Quadrat", "Sascha im Quadrat, das sind der große und der kleine Sascha und Christof Brill. Geballtes Testosteron auf einer Bühne. Und eine Musikauswahl, die seinesgleichen sucht. Gespielt wird ALLES, was Spaß macht.\n" +
                 "\n" +
                 "Der Stargast im Februar ist Michaela Tischler.\n" +
-                "„Gesang ist etwas sehr persönliches“", "Die beliebte Reihe im Casino. Stargast: Michaela Tischler", myCalendar, Event.categories[0], responseListener);
+                "„Gesang ist etwas sehr persönliches“", "Die beliebte Reihe im Casino. Stargast: Michaela Tischler", myCalendar, CategoryEnum.values()[0], responseListener);
         ((MainActivity) getActivity()).queue.add(req4);
 
         //Capitol 2
         myCalendar.set(Calendar.HOUR, 20);
         myCalendar.set(Calendar.MINUTE, 00);
         myCalendar.set(Calendar.DAY_OF_MONTH, 13);
-        JsonObjectRequest req5 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(1), "Evita", "Die mitreißende Geschichte der Eva Duarte, die vom argentinischen Volk liebevoll Evita genannt wurde. Andrew Lloyd Webber und Tim Rice widmeten der auch heute noch faszinierenden und zugleich höchst umstrittenen „First Lady“ Argentiniens eines ihrer spektakulärsten Musicals. Es erzählt den Aufstieg eines einfachen Provinz-Mädchens zur Schauspielerin und in die High Society von Buenos Aires, wo sie schließlich den hohen Militär Juan Perón kennenlernt.", "Eine große Geschichte. Eine große Frau. Ein großes Musical.", myCalendar, Event.categories[1], responseListener);
+        JsonObjectRequest req5 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(1), "Evita", "Die mitreißende Geschichte der Eva Duarte, die vom argentinischen Volk liebevoll Evita genannt wurde. Andrew Lloyd Webber und Tim Rice widmeten der auch heute noch faszinierenden und zugleich höchst umstrittenen „First Lady“ Argentiniens eines ihrer spektakulärsten Musicals. Es erzählt den Aufstieg eines einfachen Provinz-Mädchens zur Schauspielerin und in die High Society von Buenos Aires, wo sie schließlich den hohen Militär Juan Perón kennenlernt.", "Eine große Geschichte. Eine große Frau. Ein großes Musical.", myCalendar, CategoryEnum.values()[1], responseListener);
         ((MainActivity) getActivity()).queue.add(req5);
 
         //Schloss
@@ -244,7 +245,7 @@ public class UserFragment extends Fragment {
                 "Peter von Winter: Concertino für Violoncello, Klarinette und Orchester\n" +
                 "Carl Stamitz: Sinfonia concertante D-Dur für Violine principale und Orchester op. 2, Nr. 2\n" +
                 "Julia Hagen, Violoncello\n" +
-                "Paul Meyer, Dirigent", "Fürstliche Soiree", myCalendar, Event.categories[2], responseListener);
+                "Paul Meyer, Dirigent", "Fürstliche Soiree", myCalendar, CategoryEnum.values()[2], responseListener);
         ((MainActivity) getActivity()).queue.add(req6);
 
         //Connex 1
@@ -255,7 +256,7 @@ public class UserFragment extends Fragment {
                 "\n" +
                 "LINE UP\n" +
                 "\n" +
-                "FOLGT !", "TWIZE - Techno & Drum N Bass", myCalendar, Event.categories[0], responseListener);
+                "FOLGT !", "TWIZE - Techno & Drum N Bass", myCalendar, CategoryEnum.values()[0], responseListener);
         ((MainActivity) getActivity()).queue.add(req7);
 
         //Connex 2
@@ -268,7 +269,7 @@ public class UserFragment extends Fragment {
                 "\n" +
                 "JÄGERMEISTER 1 EURO ALL NIGHT LONG\n" +
                 "\n" +
-                "Einlass ab 18 Jahren. Ausweispflicht - kein Muttizettel !", "Seimen Dexter + Audioappear", myCalendar, Event.categories[1], responseListener);
+                "Einlass ab 18 Jahren. Ausweispflicht - kein Muttizettel !", "Seimen Dexter + Audioappear", myCalendar, CategoryEnum.values()[1], responseListener);
         ((MainActivity) getActivity()).queue.add(req8);
 
 
@@ -276,7 +277,7 @@ public class UserFragment extends Fragment {
         myCalendar.set(Calendar.HOUR, 19);
         myCalendar.set(Calendar.MINUTE, 30);
         myCalendar.set(Calendar.DAY_OF_MONTH, 26);
-        JsonObjectRequest req9 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(4), "Heringsessen", "Alles hat ein Ende, auch eine feuerianische Fasnachtskampagne. Aber auch der letzte Tag wird noch einmal standesgemäß begangen, zwar im trauernden Schwarz, aber nichtsdestotrotz lustig vergnügt. Bei hervorragendem Hering lassen wir unsere Kampagne noch einmal Revue passieren. Im Kartenpreis enthalten Hering satt von der Deutsche See sowie reichhaltige Beilagen.", "Herringsessen im Dorint", myCalendar, Event.categories[2], responseListener);
+        JsonObjectRequest req9 = ((MainActivity) getActivity()).backendClient.createEvent(token, list.get(4), "Heringsessen", "Alles hat ein Ende, auch eine feuerianische Fasnachtskampagne. Aber auch der letzte Tag wird noch einmal standesgemäß begangen, zwar im trauernden Schwarz, aber nichtsdestotrotz lustig vergnügt. Bei hervorragendem Hering lassen wir unsere Kampagne noch einmal Revue passieren. Im Kartenpreis enthalten Hering satt von der Deutsche See sowie reichhaltige Beilagen.", "Herringsessen im Dorint", myCalendar, CategoryEnum.values()[2], responseListener);
         ((MainActivity) getActivity()).queue.add(req9);
 
     }

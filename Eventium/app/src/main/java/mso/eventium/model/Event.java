@@ -18,41 +18,21 @@ public class Event {
     private boolean upvoted;
     private int event_points;
 
-
-
     private boolean downvoted;
-    private String category;
-
-    public static final String[] categories = {"Bar", "Disco", "Essen", "Kultur"};
-
-    public static int getCategorieIcon(String category){
-        switch (category){ //TODO ENUM, JUNGE
-            case "Bar":
-                return R.drawable.ic_flaschen;
-            case "Disco":
-                return R.drawable.ic_cocktails;
-            case "Essen":
-                return R.drawable.ic_best_choice;
-            case "Kultur":
-                return R.drawable.ic_person_white_24dp;
-        }
-        return 0;
-    }
 
 
-    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, String pin_id, boolean upvoted, boolean downvoted, int event_points, String event_id, String category) {
+    public Event(String name, String description, String event_short_description, String date, String distance, int event_photo, String pin_id, boolean upvoted, boolean downvoted, int event_points, String event_id, CategoryEnum category) {
         this.event_name = name;
         this.event_description = description;
         this.event_date = date;
         this.event_photo = event_photo;
-        this.event_icon = getCategorieIcon(category);
+        this.event_icon = category == null ? 0 : category.getIcon();
         this.event_distance = distance;
         this.event_short_description = event_short_description;
         this.pin_id = pin_id;
         this.upvoted = upvoted;
         this.downvoted = downvoted;
         this.event_id = event_id;
-        this.category = category;
         this.event_points = event_points;
     }
 

@@ -36,7 +36,7 @@ public class EventDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_event_detail, container, false);
+        final View root = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
 
         TextView mNameView = root.findViewById(R.id.event_name);
@@ -48,19 +48,13 @@ public class EventDetailFragment extends Fragment {
         ImageView mPhotoView = root.findViewById(R.id.event_photo);
 
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         final Calendar myCalendar = Calendar.getInstance();
-
 
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf1 = new SimpleDateFormat(myFormat, Locale.GERMANY);
         mDateView.setText(sdf1.format(myCalendar.getTime()));
         SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm");
         mTimeView.setText(sdf2.format(myCalendar.getTime()));
-
-
-        mIconView.setImageResource(R.drawable.ic_flaschen);
-        mPhotoView.setImageResource(R.drawable.img_drink);
 
         mNameView.setTransitionName(EventListFragment.TRANSITION_FOR_NAME);
         mIconView.setTransitionName(EventListFragment.TRANSITION_FOR_ICON);
@@ -84,9 +78,15 @@ public class EventDetailFragment extends Fragment {
             mNameView.setText(event.getName());
             mDescriptionView.setText(event.getDescription());
             myCalendar.setTime(event.getDate());
-            mDistanceView.setText("TODO: Calc distance");
+
+            if (event.getCategory() != null)
+                mIconView.setImageResource(event.getCategory().getIcon());
 
             setupMap(mapView, event.getPin().getLocation());
+
+            //TODO
+            mPhotoView.setImageResource(R.drawable.img_drink);
+            mDistanceView.setText("TODO: Calc distance");
         });
 
 
