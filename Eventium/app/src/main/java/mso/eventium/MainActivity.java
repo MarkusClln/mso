@@ -39,7 +39,7 @@ import mso.eventium.client.BackendClient;
 import mso.eventium.ui.events.EventFragment;
 import mso.eventium.ui.bonussystem.BonussystemFragment;
 import mso.eventium.ui.map.EventiumMapFragment;
-import mso.eventium.ui.messages.MessagesFragment;
+import mso.eventium.ui.newsfeed.NewsfeedFragment;
 import mso.eventium.ui.user.UserFragment;
 import mso.eventium.ui.create.CreateFragment;
 
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             setupFragment(new CreateFragment(), false);
         }
         if (activeFragment == ActiveFragments.MESSAGES) {
-            setupFragment(new MessagesFragment(), false);
+            setupFragment(new NewsfeedFragment(), false);
         }
     }
 
