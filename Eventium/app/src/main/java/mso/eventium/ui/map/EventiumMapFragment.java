@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,7 +36,10 @@ import java.util.List;
 import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.datastorage.BackendService;
+import mso.eventium.datastorage.entity.EventEntity;
 import mso.eventium.datastorage.entity.PinEntity;
+import mso.eventium.helper.CommonHelper;
+import mso.eventium.model.Event;
 import mso.eventium.model.MarkerModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +51,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
     private boolean createLocation = false;
     private MarkerModel createMarker;
     private LatLng reloadLocation;
+    private CommonHelper helper;
 
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -69,6 +75,10 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
         setUpMap();
         setUpSearchBar(root);
         setUpFAB(root);
+
+        this.helper = new CommonHelper();
+
+
 
         return root;
     }
@@ -140,7 +150,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                     @Override
                     public void onCameraIdle() {
                         final LatLng currentLocation = new LatLng(googleMap.getCameraPosition().target.latitude, googleMap.getCameraPosition().target.longitude);
-                        double distance = distFrom(currentLocation.latitude, currentLocation.longitude, reloadLocation.latitude, reloadLocation.longitude);
+                        double distance = helper.CalculateDistance(currentLocation.latitude, currentLocation.longitude, reloadLocation.latitude, reloadLocation.longitude);
 
                         if (distance >= 1000) { //only get pins if we moved out of range
                             createLocationsFromBackend();
@@ -152,6 +162,36 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
                     }
                 });
+
+                googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker marker) {
+
+                        // Inflate custom layout
+                        View v = getLayoutInflater().inflate(R.layout.marker_view, null);
+                        String title = marker.getTitle();
+                        String snippet = marker.getSnippet();
+                        // Set desired height and width
+                        v.setLayoutParams(new RelativeLayout.LayoutParams(500, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
+                        TextView locationHeader = (TextView) v.findViewById(R.id.marker_location_header);
+                        TextView events = (TextView) v.findViewById(R.id.marker_events);
+
+                        locationHeader.setText(title);
+                        events.setText(snippet);
+
+                        return v;
+                    }
+                });
+
+
 
 
                 fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
@@ -250,7 +290,15 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
                 for (PinEntity pin : response.body()) {
 
-                    final MarkerModel offsetItem = new MarkerModel(pin.getLocation(), pin.getName(), pin.getEvents().size() + " Events");
+                    List<EventEntity> events = pin.getEvents();
+                    String eventEnumeration = "";
+
+                    for(EventEntity event : events){
+                        eventEnumeration+=event.getName() +" | "+ helper.FormatDate(event.getDate().toString()) + "\n";
+                    }
+
+
+                    final MarkerModel offsetItem = new MarkerModel(pin.getLocation(), pin.getName(), eventEnumeration);
                     mClusterManager.addItem(offsetItem);
                 }
                 mClusterManager.cluster();

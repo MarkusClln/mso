@@ -34,6 +34,7 @@ import java.util.Locale;
 
 import mso.eventium.MainActivity;
 import mso.eventium.R;
+import mso.eventium.helper.CommonHelper;
 import mso.eventium.ui.events.EventListFragment;
 
 public class EventDetailFragment extends Fragment {
@@ -93,28 +94,14 @@ private Location currentLocation;
             mNameView.setText(event.getName());
             mDescriptionView.setText(event.getDescription());
 
-            try {
-                String dateStr = event.getDate().toString();
-                DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
-                Date date = formatter.parse(dateStr);
+            CommonHelper commonHelper = new CommonHelper();
 
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(date);
-                String formatedDate = cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR);
-
-                mDateView.setText(formatedDate);
-
-                int hour = cal.get(Calendar.HOUR);
-                int minute = cal.get(Calendar.MINUTE);
-
-                mTimeView.setText(String.format("%02d:%02d", hour, minute));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            mDateView.setText(commonHelper.FormatDate(event.getDate().toString()));
+            mTimeView.setText(commonHelper.FormatTime(event.getDate().toString()));
 
             LatLng loc = event.getPin().getLocation();
             LatLng latlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            double dist = distance(latlng.latitude, latlng.longitude, loc.latitude, loc.longitude);
+            double dist = commonHelper.CalculateDistance(latlng.latitude, latlng.longitude, loc.latitude, loc.longitude);
 
             if(dist > 1){
                 mDistanceView.setText(String.format("%.3f", dist) + " km");
@@ -148,27 +135,6 @@ private Location currentLocation;
                         }
                     }
                 });
-    }
-
-    private double distance(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1))
-                * Math.sin(deg2rad(lat2))
-                + Math.cos(deg2rad(lat1))
-                * Math.cos(deg2rad(lat2))
-                * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        return (dist);
-    }
-
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
     }
 
     /**

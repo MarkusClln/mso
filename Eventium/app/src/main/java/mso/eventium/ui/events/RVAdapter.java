@@ -37,6 +37,7 @@ import mso.eventium.R;
 import mso.eventium.datastorage.BackendService;
 import mso.eventium.datastorage.entity.EventEntity;
 import mso.eventium.datastorage.entity.PinEntity;
+import mso.eventium.helper.CommonHelper;
 import mso.eventium.model.Event;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,6 +59,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
     private Context context;
     private Location currentLocation;
     private EventListFragment.ListTypeEnum listType;
+    private CommonHelper helper;
 
     public RVAdapter(Context context, List<Event> events, Location curLocation, EventListFragment.ListTypeEnum listType, OnNoteListener onNoteListener) {
         this.context = context;
@@ -66,6 +68,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         this.filteredEvents = events;
         this.currentLocation = curLocation;
         this.listType = listType;
+        this.helper = new CommonHelper();
     }
 
     @Override
@@ -90,24 +93,29 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         int points = filteredEvents.get(i).getEvent_points();
         EventViewHolder.eventPoints.setText(Integer.toString(points));
 
-        try {
-            String dateStr = filteredEvents.get(i).getEvent_date().toString();
-            DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
-            Date date = formatter.parse(dateStr);
+        EventViewHolder.eventDate.setText(helper.FormatDate(filteredEvents.get(i).getEvent_date().toString()));
+        EventViewHolder.eventTime.setText(helper.FormatTime(filteredEvents.get(i).getEvent_date().toString()));
 
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            String formatedDate = cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR);
 
-            EventViewHolder.eventDate.setText(formatedDate);
 
-            int hour = cal.get(Calendar.HOUR);
-            int minute = cal.get(Calendar.MINUTE);
-
-            EventViewHolder.eventTime.setText(String.format("%02d:%02d", hour, minute));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String dateStr = filteredEvents.get(i).getEvent_date().toString();
+//            DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+//            Date date = formatter.parse(dateStr);
+//
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTime(date);
+//            String formatedDate = cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR);
+//
+//            EventViewHolder.eventDate.setText(formatedDate);
+//
+//            int hour = cal.get(Calendar.HOUR);
+//            int minute = cal.get(Calendar.MINUTE);
+//
+//            EventViewHolder.eventTime.setText(String.format("%02d:%02d", hour, minute));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
         final BackendService backendService = BackendService.getInstance(context);
         final Call<PinEntity> pinCall = backendService.getPinById(filteredEvents.get(i).getPin_id());
@@ -120,7 +128,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                 EventViewHolder.eventLocation.setText(pin.getName());
 
                 LatLng latlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                double dist = distance(latlng.latitude, latlng.longitude, pin.getLocation().latitude, pin.getLocation().longitude);
+                double dist = helper.CalculateDistance(latlng.latitude, latlng.longitude, pin.getLocation().latitude, pin.getLocation().longitude);
 
                 if(dist > 1){
                     EventViewHolder.eventDistance.setText(String.format("%.3f", dist) + " km");
@@ -133,27 +141,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             @Override
             public void onFailure(Call<PinEntity> call, Throwable t) {
 
-            }
-
-            private double distance(double lat1, double lon1, double lat2, double lon2) {
-                double theta = lon1 - lon2;
-                double dist = Math.sin(deg2rad(lat1))
-                        * Math.sin(deg2rad(lat2))
-                        + Math.cos(deg2rad(lat1))
-                        * Math.cos(deg2rad(lat2))
-                        * Math.cos(deg2rad(theta));
-                dist = Math.acos(dist);
-                dist = rad2deg(dist);
-                dist = dist * 60 * 1.1515;
-                return (dist);
-            }
-
-            private double deg2rad(double deg) {
-                return (deg * Math.PI / 180.0);
-            }
-
-            private double rad2deg(double rad) {
-                return (rad * 180.0 / Math.PI);
             }
         });
 
