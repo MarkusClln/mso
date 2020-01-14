@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+
 import java.util.List;
 
 import mso.eventium.R;
@@ -21,11 +23,13 @@ public class BonussystemAdapter extends RecyclerView.Adapter<BonussystemAdapter.
     private List<Bonus> bonusList;
     private OnNoteListener mOnNoteListener;
     private Context mContext;
+    private BonussystemListFragment.ListTypeEnum listType;
 
-    public BonussystemAdapter(Context mContext, List<Bonus> i, BonussystemAdapter.OnNoteListener onNoteListener) {
+    public BonussystemAdapter(Context mContext, List<Bonus> i, BonussystemListFragment.ListTypeEnum listType, BonussystemAdapter.OnNoteListener onNoteListener) {
         this.mContext = mContext;
         this.bonusList = i;
         this.mOnNoteListener = onNoteListener;
+        this.listType = listType;
     }
 
 
@@ -43,26 +47,39 @@ public class BonussystemAdapter extends RecyclerView.Adapter<BonussystemAdapter.
 
     @Override
     public void onBindViewHolder(BonussystemAdapter.BonusViewHolder BonusViewHolder, int i) {
-        BonusViewHolder.bonusName.setText(bonusList.get(i).getName());
-        //HostViewHolder.hostProfileImage.setImageResource(Hosts.get(i).getProfileImage());
-//        if (i == bonusList.size() - 1) {
-//            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) BonusViewHolder.hostLinearLayout.getLayoutParams();
-//            layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, 300);
-//        }
+        BonusViewHolder.eventName.setText(bonusList.get(i).getName());
+        BonusViewHolder.bonusDescription.setText(bonusList.get(i).getDescription());
+
+
+        if(this.listType.equals(BonussystemListFragment.ListTypeEnum.USED)){
+            BonusViewHolder.btn.setVisibility(View.INVISIBLE);
+            BonusViewHolder.bonusCostUsageDate.setText(bonusList.get(i).getUsedOnDate());
+            BonusViewHolder.usageDate.setVisibility(View.VISIBLE);
+        }
+        else{
+            BonusViewHolder.bonusCostUsageDate.setText(bonusList.get(i).getCost());
+            BonusViewHolder.usageDate.setVisibility(View.INVISIBLE);
+        }
     }
 
 
     public static class BonusViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView bonusName;
-        //CardView eventCardView;
+        TextView eventName;
+        TextView bonusDescription;
+        TextView bonusCostUsageDate;
         LinearLayout hostLinearLayout;
-
+        TextView usageDate;
+        MaterialButton btn;
         BonussystemAdapter.OnNoteListener onNoteListener;
 
         BonusViewHolder(View itemView, BonussystemAdapter.OnNoteListener onNoteListener) {
             super(itemView);
-            bonusName = itemView.findViewById(R.id.bonus_name);
+            eventName = itemView.findViewById(R.id.bonus_event_name);
+            bonusDescription = itemView.findViewById(R.id.bonus_description);
+            bonusCostUsageDate = itemView.findViewById(R.id.bonus_cost_or_used_date);
             hostLinearLayout = itemView.findViewById(R.id.bonusLinearLayout);
+            btn = itemView.findViewById(R.id.getBonusButton);
+            usageDate = itemView.findViewById(R.id.usageDate);
             this.onNoteListener = onNoteListener;
 
             itemView.setOnClickListener(this);

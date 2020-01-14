@@ -48,17 +48,24 @@ import static mso.eventium.ui.events.EventListFragment.TRANSITION_FOR_NAME;
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> implements Filterable {
 
     private List<Event> events;
+
+    public List<Event> getFilteredEvents() {
+        return filteredEvents;
+    }
+
     private List<Event> filteredEvents;
     private OnNoteListener mOnNoteListener;
     private Context context;
     private Location currentLocation;
+    private EventListFragment.ListTypeEnum listType;
 
-    public RVAdapter(Context context, List<Event> events, Location curLocation, OnNoteListener onNoteListener) {
+    public RVAdapter(Context context, List<Event> events, Location curLocation, EventListFragment.ListTypeEnum listType, OnNoteListener onNoteListener) {
         this.context = context;
         this.events = events;
         this.mOnNoteListener = onNoteListener;
         this.filteredEvents = events;
         this.currentLocation = curLocation;
+        this.listType = listType;
     }
 
     @Override
@@ -110,6 +117,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             public void onResponse(Call<PinEntity> call, retrofit2.Response<PinEntity> response) {
                 final PinEntity pin = response.body();
 
+                EventViewHolder.eventLocation.setText(pin.getName());
+
                 LatLng latlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 double dist = distance(latlng.latitude, latlng.longitude, pin.getLocation().latitude, pin.getLocation().longitude);
 
@@ -158,26 +167,30 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         EventViewHolder.eventIcon.setImageResource(filteredEvents.get(i).getEvent_icon());
 
 
-        if (filteredEvents.get(i).isUpvoted()) {
-            EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_blue_24dp);
-            EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
+        if(listType.equals(EventListFragment.ListTypeEnum.OWNED)){
+            EventViewHolder.btnUpvote.setVisibility(View.INVISIBLE);
+            EventViewHolder.btnDownvote.setVisibility(View.INVISIBLE);
+        }else{
+            if (filteredEvents.get(i).isUpvoted()) {
+                EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_blue_24dp);
+                EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
 
-            EventViewHolder.btnUpvote.setEnabled(false);
-            EventViewHolder.btnDownvote.setEnabled(true);
-        } else if (filteredEvents.get(i).isDownvoted()) {
-            EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
-            EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_blue_24dp);
+                EventViewHolder.btnUpvote.setEnabled(false);
+                EventViewHolder.btnDownvote.setEnabled(true);
+            } else if (filteredEvents.get(i).isDownvoted()) {
+                EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
+                EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_blue_24dp);
 
-            EventViewHolder.btnUpvote.setEnabled(true);
-            EventViewHolder.btnDownvote.setEnabled(false);
-        } else {
-            EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
-            EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
+                EventViewHolder.btnUpvote.setEnabled(true);
+                EventViewHolder.btnDownvote.setEnabled(false);
+            } else {
+                EventViewHolder.btnUpvote.setImageResource(R.drawable.ic_up_grey_24dp);
+                EventViewHolder.btnDownvote.setImageResource(R.drawable.ic_down_grey_24dp);
 
-            EventViewHolder.btnUpvote.setEnabled(true);
-            EventViewHolder.btnDownvote.setEnabled(true);
+                EventViewHolder.btnUpvote.setEnabled(true);
+                EventViewHolder.btnDownvote.setEnabled(true);
+            }
         }
-
         //EventViewHolder.saveEventButton.setChecked(true);
 
         EventViewHolder.eventName.setTransitionName(TRANSITION_FOR_NAME + i);

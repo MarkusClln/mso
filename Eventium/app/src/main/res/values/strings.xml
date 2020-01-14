@@ -9,12 +9,12 @@
     <string name="com_auth0_client_id">jCfWvtN7IM0Dqq51X96B9yc1JfMMb1zN</string>
     <string name="com_auth0_domain">dev-markus.eu.auth0.com</string>
 
-    <string name="searchHint">Suche hier doch :^)</string>
+    <string name="searchHint">Suche</string>
     <string name="eventNameHint">Namen deines Events</string>
     <string name="eventShortDescHint">Kurze Info deines Events</string>
     <string name="eventDescHint">Beschreibung deines Events</string>
     <string name="eventLocation">Ort des Events</string>
-    <string name="IP_Server">172.18.107.177:9001</string>
+    <string name="IP_Server">172.17.25.81:9001</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

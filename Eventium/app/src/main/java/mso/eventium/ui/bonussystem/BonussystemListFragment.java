@@ -52,11 +52,11 @@ public class BonussystemListFragment extends Fragment implements BonussystemAdap
         System.out.println("Create BonusListFragment for list " + listType);
 
         bonusModels = new ArrayList<>();
-        bonusModels = getDummyData();
+        bonusModels = getDummyData(this.listType.equals(ListTypeEnum.USED));
         //eventModels.add(new Event("Event1_1", "","", "23.01.2019", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, ""));
         mRecyclerView = root.findViewById(R.id.bonusRv);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new BonussystemAdapter(getContext(), bonusModels, this);
+        mAdapter = new BonussystemAdapter(getContext(), bonusModels, this.listType, this);
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(root.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -64,12 +64,23 @@ public class BonussystemListFragment extends Fragment implements BonussystemAdap
         return root;
     }
 
-    public ArrayList<Bonus> getDummyData() {
+    public ArrayList<Bonus> getDummyData(boolean isUsed) {
         ArrayList<Bonus> bonusList = new ArrayList<Bonus>();
-
-        for (int i = 0; i< 20; i++){
-            bonusList.add(new Bonus("Bonus " + i));
+        if(isUsed){
+            bonusList.add(new Bonus("Holiday On Ice", "App in der Farbe Grün","", "07.02.2020"));
+            bonusList.add(new Bonus("Eventium", "1 Event promoten","", "01.02.2020"));
         }
+        else{
+            bonusList.add(new Bonus("Evita", "5€ Rabatt an der Abendkasse","3000", ""));
+            bonusList.add(new Bonus("TWIZE", "1 Freigetränk","2000", ""));
+            bonusList.add(new Bonus("All Night Long", "1 Gratis Shot","2000", ""));
+            bonusList.add(new Bonus("Eventium", "App in der Farbe Rot","1500", ""));
+            bonusList.add(new Bonus("Eventium", "App in der Farbe Grün","1500", ""));
+            bonusList.add(new Bonus("Eventium", "App in der Farbe Gelb","1500", ""));
+        }
+
+
+
 
         return bonusList;
     }

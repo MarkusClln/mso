@@ -129,7 +129,6 @@ private Location currentLocation;
 
             //TODO
             mPhotoView.setImageResource(R.drawable.img_drink);
-            mDistanceView.setText("TODO: Calc distance");
         });
 
 

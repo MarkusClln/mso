@@ -150,6 +150,7 @@
                     android:layout_below="@+id/event_date"
                     android:layout_marginTop="37dp"
                     android:layout_marginBottom="@dimen/default_margin"
+                    android:layout_marginLeft="8dp"
                     android:text="Schnellen es viehmarkt verstehen behaglich grundlich pa. Unrecht beinahe das solange zum endlich von ich. Fehlen jemals feinen hin vor gesagt tun kirche schien. Wo gelernt verband er wu einfand bereits stopfen ja. Grundstuck launischen zu verdrossen da dachkammer bescheiden fluchtigen. Zog zur all ruth gewi kerl gern fur. "
                     android:textColor="@color/event_text" />
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,18 +22,82 @@
             android:textAlignment="center">
 
             <TextView
-                android:id="@+id/bonus_name"
+                android:id="@+id/bonus_event_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:maxWidth="265dp"
+                android:minHeight="50dp"
+                android:text="Eventname"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/colorAccent"
+                android:textSize="30sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/bonus_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:maxWidth="265dp"
                 android:minHeight="50dp"
-                android:text="Irgend ein Name"
+                android:text="Bonusname"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bonus_event_name"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/usageDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:maxWidth="265dp"
+                android:minHeight="50dp"
+                android:text="Eingelöst am: "
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/bonus_cost_or_used_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:maxWidth="265dp"
+                android:minHeight="50dp"
+                android:text="Kosten"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                app:layout_constraintBottom_toBottomOf="@+id/getBonusButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/getBonusButton"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/getBonusButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Einlösen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin">
+
+            </com.google.android.material.button.MaterialButton>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
