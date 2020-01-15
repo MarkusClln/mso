@@ -287,8 +287,6 @@ public class MainActivity extends AppCompatActivity {
                             public void run() {
                                 token = credentials.getAccessToken();
                                 System.out.println(credentials.getIdToken());
-                                Button loginButton = findViewById(R.id.logout);
-                                loginButton.setText("Logout");
                                 SharedPreferences.Editor mEditor = prefs.edit();
                                 mEditor.putString("token", token).apply();
 
@@ -317,10 +315,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 TextView nameTV = findViewById(R.id.userName);
-                                TextView emailTV = findViewById(R.id.email);
                                 nameTV.setText(userinfo.getNickname());
-                                emailTV.setText(userinfo.getEmail());
-
                             }
                         });
                     }

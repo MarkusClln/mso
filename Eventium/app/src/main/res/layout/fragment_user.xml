@@ -5,113 +5,34 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/pointsBar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="130dp"
-        android:layout_height="144dp"
-        android:layout_marginTop="@dimen/default_margin"
-        android:progress="0"
-        android:progressDrawable="@drawable/circle_points"
-        android:rotation="270"
+    <Button
+        android:id="@+id/buttonBla1"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="bla"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonCopyRight" />
 
-    <TextView
-        android:id="@+id/TextViewLevel"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/buttonBla2"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Level 1"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/points"
-        app:layout_constraintEnd_toEndOf="@+id/pointsBar"
-        app:layout_constraintStart_toStartOf="@+id/pointsBar"
-        app:layout_constraintTop_toTopOf="@+id/pointsBar" />
-
-    <TextView
-        android:id="@+id/points"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logge dich ein um Punkte zu sammeln"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/pointsBar"
-        app:layout_constraintStart_toStartOf="@+id/pointsBar"
-        app:layout_constraintTop_toBottomOf="@+id/pointsBar" />
+        android:text="bla"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonBla1" />
 
     <View
         android:id="@+id/line1"
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="@dimen/default_margin"
 
+        android:layout_marginTop="36dp"
         android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/points" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/default_margin"
-        android:src="@drawable/ic_account_circle_blue_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line1" />
-
-    <TextView
-        android:id="@+id/userNameDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
-        android:text="Name:"
-        android:textAlignment="viewStart"
-        android:textColor="@color/event_text"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/userName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginTop="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:textAlignment="viewStart"
-        android:textColor="@color/event_text"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/userNameDesc"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/emailDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
-        android:text="Email:"
-        android:textAlignment="viewStart"
-        android:textColor="@color/event_text"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userNameDesc" />
-
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
-        android:textAlignment="viewStart"
-        android:textColor="@color/event_text"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/userNameDesc"
         app:layout_constraintTop_toBottomOf="@+id/userName" />
 
     <Button
@@ -119,26 +40,68 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/default_margin2"
+        android:layout_marginTop="64dp"
         android:background="@android:color/white"
-        android:text="Login"
-        android:textColor="@color/blue_text"
+        android:text="Anmelden"
+        android:textColor="#FFFFFF"
+        app:iconTint="#00FCFBFB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonBla2" />
 
     <Button
-        android:id="@+id/dummiData"
+        android:id="@+id/deleteAccount"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/default_margin"
+        android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:text="create dummi data"
-        android:textColor="@color/blue_text"
+        android:text="Konto löschen"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logout" />
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="#030303"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:visibility="invisible" />
+
+    <Button
+        android:id="@+id/buttonPersonal"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Persönliches"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+    <Button
+        android:id="@+id/buttonCopyRight"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Datenschutz"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPersonal" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/jens_round" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.auth0.android.result.UserProfile;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -70,74 +71,98 @@ public class UserFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_user, container, false);
-        Button loginButton = root.findViewById(R.id.logout);
 
         token = getArguments().getString(ARGS_TOKEN);
 
-        TVPoints = root.findViewById(R.id.points);
-        TVLevel = root.findViewById(R.id.TextViewLevel);
-        PBPoints = root.findViewById(R.id.pointsBar);
+        Button loginButton = root.findViewById(R.id.logout);
+        Button deleteAccountButton = root.findViewById(R.id.deleteAccount);
+        Button bla2Button = root.findViewById(R.id.buttonBla2);
+        Button bla1Button = root.findViewById(R.id.buttonBla1);
+        Button copyRightButton = root.findViewById(R.id.buttonCopyRight);
+        Button personalButton = root.findViewById(R.id.buttonPersonal);
+        TextView nameTV = root.findViewById(R.id.userName);
+        View line = root.findViewById(R.id.line1);
+        View image = root.findViewById(R.id.imageView);
 
 
         if (token != null) {
-            loginButton.setText("Logout");
             ((MainActivity) getActivity()).getProfile();
-            getPoints();
+            loginButton.setText("Abmelden");
+            deleteAccountButton.setVisibility(View.VISIBLE);
+            bla1Button.setVisibility(View.VISIBLE);
+            bla2Button.setVisibility(View.VISIBLE);
+            copyRightButton.setVisibility(View.VISIBLE);
+            personalButton.setVisibility(View.VISIBLE);
+            nameTV.setVisibility(View.VISIBLE);
+            line.setVisibility(View.VISIBLE);
+            image.setVisibility(View.VISIBLE);
         } else {
-            loginButton.setText("Login");
-            TextView nameTV = root.findViewById(R.id.userName);
-            TextView emailTV = root.findViewById(R.id.email);
+            loginButton.setText("Anmelden");
+            deleteAccountButton.setVisibility(View.INVISIBLE);
+            bla1Button.setVisibility(View.INVISIBLE);
+            bla2Button.setVisibility(View.INVISIBLE);
+            copyRightButton.setVisibility(View.INVISIBLE);
+            personalButton.setVisibility(View.INVISIBLE);
             nameTV.setVisibility(View.INVISIBLE);
-            emailTV.setVisibility(View.INVISIBLE);
+            line.setVisibility(View.INVISIBLE);
+            image.setVisibility(View.INVISIBLE);
 
-            TextView nameTVdesc = root.findViewById(R.id.userNameDesc);
-            TextView emailTVdesc = root.findViewById(R.id.emailDesc);
-            nameTVdesc.setVisibility(View.INVISIBLE);
-            emailTVdesc.setVisibility(View.INVISIBLE);
         }
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Button loginButton = root.findViewById(R.id.logout);
+                Button deleteAccountButton = root.findViewById(R.id.deleteAccount);
+                Button bla2Button = root.findViewById(R.id.buttonBla2);
+                Button bla1Button = root.findViewById(R.id.buttonBla1);
+                Button copyRightButton = root.findViewById(R.id.buttonCopyRight);
+                Button personalButton = root.findViewById(R.id.buttonPersonal);
+                TextView nameTV = root.findViewById(R.id.userName);
+                View line = root.findViewById(R.id.line1);
+                View image = root.findViewById(R.id.imageView);
+
+
                 if (!((MainActivity) getActivity()).isLoggedIn()) {
                     ((MainActivity) getActivity()).login();
-                    TextView nameTV = root.findViewById(R.id.userName);
-                    TextView emailTV = root.findViewById(R.id.email);
+
+                    loginButton.setText("Abmelden");
+                    deleteAccountButton.setVisibility(View.VISIBLE);
+                    bla1Button.setVisibility(View.VISIBLE);
+                    bla2Button.setVisibility(View.VISIBLE);
+                    copyRightButton.setVisibility(View.VISIBLE);
+                    personalButton.setVisibility(View.VISIBLE);
                     nameTV.setVisibility(View.VISIBLE);
-                    emailTV.setVisibility(View.VISIBLE);
+                    line.setVisibility(View.VISIBLE);
+                    image.setVisibility(View.VISIBLE);
 
-                    TextView nameTVdesc = root.findViewById(R.id.userNameDesc);
-                    TextView emailTVdesc = root.findViewById(R.id.emailDesc);
-                    nameTVdesc.setVisibility(View.VISIBLE);
-                    emailTVdesc.setVisibility(View.VISIBLE);
                 } else {
-                    ((MainActivity) getActivity()).logout();
-                    Button loginButton = root.findViewById(R.id.logout);
-                    TextView nameTV = root.findViewById(R.id.userName);
-                    TextView emailTV = root.findViewById(R.id.email);
-                    loginButton.setText("Login");
-                    nameTV.setVisibility(View.INVISIBLE);
-                    emailTV.setVisibility(View.INVISIBLE);
-                    nameTV.setText("");
-                    emailTV.setText("");
 
-                    TextView nameTVdesc = root.findViewById(R.id.userNameDesc);
-                    TextView emailTVdesc = root.findViewById(R.id.emailDesc);
-                    nameTVdesc.setVisibility(View.INVISIBLE);
-                    emailTVdesc.setVisibility(View.INVISIBLE);
+                    ((MainActivity) getActivity()).logout();
+
+                    loginButton.setText("Anmelden");
+                    deleteAccountButton.setVisibility(View.INVISIBLE);
+                    bla1Button.setVisibility(View.INVISIBLE);
+                    bla2Button.setVisibility(View.INVISIBLE);
+                    copyRightButton.setVisibility(View.INVISIBLE);
+                    personalButton.setVisibility(View.INVISIBLE);
+                    nameTV.setVisibility(View.INVISIBLE);
+                    line.setVisibility(View.INVISIBLE);
+                    image.setVisibility(View.INVISIBLE);
+
                 }
             }
         });
 
-        Button dummiData = root.findViewById(R.id.dummiData);
+       /* Button dummiData = root.findViewById(R.id.dummiData);
         dummiData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createDummiData();
             }
         });
-        dummiData.setEnabled(token != null);
+        dummiData.setEnabled(token != null);*/
 
         return root;
     }
