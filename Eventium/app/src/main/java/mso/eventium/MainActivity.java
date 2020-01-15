@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             setupFragment(new BonussystemFragment(), false);
         }
         if (activeFragment == ActiveFragments.CREATE) {
-            setupFragment(new CreateFragment(), false);
+            setupFragment(CreateFragment.newInstance(token), false);
         }
         if (activeFragment == ActiveFragments.MESSAGES) {
             setupFragment(new NewsfeedFragment(), false);
