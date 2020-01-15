@@ -297,9 +297,10 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                         eventEnumeration+=event.getName() +" | "+ helper.FormatDate(event.getDate().toString()) + "\n";
                     }
 
-
-                    final MarkerModel offsetItem = new MarkerModel(pin.getLocation(), pin.getName(), eventEnumeration);
-                    mClusterManager.addItem(offsetItem);
+                    if(events.size() != 0){
+                        final MarkerModel offsetItem = new MarkerModel(pin.getLocation(), pin.getName(), eventEnumeration);
+                        mClusterManager.addItem(offsetItem);
+                    }
                 }
                 mClusterManager.cluster();
 

@@ -28,7 +28,7 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.NewsFe
 
     @Override
     public int getItemCount() {
-        return 1; //bonusList.size();
+        return newsfeedList.size();
     }
 
     @Override

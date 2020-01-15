@@ -68,7 +68,10 @@ public class NewsfeedFragment extends Fragment implements NewsfeedAdapter.OnNote
     private List<Newsfeed> getDummyData(){
         List<Newsfeed> list = new ArrayList<>();
 
-        list.add(new Newsfeed("Titel","Description"));
+        list.add(new Newsfeed("SAPARENA","Das Event 'Adler Mannheim Playoff-Spiel 1' wurde hinzugefügt"));
+        list.add(new Newsfeed("Mannheim Wasserturm","Das Event 'Weihnachtsmarkt 2020' wurde hinzugefügt"));
+        list.add(new Newsfeed("Hochschule Mannheim","Das Event 'Lan-Party 2020' wurde hinzugefügt"));
+        list.add(new Newsfeed("Titel4","Description4"));
         list.add(new Newsfeed("Titel2","Description2"));
         list.add(new Newsfeed("Titel3","Description3"));
         list.add(new Newsfeed("Titel4","Description4"));

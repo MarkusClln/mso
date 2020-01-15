@@ -213,12 +213,12 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
                 eventModels = new ArrayList<>();
 
+                if(response.body() != null){
+                    for (EventEntity eventEntity : response.body()) {
 
-                for (EventEntity eventEntity : response.body()) {
-
-                    try {
+                        try {
 //                        int distance_rounded = (int) Math.round(eventEntity.getPin().getDistance());  //TODO in methode verschieben die aus EventEntity das EventViewModel macht (oder besser die TextView das es anzeigt soll was dranschreiben)
-                        String distance_str = "TODO distance berechnen";
+                            String distance_str = "TODO distance berechnen";
 //                        if (distance_rounded < 1000) {
 //                            distance_str = distance_rounded + " m";
 //                        } else {
@@ -227,33 +227,35 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 //                        }
 
 
-                        boolean liked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().contains(token) : false;
-                        boolean disliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().contains(token) : false;
+                            boolean liked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().contains(token) : false;
+                            boolean disliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().contains(token) : false;
 
-                        int countOfUsersThatLiked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().size() : 0;
-                        int countOfUsersThatDisliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().size() : 0;
-                        int points = countOfUsersThatLiked - countOfUsersThatDisliked;
+                            int countOfUsersThatLiked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().size() : 0;
+                            int countOfUsersThatDisliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().size() : 0;
+                            int points = countOfUsersThatLiked - countOfUsersThatDisliked;
 
-                        Event item = new Event(
-                                eventEntity.getName(),
-                                eventEntity.getDescription(),
-                                eventEntity.getShortDescription(),
-                                eventEntity.getDate(),
-                                distance_str,
-                                R.drawable.img_drink,
-                                eventEntity.getPinId(),
-                                liked,
-                                disliked,
-                                points,
-                                eventEntity.getId(),
-                                eventEntity.getCategory()
+                            Event item = new Event(
+                                    eventEntity.getName(),
+                                    eventEntity.getDescription(),
+                                    eventEntity.getShortDescription(),
+                                    eventEntity.getDate(),
+                                    distance_str,
+                                    R.drawable.img_drink,
+                                    eventEntity.getPinId(),
+                                    liked,
+                                    disliked,
+                                    points,
+                                    eventEntity.getId(),
+                                    eventEntity.getCategory()
 
-                        );
-                        eventModels.add(item);
-                    } catch (NumberFormatException nfe) {
-                        System.err.println("NumberFormatException: " + nfe.getMessage());
+                            );
+                            eventModels.add(item);
+                        } catch (NumberFormatException nfe) {
+                            System.err.println("NumberFormatException: " + nfe.getMessage());
+                        }
                     }
                 }
+
 
                 mAdapter = new RVAdapter(getContext(), eventModels, currentLocation,listType,EventListFragment.this);
                 mRecyclerView.setAdapter(mAdapter);
