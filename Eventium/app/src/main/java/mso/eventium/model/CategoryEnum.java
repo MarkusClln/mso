@@ -3,7 +3,7 @@ package mso.eventium.model;
 import mso.eventium.R;
 
 public enum CategoryEnum {
-    BAR(R.drawable.ic_flaschen), DISCO(R.drawable.ic_cocktails), RESTAURANT(R.drawable.ic_best_choice), CULTURE(R.drawable.ic_person_white_24dp);
+    BAR(R.mipmap.bar_round), DISCO(R.mipmap.disco_round), RESTAURANT(R.mipmap.food_round), CULTURE(R.mipmap.culture_round);
 
     private int icon;
 
