@@ -150,18 +150,17 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                     @Override
                     public void onCameraIdle() {
                         final LatLng currentLocation = new LatLng(googleMap.getCameraPosition().target.latitude, googleMap.getCameraPosition().target.longitude);
-                        double distance = helper.CalculateDistance(currentLocation.latitude, currentLocation.longitude, reloadLocation.latitude, reloadLocation.longitude);
+                        double distance = distFrom(currentLocation.latitude, currentLocation.longitude, reloadLocation.latitude, reloadLocation.longitude);
 
                         if (distance >= 1000) { //only get pins if we moved out of range
                             createLocationsFromBackend();
                             reloadLocation = currentLocation;
                         }
-
                         mClusterManager.cluster();
-
-
+                        mClusterManager.onCameraIdle();
                     }
                 });
+
 
                 googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
@@ -225,9 +224,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
 
     private void setUpCluster() {
 
-        mClusterManager = new ClusterManager<MarkerModel>(this.getContext(), googleMap) {
-
-        };
+        mClusterManager = new ClusterManager<MarkerModel>(this.getContext(), googleMap);
 
         googleMap.setOnCameraIdleListener(mClusterManager);
         // googleMap.setOnMarkerClickListener(mClusterManager);
@@ -303,6 +300,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                     }
                 }
                 mClusterManager.cluster();
+                mClusterManager.onCameraIdle();
 
             }
 
