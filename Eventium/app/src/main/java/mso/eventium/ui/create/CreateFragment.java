@@ -126,12 +126,20 @@ public class CreateFragment extends Fragment implements SelectCategoryDialogFrag
 
     public void createDummyData() {
         final List<PinEntity> pins = new LinkedList<>();
+
+        //Mannheim
         pins.add(createPin(49.463970, 8.517586, "SAP Arena Mannheim", "Modernes Stadion mit Glas & Alu für Eishockeyspiele & andere Sportveranstaltungen sowie große Konzerte."));
         pins.add(createPin(49.497550, 8.472584, "Capitol Mannheim", "Konzerthalle, Comedy-Club & Veranstaltungszentrum in einem ehemaligen Kino im Art-déco-Stil."));
         pins.add(createPin(49.483346, 8.461786, "Barockschloss Mannheim", "Großes Barockschloss mit restaurierten Ausstellungsräumen, 5 Flügeln & 400 m² großem Hof."));
         pins.add(createPin(49.466663, 8.259124, "MS Connexion Complex", "Tanzpartys für Freunde von Techno, Drum'n'Bass und Gothic bei Neonlicht in den Räumen einer umgebauten Fabrik."));
         pins.add(createPin(49.485700, 8.476469, "Dorint Kongresshotel Mannheim", "Konferenzhotel mit direkter Verbindung zum Congress Center Rosengarten"));
         pins.add(createPin(49.469556866111, 8.4822070597222, "Hochschule Mannheim", "Ein grauenhafter Ort"));
+
+        //Heidelberg
+        pins.add(createPin(49.469556866111, 8.4822070597222, "Hochschule Mannheim", "Ein grauenhafter Ort"));
+        pins.add(createPin(49.469556866111, 8.4822070597222, "Hochschule Mannheim", "Ein grauenhafter Ort"));
+        pins.add(createPin(49.402490,  8.671670, "halle02", "Die Halle02 ist ein Veranstaltungshaus in Heidelberg, in dem Konzerte, Partys und Tanzveranstaltungen der unterschiedlichsten Art stattfinden. Es befindet sich in den umgebauten Lagerhallen des ehemaligen Heidelberger Güterbahnhofs."));
+
         final List<PinCreateHelper> pinIds = new ArrayList<PinCreateHelper>();
 
         final Callback<PinEntity> createPinCallback = new Callback<PinEntity>() {
@@ -221,7 +229,7 @@ public class CreateFragment extends Fragment implements SelectCategoryDialogFrag
         myCalendar.set(Calendar.DAY_OF_MONTH, 10);
 
         final EventEntity capitol1 = new EventEntity();
-        capitol1.setName("\"Sascha im Quadrat");
+        capitol1.setName("Sascha im Quadrat");
         capitol1.setShortDescription("Die beliebte Reihe im Casino. Stargast: Michaela Tischler");
         capitol1.setDescription("Sascha im Quadrat, das sind der große und der kleine Sascha und Christof Brill. Geballtes Testosteron auf einer Bühne. Und eine Musikauswahl, die seinesgleichen sucht. Gespielt wird ALLES, was Spaß macht.\\n\" +\n" +
                 "                \"\\n\" +\n" +
@@ -316,6 +324,39 @@ public class CreateFragment extends Fragment implements SelectCategoryDialogFrag
         dorint.setDate(myCalendar.getTime());
         dorint.setPinId(getCorrectPinId(pins, "Dorint Kongresshotel Mannheim"));
         createDummyEvent(dorint);
+
+        //Poetry Slam
+        myCalendar.set(Calendar.HOUR, 20);
+        myCalendar.set(Calendar.MINUTE, 00);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 12);
+
+        final EventEntity poetrySlam = new EventEntity();
+        poetrySlam.setName("Word Up! Poetry Slam");
+        poetrySlam.setShortDescription("Slam is the lighthouse for the democratization of art.");
+        poetrySlam.setDescription("Mit Marius Loy (Esslingen), Natalie Friedrich (Karlsruhe), Marvin Suckut (Konstanz), Die Fabelstapler (Mannheim/Kaiserslautern), Paula Neu (Mannheim).\n" +
+                "\n" +
+                "Special Guest: Lucie Paradis\n" +
+                "\n" +
+                "Moderation: Philipp Herold");
+        poetrySlam.setCategory(CategoryEnum.values()[3]);
+        poetrySlam.setDate(myCalendar.getTime());
+        poetrySlam.setPinId(getCorrectPinId(pins, "halle02"));
+        createDummyEvent(poetrySlam);
+
+        //Flohmarkt
+        myCalendar.set(Calendar.HOUR, 13);
+        myCalendar.set(Calendar.MINUTE, 00);
+        myCalendar.set(Calendar.DAY_OF_MONTH, 8);
+
+        final EventEntity flohmarkt = new EventEntity();
+        flohmarkt.setName("Hallenflohmarkt");
+        flohmarkt.setShortDescription("Aufbaubeginn für Verkäufer: 12:00 Uhr\n" +
+                "Marktbeginn: 13:00 Uhr\n" +
+                "Marktende: 17:00 Uhr");
+        flohmarkt.setCategory(CategoryEnum.values()[3]);
+        flohmarkt.setDate(myCalendar.getTime());
+        flohmarkt.setPinId(getCorrectPinId(pins, "halle02"));
+        createDummyEvent(flohmarkt);
     }
 
     private String getCorrectPinId(List<PinCreateHelper> pins, String location){
