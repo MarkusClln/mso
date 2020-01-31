@@ -222,7 +222,7 @@ public class UserFragment extends Fragment {
         JsonObjectRequest req5 = ((MainActivity) getActivity()).backendClient.createEvent(token, Integer.toString(capitolMannheim), "Evita", "Die mitreißende Geschichte der Eva Duarte, die vom argentinischen Volk liebevoll Evita genannt wurde. Andrew Lloyd Webber und Tim Rice widmeten der auch heute noch faszinierenden und zugleich höchst umstrittenen „First Lady“ Argentiniens eines ihrer spektakulärsten Musicals. Es erzählt den Aufstieg eines einfachen Provinz-Mädchens zur Schauspielerin und in die High Society von Buenos Aires, wo sie schließlich den hohen Militär Juan Perón kennenlernt.", "Eine große Geschichte. Eine große Frau. Ein großes Musical.", myCalendar, CategoryEnum.values()[1], responseListener);
         ((MainActivity) getActivity()).queue.add(req5);
 
-        //culture_picture
+        //img_culture
         myCalendar.set(Calendar.HOUR, 18);
         myCalendar.set(Calendar.MINUTE, 00);
         myCalendar.set(Calendar.DAY_OF_MONTH, 8);

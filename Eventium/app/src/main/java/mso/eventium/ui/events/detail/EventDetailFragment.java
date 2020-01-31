@@ -109,9 +109,7 @@ public class EventDetailFragment extends Fragment {
             setupMap(mapView, event.getPin().getLocation());
 
             mIconView.setImageResource(event.getCategory().getIcon());
-            if (CategoryEnum.CULTURE.equals(event.getCategory())) {
-                mPhotoView.setImageResource(R.drawable.culture_picture);
-            }
+            mPhotoView.setImageResource(event.getCategory().getPicture());
 
         });
 
