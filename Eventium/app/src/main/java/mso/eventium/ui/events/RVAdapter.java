@@ -135,7 +135,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
                 double dist = helper.CalculateDistance(latlng.latitude, latlng.longitude, pin.getLocation().latitude, pin.getLocation().longitude);
 
                 if(dist > 1){
-                    EventViewHolder.eventDistance.setText(String.format("%.3f", dist) + " km");
+                    EventViewHolder.eventDistance.setText(String.format("%.1f", dist) + " km");
                 }
                 else{
                     EventViewHolder.eventDistance.setText(String.format("%.0f", dist * 1000) + " m");

@@ -99,7 +99,7 @@ public class EventDetailFragment extends Fragment {
             double dist = commonHelper.CalculateDistance(latlng.latitude, latlng.longitude, loc.latitude, loc.longitude);
 
             if (dist > 1) {
-                mDistanceView.setText(String.format("%.3f", dist) + " km");
+                mDistanceView.setText(String.format("%.1f", dist) + " km");
             } else {
                 mDistanceView.setText(String.format("%.0f", dist * 1000) + " m");
             }
