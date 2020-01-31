@@ -93,8 +93,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
         int points = filteredEvents.get(i).getEvent_points();
         EventViewHolder.eventPoints.setText(Integer.toString(points));
 
-        EventViewHolder.eventDate.setText(helper.FormatDate(filteredEvents.get(i).getEvent_date().toString()));
-        EventViewHolder.eventTime.setText(helper.FormatTime(filteredEvents.get(i).getEvent_date().toString()));
+        EventViewHolder.eventDate.setText(helper.FormatDate(filteredEvents.get(i).getEvent_date()));
+        EventViewHolder.eventTime.setText(helper.FormatTime(filteredEvents.get(i).getEvent_date()));
 
 
 

@@ -10,13 +10,14 @@ import java.util.concurrent.ExecutionException;
 
 public class CommonHelper {
 
-    public CommonHelper(){ }
+    public CommonHelper() {
+    }
 
-    public double CalculateDistance(double lat1, double lon1, double lat2, double lon2){
+    public double CalculateDistance(double lat1, double lon1, double lat2, double lon2) {
         return distance(lat1, lon1, lat2, lon2);
     }
 
-    public String FormatDate(String dateString){
+    public String FormatDate(String dateString) {
         try {
             Calendar cal = this.GetCalendarFromDateString(dateString);
             return cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR);
@@ -26,7 +27,12 @@ public class CommonHelper {
         }
     }
 
-    public String FormatTime(String dateString){
+    public String FormatDate(Date dateString) {
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yy");
+        return formatter.format(dateString);
+    }
+
+    public String FormatTime(String dateString) {
         try {
             Calendar cal = this.GetCalendarFromDateString(dateString);
             return String.format("%02d:%02d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
@@ -34,20 +40,35 @@ public class CommonHelper {
             e.printStackTrace();
             return null;
         }
-
     }
 
-    private Calendar GetCalendarFromDateString(String dateString){
-        try{
+    public String FormatTime(Date dateString) {
+        DateFormat formatter = new SimpleDateFormat("HH:mm");
+        return formatter.format(dateString);
+    }
+
+    private Calendar GetCalendarFromDateString(String dateString) {
+        try {
             //TODO: 24h Scheiß geht ned mit HH
-            DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+            DateFormat formatter = new SimpleDateFormat("dd MMM   HH:mm:ss Z yyyy");
             Date date = formatter.parse(dateString);
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             return cal;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
-        catch(Exception ex){
+    }
+
+    private Calendar GetCalendarFromDateString(Date date) {
+        try {
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            return cal;
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
