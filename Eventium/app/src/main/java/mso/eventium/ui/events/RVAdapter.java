@@ -125,6 +125,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.EventViewHolder> i
             public void onResponse(Call<PinEntity> call, retrofit2.Response<PinEntity> response) {
                 final PinEntity pin = response.body();
 
+                if(pin == null){
+                    return;
+                }
+
                 EventViewHolder.eventLocation.setText(pin.getName());
 
                 LatLng latlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
