@@ -25,22 +25,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
 import mso.eventium.MainActivity;
 import mso.eventium.R;
 import mso.eventium.helper.CommonHelper;
+import mso.eventium.model.CategoryEnum;
 import mso.eventium.ui.events.EventListFragment;
 
 public class EventDetailFragment extends Fragment {
 
     private GoogleMap googleMap;
-private Location currentLocation;
+    private Location currentLocation;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -103,10 +98,9 @@ private Location currentLocation;
             LatLng latlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
             double dist = commonHelper.CalculateDistance(latlng.latitude, latlng.longitude, loc.latitude, loc.longitude);
 
-            if(dist > 1){
+            if (dist > 1) {
                 mDistanceView.setText(String.format("%.3f", dist) + " km");
-            }
-            else{
+            } else {
                 mDistanceView.setText(String.format("%.0f", dist * 1000) + " m");
             }
 
@@ -114,8 +108,11 @@ private Location currentLocation;
 
             setupMap(mapView, event.getPin().getLocation());
 
-            //TODO
-            mPhotoView.setImageResource(R.drawable.img_drink);
+            mIconView.setImageResource(event.getCategory().getIcon());
+            if (CategoryEnum.CULTURE.equals(event.getCategory())) {
+                mPhotoView.setImageResource(R.drawable.culture_picture);
+            }
+
         });
 
 

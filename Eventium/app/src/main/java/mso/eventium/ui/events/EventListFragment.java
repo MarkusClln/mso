@@ -75,12 +75,10 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
         final View root = inflater.inflate(R.layout.fragment_event_list, container, false);
 
         this.listType = ListTypeEnum.valueOf(getArguments().getString(LIST_TYPE_ARG_NAME));
-        System.out.println("Create EventListFrag for list " + listType);
-
-        eventModels = new ArrayList<>();
-        //eventModels.add(new Event("Event1_1", "","", "23.01.2019", "distance: 100m", R.drawable.img_drink, R.drawable.ic_cocktails, ""));
         mRecyclerView = root.findViewById(R.id.rv);
         mRecyclerView.setHasFixedSize(true);
+
+        eventModels = new ArrayList<>();
         mAdapter = new RVAdapter(getContext(), eventModels, currentLocation, listType, this);
 
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(root.getContext());
@@ -109,9 +107,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
 
     private void transitionActivity(int position) {
-//        setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.change_image_transform)); //does nothing?
-//        setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.slide_bottom)); //also does nothing
-
         final TextView mViewName = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_name);
         final ImageView mViewIcon = mRecyclerView.findViewHolderForLayoutPosition(position).itemView.findViewById(R.id.event_icon);
 
@@ -130,7 +125,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
 
     @Override
     public void onStart() {
-        System.out.println("STARTED " + listType);
         // Fetching data from server
         loadRecyclerViewData();
 
@@ -138,16 +132,7 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
     }
 
     @Override
-    public void onResume() {
-
-        System.out.println("RESUME " + listType + " with elements: " + eventModels.size());
-
-        super.onResume();
-    }
-
-    @Override
     public void onRefresh() {
-        System.out.println("onRefresh " + listType);
         loadRecyclerViewData();
     }
 
@@ -217,16 +202,6 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                     for (EventEntity eventEntity : response.body()) {
 
                         try {
-//                        int distance_rounded = (int) Math.round(eventEntity.getPin().getDistance());  //TODO in methode verschieben die aus EventEntity das EventViewModel macht (oder besser die TextView das es anzeigt soll was dranschreiben)
-                            String distance_str = "TODO distance berechnen";
-//                        if (distance_rounded < 1000) {
-//                            distance_str = distance_rounded + " m";
-//                        } else {
-//                            distance_rounded = (int) Math.round(eventEntity.getPin().getDistance() / 1000);
-//                            distance_str = distance_rounded + " m";
-//                        }
-
-
                             boolean liked = eventEntity.getUsersThatLiked() != null ? eventEntity.getUsersThatLiked().contains(token) : false;
                             boolean disliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().contains(token) : false;
 
@@ -234,12 +209,12 @@ public class EventListFragment extends Fragment implements RVAdapter.OnNoteListe
                             int countOfUsersThatDisliked = eventEntity.getUsersThatDisliked() != null ? eventEntity.getUsersThatDisliked().size() : 0;
                             int points = countOfUsersThatLiked - countOfUsersThatDisliked;
 
-                            Event item = new Event(
+                            final Event item = new Event(
                                     eventEntity.getName(),
                                     eventEntity.getDescription(),
                                     eventEntity.getShortDescription(),
                                     eventEntity.getDate(),
-                                    distance_str,
+                                    "",
                                     R.drawable.img_drink,
                                     eventEntity.getPinId(),
                                     liked,
