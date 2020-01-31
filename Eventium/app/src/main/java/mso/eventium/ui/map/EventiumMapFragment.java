@@ -291,7 +291,7 @@ public class EventiumMapFragment extends Fragment implements GoogleMap.OnMarkerC
                     String eventEnumeration = "";
 
                     for(EventEntity event : events){
-                        eventEnumeration+=event.getName() +" | "+ helper.FormatDate(event.getDate().toString()) + "\n";
+                        eventEnumeration+=event.getName() +" | "+ helper.FormatDate(event.getDate()) + "\n";
                     }
 
                     if(events.size() != 0){
