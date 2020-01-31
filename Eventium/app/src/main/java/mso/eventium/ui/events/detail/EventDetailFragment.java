@@ -91,8 +91,8 @@ public class EventDetailFragment extends Fragment {
 
             CommonHelper commonHelper = new CommonHelper();
 
-            mDateView.setText(commonHelper.FormatDate(event.getDate().toString()));
-            mTimeView.setText(commonHelper.FormatTime(event.getDate().toString()));
+            mDateView.setText(commonHelper.FormatDate(event.getDate()));
+            mTimeView.setText(commonHelper.FormatTime(event.getDate()));
 
             LatLng loc = event.getPin().getLocation();
             LatLng latlng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());

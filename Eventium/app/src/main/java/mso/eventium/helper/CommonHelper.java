@@ -17,61 +17,14 @@ public class CommonHelper {
         return distance(lat1, lon1, lat2, lon2);
     }
 
-    public String FormatDate(String dateString) {
-        try {
-            Calendar cal = this.GetCalendarFromDateString(dateString);
-            return cal.get(Calendar.DATE) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.YEAR);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public String FormatDate(Date dateString) {
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yy");
+        final DateFormat formatter = new SimpleDateFormat("dd.MM.yy");
         return formatter.format(dateString);
-    }
-
-    public String FormatTime(String dateString) {
-        try {
-            Calendar cal = this.GetCalendarFromDateString(dateString);
-            return String.format("%02d:%02d", cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public String FormatTime(Date dateString) {
-        DateFormat formatter = new SimpleDateFormat("HH:mm");
+        final DateFormat formatter = new SimpleDateFormat("HH:mm");
         return formatter.format(dateString);
-    }
-
-    private Calendar GetCalendarFromDateString(String dateString) {
-        try {
-            //TODO: 24h Scheiß geht ned mit HH
-            DateFormat formatter = new SimpleDateFormat("dd MMM   HH:mm:ss Z yyyy");
-            Date date = formatter.parse(dateString);
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            return cal;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    private Calendar GetCalendarFromDateString(Date date) {
-        try {
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            return cal;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
     }
 
     private double distance(double lat1, double lon1, double lat2, double lon2) {
