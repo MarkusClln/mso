@@ -1,9 +1,10 @@
 package mso.eventium.model;
 
 public class Newsfeed {
-    public Newsfeed(String _title, String _description){
+    public Newsfeed(String _title, String _description, boolean _isAdd){
         this.title = _title;
         this.description = _description;
+        this.isAdd = _isAdd;
     }
 
     public String getTitle() {
@@ -25,6 +26,16 @@ public class Newsfeed {
     }
 
     private String description;
+
+    public boolean isAdd() {
+        return isAdd;
+    }
+
+    public void setAdd(boolean add) {
+        isAdd = add;
+    }
+
+    private boolean isAdd;
 
 
 }

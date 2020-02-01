@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +42,15 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.NewsFe
     public void onBindViewHolder(NewsfeedAdapter.NewsFeedViewHolder NewsFeedViewHolder, int i) {
         NewsFeedViewHolder.title.setText(newsfeedList.get(i).getTitle());
         NewsFeedViewHolder.description.setText(newsfeedList.get(i).getDescription());
+
+        if(newsfeedList.get(i).isAdd()){
+            NewsFeedViewHolder.iconAdd.setVisibility(View.VISIBLE);
+            NewsFeedViewHolder.iconUpdate.setVisibility(View.INVISIBLE);
+        }
+        else{
+            NewsFeedViewHolder.iconAdd.setVisibility(View.INVISIBLE);
+            NewsFeedViewHolder.iconUpdate.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -48,12 +58,15 @@ public class NewsfeedAdapter extends RecyclerView.Adapter<NewsfeedAdapter.NewsFe
         TextView title;
         TextView description;
         NewsfeedAdapter.OnNoteListener onNoteListener;
+        ImageView iconAdd;
+        ImageView iconUpdate;
 
         NewsFeedViewHolder(View itemView, NewsfeedAdapter.OnNoteListener onNoteListener) {
             super(itemView);
             title = itemView.findViewById(R.id.newsfeedTitle);
             description = itemView.findViewById(R.id.newsfeedDescription);
-
+            iconAdd = itemView.findViewById(R.id.iconAddNewsFeed);
+            iconUpdate = itemView.findViewById(R.id.iconUpdateNewsFeed);
             this.onNoteListener = onNoteListener;
 
             itemView.setOnClickListener(this);
