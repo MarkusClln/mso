@@ -70,7 +70,6 @@ public class NewsfeedFragment extends Fragment implements NewsfeedAdapter.OnNote
 
         list.add(new Newsfeed("SAPARENA","Das Event 'Adler Mannheim Playoff-Spiel 1' wurde hinzugefügt", true));
         list.add(new Newsfeed("Mannheim Wasserturm","Das Event 'Weihnachtsmarkt 2020' wurde hinzugefügt", true));
-        list.add(new Newsfeed("Hochschule Mannheim","Das Event 'Lan-Party 2020' wurde hinzugefügt", true));
         list.add(new Newsfeed("Hochschule Mannheim","Das Event 'MSO-Präsentation' wurde aktualisiert", false));
 
         return list;

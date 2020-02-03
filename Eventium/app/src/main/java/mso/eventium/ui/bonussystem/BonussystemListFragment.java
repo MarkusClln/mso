@@ -67,7 +67,7 @@ public class BonussystemListFragment extends Fragment implements BonussystemAdap
     public ArrayList<Bonus> getDummyData(boolean isUsed) {
         ArrayList<Bonus> bonusList = new ArrayList<Bonus>();
         if(isUsed){
-            bonusList.add(new Bonus("Holiday On Ice", "App in der Farbe Grün","", "07.02.2020"));
+            bonusList.add(new Bonus("Holiday On Ice", "Freier Eintritt","", "07.02.2020"));
             bonusList.add(new Bonus("Eventium", "1 Event promoten","", "01.02.2020"));
         }
         else{

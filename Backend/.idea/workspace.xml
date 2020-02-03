@@ -37,7 +37,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../IWS_Microservices/API-Gateway" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="settings.nodejs" />
@@ -167,7 +167,8 @@
       <workItem from="1577299080220" duration="626000" />
       <workItem from="1578552990447" duration="1263000" />
       <workItem from="1578555263880" duration="4745000" />
-      <workItem from="1579162239968" duration="1398000" />
+      <workItem from="1579162239968" duration="2897000" />
+      <workItem from="1579250071719" duration="24000" />
     </task>
     <servers />
   </component>
@@ -204,9 +205,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="674" y="243" key="#docker-compose.yml:_Compose_Deployment/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1575530262518" />
-    <state x="2659" y="261" key="FileChooserDialogImpl" timestamp="1576415629859">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="591" y="231" key="FileChooserDialogImpl" timestamp="1579250091883">
+      <screen x="0" y="0" width="1536" height="920" />
     </state>
+    <state x="591" y="231" key="FileChooserDialogImpl/0.0.1536.920@0.0.1536.920" timestamp="1579250091883" />
     <state x="2659" y="261" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1576415629859" />
     <state x="614" y="381" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578556273390">
       <screen x="0" y="0" width="1536" height="920" />
