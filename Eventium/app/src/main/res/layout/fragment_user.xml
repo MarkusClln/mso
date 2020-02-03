@@ -9,7 +9,7 @@
         android:id="@+id/buttonBla1"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="bla"
+        android:text="Kontakt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCopyRight" />
@@ -18,7 +18,7 @@
         android:id="@+id/buttonBla2"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="bla"
+        android:text="Kommunikation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonBla1" />
@@ -40,12 +40,13 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:background="@android:color/white"
         android:text="Anmelden"
         android:textColor="#FFFFFF"
         app:iconTint="#00FCFBFB"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonBla2" />
 
