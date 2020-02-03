@@ -271,16 +271,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/event_location" />
 
-                <Button
-                    android:id="@+id/buttonCreateDummyData"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Create Dummydata"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buttonCreateEvent"
-                    android:layout_marginBottom="100px"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

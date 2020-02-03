@@ -109,13 +109,13 @@ public class CreateFragment extends Fragment implements SelectCategoryDialogFrag
         setUpCreateButton();
         setUpLocationEdit();
 
-        Button dummiData = root.findViewById(R.id.buttonCreateDummyData);
-        dummiData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createDummyData();
-            }
-        });
+//        Button dummiData = root.findViewById(R.id.buttonCreateDummyData);
+//        dummiData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                createDummyData();
+//            }
+//        });
         //dummiData.setEnabled(token != null);
 
 
@@ -518,7 +518,7 @@ public class CreateFragment extends Fragment implements SelectCategoryDialogFrag
 
                         @Override
                         public void onResponse(Call<EventEntity> call, retrofit2.Response<EventEntity> response) {
-                            Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Event erfolgreich erstellt!", Toast.LENGTH_LONG).show();
                             Log.d("PIN CREATE", "created pin:" + response.body().toString());
                         }
 
